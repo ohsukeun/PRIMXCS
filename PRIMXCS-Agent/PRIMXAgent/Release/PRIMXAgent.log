@@ -1,0 +1,51 @@
+﻿  Performing Custom Build Tools
+  MC: Compiling EventLog\EVENT_MSG.mc
+  stdafx.cpp
+  CppSQLite3U.cpp
+  Unicode Selected
+  ARIAEncryption.cpp
+  Base64.cpp
+  CommandManagerEx.cpp
+  CommonModule.cpp
+  ConfigDataManager.cpp
+  DoubleBuffering.cpp
+  FileDBManager.cpp
+  Unicode Selected
+  FileVersion.cpp
+  IPCChannel.cpp
+  LogManager.cpp
+  Markup.cpp
+  ProcessRun.cpp
+  RyeolException.cpp
+  RyeolHttpClient.cpp
+  sha512.cpp
+  SNIDSocket.cpp
+  StrCnvt.cpp
+  ThreadEx.cpp
+  XUnzip.cpp
+  컴파일하고 있습니다...
+  XZip.cpp
+  ZIPFile.cpp
+  ZombieProcessCheck.cpp
+  CommandLogDataTransfer.cpp
+  CommandPolling.cpp
+  CommandSystemReg.cpp
+  CommandUpdateFile.cpp
+  ControlService.cpp
+  DataCollectManager.cpp
+  Unicode Selected
+  NTService.cpp
+  PRIMXAgent.cpp
+  PRIMXAgentManager.cpp
+  Unicode Selected
+  SystemDataManager.cpp
+  SystemDataModifyCheck.cpp
+  Unicode Selected
+  WindowsFirewall.cpp
+  sqlite3.c
+  lz4.c
+  코드를 생성하고 있습니다.
+  All 5223 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  PRIMXAgent.vcxproj -> D:\Work-GitHub\PRIMXCS-Agent\Release\PRIMXAgent.exe
+  PRIMXAgent.vcxproj -> D:\Work-GitHub\PRIMXCS-Agent\Release\PRIMXAgent.pdb (Full PDB)

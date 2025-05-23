@@ -1,0 +1,12 @@
+#
+# version infomation
+#
+MAJOR_VER=1
+MINOR1_VER=0
+MINOR2_VER=0
+BUILD_NO=1
+ADD_TAG=""
+
+PROJECT_NAME=ext_test
+FILE_NAME=${PROJECT_NAME}-${MAJOR_VER}-${MINOR1_VER}-${MINOR2_VER}-${BUILD_NO}${ADD_TAG}
+# [2021-08-31] v1.0.0.1 : created 

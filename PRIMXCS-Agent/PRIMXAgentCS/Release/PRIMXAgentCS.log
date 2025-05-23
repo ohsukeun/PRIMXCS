@@ -1,0 +1,56 @@
+﻿  stdafx.cpp
+  CppSQLite3U.cpp
+  Unicode Selected
+  ARIAEncryption.cpp
+  Base64.cpp
+  CommandManagerEx.cpp
+  CommonModule.cpp
+  ConfigDataManager.cpp
+  DoubleBuffering.cpp
+  FileDBManager.cpp
+  Unicode Selected
+  FileVersion.cpp
+  IPCChannel.cpp
+  LogManager.cpp
+  Markup.cpp
+  sha512.cpp
+  SNIDSocket.cpp
+  StrCnvt.cpp
+  ThreadEx.cpp
+  XUnzip.cpp
+  XZip.cpp
+  ZIPFile.cpp
+  CommandExportFileReg.cpp
+  컴파일하고 있습니다...
+  CommandUserSearch.cpp
+  DKStatic.cpp
+  ExportFileDetailDlg.cpp
+  ExportFileGenerateDlg.cpp
+ExportFileGenerateDlg.cpp(269): warning C4244: '인수': 'double'에서 'short'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  ExportFileManager.cpp
+  Unicode Selected
+  ExportFilePage.cpp
+  Unicode Selected
+  ListCtrlEx.cpp
+  ListCtrlSortClass.cpp
+  ListDropTarget.cpp
+  PRIMXAgentCS.cpp
+  PRIMXAgentCSDlg.cpp
+  Unicode Selected
+  ProductInfoPage.cpp
+  Unicode Selected
+  ProgressExDlg.cpp
+ProgressExDlg.cpp(56): warning C4244: '=': 'double'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+ProgressExDlg.cpp(65): warning C4244: '=': 'double'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  TrayRefreshEx.cpp
+  UserInfoPage.cpp
+  UserRegDlg.cpp
+  ZEDManager.cpp
+  shell.c
+  sqlite3.c
+  lz4.c
+  코드를 생성하고 있습니다.
+  All 4475 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  PRIMXAgentCS.vcxproj -> D:\Work-GitHub\PRIMXCS-Agent\Release\PRIMXAgentCS.exe
+  PRIMXAgentCS.vcxproj -> D:\Work-GitHub\PRIMXCS-Agent\Release\PRIMXAgentCS.pdb (Full PDB)

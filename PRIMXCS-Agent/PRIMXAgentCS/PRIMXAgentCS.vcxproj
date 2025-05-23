@@ -1,0 +1,354 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BC438A80-5F7E-4E80-9009-72166A16580B}</ProjectGuid>
+    <RootNamespace>PRIMXAgentCS</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <Keyword>MFCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;SQLITE_HAS_CODEC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../CommonLib/Utils;../CommonLib/SQLite;../CommonLib/OpenSSL/OpenSSL_x86/include;../CommonLib/ZedAPI/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>../CommonLib/OpenSSL/OpenSSL_x86/lib;../CommonLib/ZedAPI/lib/x86</AdditionalLibraryDirectories>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0412</Culture>
+      <PreprocessorDefinitions>ZED_EXE_X86;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Manifest>
+      <EnableDpiAwareness>false</EnableDpiAwareness>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;SQLITE_HAS_CODEC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../CommonLib/Utils;../CommonLib/SQLite;../CommonLib/OpenSSL/OpenSSL_x64/include;../CommonLib/ZedAPI/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>../CommonLib/OpenSSL/OpenSSL_x64/lib;../CommonLib/ZedAPI/lib/x64</AdditionalLibraryDirectories>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0412</Culture>
+      <PreprocessorDefinitions>ZED_EXE_X64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Manifest>
+      <EnableDpiAwareness>false</EnableDpiAwareness>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;SQLITE_HAS_CODEC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../CommonLib/Utils;../CommonLib/SQLite;../CommonLib/OpenSSL/OpenSSL_x86/include;../CommonLib/ZedAPI/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>../CommonLib/OpenSSL/OpenSSL_x86/lib;../CommonLib/ZedAPI/lib/x86</AdditionalLibraryDirectories>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0412</Culture>
+      <PreprocessorDefinitions>ZED_EXE_X86;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Manifest>
+      <EnableDpiAwareness>false</EnableDpiAwareness>
+    </Manifest>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;SQLITE_HAS_CODEC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../CommonLib/Utils;../CommonLib/SQLite;../CommonLib/OpenSSL/OpenSSL_x64/include;../CommonLib/ZedAPI/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>../CommonLib/OpenSSL/OpenSSL_x64/lib;../CommonLib/ZedAPI/lib/x64</AdditionalLibraryDirectories>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0412</Culture>
+      <PreprocessorDefinitions>ZED_EXE_X64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Manifest>
+      <EnableDpiAwareness>false</EnableDpiAwareness>
+    </Manifest>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\CommonLib\SQLite\CppSQLite3U.h" />
+    <ClInclude Include="..\CommonLib\SQLite\sqlite3.h" />
+    <ClInclude Include="..\CommonLib\SQLite\sqlite3ext.h" />
+    <ClInclude Include="..\CommonLib\Utils\ARIAEncryption.h" />
+    <ClInclude Include="..\CommonLib\Utils\Base64.h" />
+    <ClInclude Include="..\CommonLib\Utils\CIDPWGenerator.h" />
+    <ClInclude Include="..\CommonLib\Utils\CommandManagerEx.h" />
+    <ClInclude Include="..\CommonLib\Utils\CommonDefine.h" />
+    <ClInclude Include="..\CommonLib\Utils\CommonModule.h" />
+    <ClInclude Include="..\CommonLib\Utils\ConfigDataManager.h" />
+    <ClInclude Include="..\CommonLib\Utils\DoubleBuffering.h" />
+    <ClInclude Include="..\CommonLib\Utils\FileDBManager.h" />
+    <ClInclude Include="..\CommonLib\Utils\FileVersion.h" />
+    <ClInclude Include="..\CommonLib\Utils\IPCChannel.h" />
+    <ClInclude Include="..\CommonLib\Utils\LogManager.h" />
+    <ClInclude Include="..\CommonLib\Utils\lz4.h" />
+    <ClInclude Include="..\CommonLib\Utils\Markup.h" />
+    <ClInclude Include="..\CommonLib\Utils\PRIMXAgent_if.h" />
+    <ClInclude Include="..\CommonLib\Utils\sha512.h" />
+    <ClInclude Include="..\CommonLib\Utils\SNIDSocket.h" />
+    <ClInclude Include="..\CommonLib\Utils\StrCnvt.h" />
+    <ClInclude Include="..\CommonLib\Utils\ThreadEx.h" />
+    <ClInclude Include="..\CommonLib\Utils\XUnzip.h" />
+    <ClInclude Include="..\CommonLib\Utils\XZip.h" />
+    <ClInclude Include="..\CommonLib\Utils\ZIPFile.h" />
+    <ClInclude Include="..\CommonLib\ZedAPI\include\zedapi.h" />
+    <ClInclude Include="..\CommonLib\ZedAPI\include\zedx.h" />
+    <ClInclude Include="CommandExportFileReg.h" />
+    <ClInclude Include="CommandUserSearch.h" />
+    <ClInclude Include="DKStatic.h" />
+    <ClInclude Include="ExportFileDetailDlg.h" />
+    <ClInclude Include="ExportFileGenerateDlg.h" />
+    <ClInclude Include="ExportFileManager.h" />
+    <ClInclude Include="ExportFilePage.h" />
+    <ClInclude Include="ListCtrlEx.h" />
+    <ClInclude Include="ListCtrlSortClass.h" />
+    <ClInclude Include="ListDropTarget.h" />
+    <ClInclude Include="PRIMXAgentCS.h" />
+    <ClInclude Include="PRIMXAgentCSDlg.h" />
+    <ClInclude Include="ProductInfoPage.h" />
+    <ClInclude Include="ProgressExDlg.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="TrayRefreshEx.h" />
+    <ClInclude Include="UserInfoPage.h" />
+    <ClInclude Include="UserRegDlg.h" />
+    <ClInclude Include="ZEDManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\CommonLib\SQLite\CppSQLite3U.cpp" />
+    <ClCompile Include="..\CommonLib\SQLite\shell.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\CommonLib\SQLite\sqlite3.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\CommonLib\Utils\ARIAEncryption.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\Base64.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\CommandManagerEx.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\CommonModule.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\ConfigDataManager.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\DoubleBuffering.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\FileDBManager.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\FileVersion.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\IPCChannel.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\LogManager.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\lz4.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\CommonLib\Utils\Markup.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\sha512.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\SNIDSocket.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\StrCnvt.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\ThreadEx.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\XUnzip.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\XZip.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\ZIPFile.cpp" />
+    <ClCompile Include="CommandExportFileReg.cpp" />
+    <ClCompile Include="CommandUserSearch.cpp" />
+    <ClCompile Include="DKStatic.cpp" />
+    <ClCompile Include="ExportFileDetailDlg.cpp" />
+    <ClCompile Include="ExportFileGenerateDlg.cpp" />
+    <ClCompile Include="ExportFileManager.cpp" />
+    <ClCompile Include="ExportFilePage.cpp" />
+    <ClCompile Include="ListCtrlEx.cpp" />
+    <ClCompile Include="ListCtrlSortClass.cpp" />
+    <ClCompile Include="ListDropTarget.cpp" />
+    <ClCompile Include="PRIMXAgentCS.cpp" />
+    <ClCompile Include="PRIMXAgentCSDlg.cpp" />
+    <ClCompile Include="ProductInfoPage.cpp" />
+    <ClCompile Include="ProgressExDlg.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="TrayRefreshEx.cpp" />
+    <ClCompile Include="UserInfoPage.cpp" />
+    <ClCompile Include="UserRegDlg.cpp" />
+    <ClCompile Include="ZEDManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PRIMXAgentCS.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Exec\PRIMXDecryptFile.zip" />
+    <None Include="Exec\x64\PRIMXDecryptFile.zip" />
+    <None Include="Exec\x86\PRIMXDecryptFile.zip" />
+    <None Include="res\PRIMXAgentCS.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\IDB_SIDE.bmp" />
+    <Image Include="res\ITEM.bmp" />
+    <Image Include="res\PRIMXAgentCS.ico" />
+    <Image Include="res\S_b1.bmp" />
+    <Image Include="res\S_b2.bmp" />
+    <Image Include="res\S_b3.bmp" />
+    <Image Include="res\S_w1.bmp" />
+    <Image Include="res\S_w2.bmp" />
+    <Image Include="res\S_w3.bmp" />
+    <Image Include="res\tray_logon.ico" />
+    <Image Include="res\ZED.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="PRIMXAgentCS.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

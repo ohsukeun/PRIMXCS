@@ -1,0 +1,22 @@
+﻿  stdafx.cpp
+  ARIAEncryption.cpp
+  Base64.cpp
+  CommonModule.cpp
+  ConfigDataManager.cpp
+  FileVersion.cpp
+  IPCChannel.cpp
+  LogManager.cpp
+  ProcessRun.cpp
+  sha512.cpp
+  StrCnvt.cpp
+  ThreadEx.cpp
+  CPrimxzc.cpp
+CPrimxzc.cpp(70): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+CPrimxzc.cpp(110): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  FileChangeMonitor.cpp
+  PRIMXEncMonitor.cpp
+  코드를 생성하고 있습니다.
+  All 832 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  PRIMXEncMonitor.vcxproj -> D:\Work-GitHub\PRIMXCS-Agent\Release\PRIMXEncMonitor.exe
+  PRIMXEncMonitor.vcxproj -> D:\Work-GitHub\PRIMXCS-Agent\Release\PRIMXEncMonitor.pdb (Full PDB)

@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B7DCE2B6-4045-4544-8EF0-6712FB1BE1E1}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>PRIMXAgent</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;SQLITE_HAS_CODEC;%(PreprocessorDefinitions);_WINDOWS_SERVICE_</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../CommonLib/Utils;../CommonLib/SQLite;../CommonLib/OpenSSL/OpenSSL_x86/include;./EventLog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../CommonLib/OpenSSL/OpenSSL_x86/lib</AdditionalLibraryDirectories>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <AdditionalDependencies>legacy_stdio_definitions.lib</AdditionalDependencies>
+    </Link>
+    <Manifest>
+      <AdditionalManifestFiles>winversion.manifest</AdditionalManifestFiles>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;SQLITE_HAS_CODEC;%(PreprocessorDefinitions);_WINDOWS_SERVICE_</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../CommonLib/Utils;../CommonLib/SQLite;../CommonLib/OpenSSL/OpenSSL_x64/include;./EventLog</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../CommonLib/OpenSSL/OpenSSL_x64/lib</AdditionalLibraryDirectories>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <AdditionalDependencies>legacy_stdio_definitions.lib</AdditionalDependencies>
+    </Link>
+    <Manifest>
+      <AdditionalManifestFiles>winversion.manifest</AdditionalManifestFiles>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;SQLITE_HAS_CODEC;%(PreprocessorDefinitions);_WINDOWS_SERVICE_</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../CommonLib/Utils;../CommonLib/SQLite;../CommonLib/OpenSSL/OpenSSL_x86/include;./EventLog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../CommonLib/OpenSSL/OpenSSL_x86/lib</AdditionalLibraryDirectories>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <AdditionalDependencies>legacy_stdio_definitions.lib</AdditionalDependencies>
+    </Link>
+    <Manifest>
+      <AdditionalManifestFiles>winversion.manifest</AdditionalManifestFiles>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;SQLITE_HAS_CODEC;%(PreprocessorDefinitions);_WINDOWS_SERVICE_</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../CommonLib/Utils;../CommonLib/SQLite;../CommonLib/OpenSSL/OpenSSL_x64/include;./EventLog</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../CommonLib/OpenSSL/OpenSSL_x64/lib</AdditionalLibraryDirectories>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <AdditionalDependencies>legacy_stdio_definitions.lib</AdditionalDependencies>
+    </Link>
+    <Manifest>
+      <AdditionalManifestFiles>winversion.manifest</AdditionalManifestFiles>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\CommonLib\SQLite\CppSQLite3U.h" />
+    <ClInclude Include="..\CommonLib\SQLite\sqlite3.h" />
+    <ClInclude Include="..\CommonLib\SQLite\sqlite3ext.h" />
+    <ClInclude Include="..\CommonLib\Utils\ARIAEncryption.h" />
+    <ClInclude Include="..\CommonLib\Utils\Base64.h" />
+    <ClInclude Include="..\CommonLib\Utils\CommandManagerEx.h" />
+    <ClInclude Include="..\CommonLib\Utils\CommonDefine.h" />
+    <ClInclude Include="..\CommonLib\Utils\CommonModule.h" />
+    <ClInclude Include="..\CommonLib\Utils\ConfigDataManager.h" />
+    <ClInclude Include="..\CommonLib\Utils\DoubleBuffering.h" />
+    <ClInclude Include="..\CommonLib\Utils\FileDBManager.h" />
+    <ClInclude Include="..\CommonLib\Utils\FileVersion.h" />
+    <ClInclude Include="..\CommonLib\Utils\IPCChannel.h" />
+    <ClInclude Include="..\CommonLib\Utils\LogManager.h" />
+    <ClInclude Include="..\CommonLib\Utils\lz4.h" />
+    <ClInclude Include="..\CommonLib\Utils\Markup.h" />
+    <ClInclude Include="..\CommonLib\Utils\PRIMXAgent_if.h" />
+    <ClInclude Include="..\CommonLib\Utils\ProcessRun.h" />
+    <ClInclude Include="..\CommonLib\Utils\RyeolException.h" />
+    <ClInclude Include="..\CommonLib\Utils\RyeolHttpClient.h" />
+    <ClInclude Include="..\CommonLib\Utils\SafeInt.hpp" />
+    <ClInclude Include="..\CommonLib\Utils\sha512.h" />
+    <ClInclude Include="..\CommonLib\Utils\SNIDSocket.h" />
+    <ClInclude Include="..\CommonLib\Utils\SNPHashList.h" />
+    <ClInclude Include="..\CommonLib\Utils\StrCnvt.h" />
+    <ClInclude Include="..\CommonLib\Utils\ThreadEx.h" />
+    <ClInclude Include="..\CommonLib\Utils\XUnzip.h" />
+    <ClInclude Include="..\CommonLib\Utils\XZip.h" />
+    <ClInclude Include="..\CommonLib\Utils\ZIPFile.h" />
+    <ClInclude Include="..\CommonLib\Utils\ZombieProcessCheck.h" />
+    <ClInclude Include="CommandLogDataTransfer.h" />
+    <ClInclude Include="CommandPolling.h" />
+    <ClInclude Include="CommandSystemReg.h" />
+    <ClInclude Include="CommandUpdateFile.h" />
+    <ClInclude Include="ControlService.h" />
+    <ClInclude Include="DataCollectManager.h" />
+    <ClInclude Include="IPCChannel.h" />
+    <ClInclude Include="NTService.h" />
+    <ClInclude Include="PRIMXAgent.h" />
+    <ClInclude Include="PRIMXAgentManager.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="SystemDataManager.h" />
+    <ClInclude Include="SystemDataModifyCheck.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="WindowsFirewall.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\CommonLib\SQLite\CppSQLite3U.cpp" />
+    <ClCompile Include="..\CommonLib\SQLite\sqlite3.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\CommonLib\Utils\ARIAEncryption.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\Base64.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\CommandManagerEx.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\CommonModule.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\ConfigDataManager.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\DoubleBuffering.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\FileDBManager.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\FileVersion.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\IPCChannel.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\LogManager.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\lz4.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\CommonLib\Utils\Markup.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\ProcessRun.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\RyeolException.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\RyeolHttpClient.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\sha512.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\SNIDSocket.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\StrCnvt.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\ThreadEx.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\XUnzip.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\XZip.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\ZIPFile.cpp" />
+    <ClCompile Include="..\CommonLib\Utils\ZombieProcessCheck.cpp" />
+    <ClCompile Include="CommandLogDataTransfer.cpp" />
+    <ClCompile Include="CommandPolling.cpp" />
+    <ClCompile Include="CommandSystemReg.cpp" />
+    <ClCompile Include="CommandUpdateFile.cpp" />
+    <ClCompile Include="ControlService.cpp" />
+    <ClCompile Include="DataCollectManager.cpp" />
+    <ClCompile Include="NTService.cpp" />
+    <ClCompile Include="PRIMXAgent.cpp" />
+    <ClCompile Include="PRIMXAgentManager.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="SystemDataManager.cpp" />
+    <ClCompile Include="SystemDataModifyCheck.cpp" />
+    <ClCompile Include="WindowsFirewall.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PRIMXAgent.rc">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">./EventLog</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">./EventLog</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">./EventLog</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">./EventLog</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="EventLog\EVENT_MSG.mc">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mc.exe -u "%(RelativeDir)%(Filename).mc" -r "%(RelativeDir)\" -h "%(RelativeDir)\"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)%(Filename).rc;%(RootDir)%(Directory)%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mc.exe -u "%(RelativeDir)%(Filename).mc" -r "%(RelativeDir)\" -h "%(RelativeDir)\"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)%(Filename).rc;%(RootDir)%(Directory)%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mc.exe -u "%(RelativeDir)%(Filename).mc" -r "%(RelativeDir)\" -h "%(RelativeDir)\"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RootDir)%(Directory)%(Filename).rc;%(RootDir)%(Directory)%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mc.exe -u "%(RelativeDir)%(Filename).mc" -r "%(RelativeDir)\" -h "%(RelativeDir)\"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RootDir)%(Directory)%(Filename).rc;%(RootDir)%(Directory)%(Filename).h;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

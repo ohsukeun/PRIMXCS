@@ -1,0 +1,153 @@
+/// @file xma_base_def.h
+/// @author Park, sung soo
+/// @date 2023-06-16
+/// @brief migration engine base definitions
+
+#include <error.h>
+#include <assert.h>
+
+#include <logger.h>
+#include <swc.h>
+
+#include <pmx_error.h>
+
+#ifndef __PMX_BASE_DEF_H__
+#define __PMX_BASE_DEF_H__
+
+//-----------------------------------------------------------------------------
+// GLOBAL DEFINITIONS
+//-----------------------------------------------------------------------------
+#define PMX_DEFAULT_CTRL_PORT     50101
+#define PMX_DEFAULT_UPDATE_PORT   50102
+#define PMX_DEFAULT_AUTH_PORT     50103
+#define PMX_DEFAULT_DB_PORT       53306
+
+// user and group
+#define PMX_USER_GROUP       "primxsrvgp"
+#define PMX_USER_SVR         "primxsrv"
+#define PMX_USER_WEB         "primxweb"
+
+#define PMX_ROOT_GROUP       "root"
+#define PMX_USER_ROOT        "root"
+
+// directories
+#define PMX_DIR_ACCESSFILES  "ACCESSFILES"
+#define PMX_DIR_BIN          "BIN"
+#define PMX_DIR_CACHE        "CACHE"
+#define PMX_DIR_CERTS        "CERTS"
+#define PMX_DIR_CONF         "CONF"
+#define PMX_DIR_CRYHOD       "CRYHOD"
+#define PMX_DIR_KEYMAP       "KEYMAP"
+#define PMX_DIR_LIB          "LIB"
+#define PMX_DIR_LOGS         "LOGS"
+#define PMX_DIR_ORIZON       "ORIZON"
+#define PMX_DIR_PACKAGE      "PACKAGE"
+#define PMX_DIR_POLICIES     "POLICIES"
+#define PMX_DIR_POLICY       "POLICY"
+#define PMX_DIR_POLICYSCRIPT "POLICYSCRIPT"
+#define PMX_DIR_PRIMXSERVER  "PRIMXSERVER"
+#define PMX_DIR_PRODUCT      "PRODUCT"
+#define PMX_DIR_PROTECTION   "PROTECTION"
+#define PMX_DIR_WEBSRV       "WEBSRV"
+#define PMX_DIR_ZONECENTRAL  "ZONECENTRAL"
+#define PMX_DIR_ZONEMAP      "ZONEMAP"
+
+// paths
+#define PMX_PATH_PRIMXSERVER                                         "/PRIMXSERVER"
+#define PMX_PATH_PRIMXSERVER_BIN                                     "/PRIMXSERVER/BIN"
+#define PMX_PATH_PRIMXSERVER_CONF                                    "/PRIMXSERVER/CONF"
+#define PMX_PATH_PRIMXSERVER_CONF_CERTS                              "/PRIMXSERVER/CONF/CERTS"
+#define PMX_PATH_PRIMXSERVER_CONF_CERTS_MARIADB_CLIENT               "/PRIMXSERVER/CONF/CERTS/MARIADB_CLIENT"
+#define PMX_PATH_PRIMXSERVER_CONF_CERTS_SERVER                       "/PRIMXSERVER/CONF/CERTS/SERVER"
+#define PMX_PATH_PRIMXSERVER_LIB                                     "/PRIMXSERVER/LIB"
+#define PMX_PATH_PRIMXSERVER_LOGS                                    "/PRIMXSERVER/LOGS"
+#define PMX_PATH_PRIMXSERVER_WAREHOUSE                               "/PRIMXSERVER/WAREHOUSE"
+#define PMX_PATH_PRIMXSERVER_WAREHOUSE_DBBACKUP                      "/PRIMXSERVER/WAREHOUSE/DBBACKUP"
+#define PMX_PATH_PRIMXSERVER_WAREHOUSE_TEMP                          "/PRIMXSERVER/WAREHOUSE/TEMP"
+#define PMX_PATH_PRIMXSERVER_WAREHOUSE_ERRLOGS                       "/PRIMXSERVER/WAREHOUSE/ERRLOGS"
+#define PMX_PATH_PRIMXSERVER_WEBSRV                                  "/PRIMXSERVER/WEBSRV"
+#define PMX_PATH_PRIMXSERVER_WEBSRV                                  "/PRIMXSERVER/WEBSRV"
+#define PMX_PATH_PRIMXSERVER_WEBSRV                                  "/PRIMXSERVER/WEBSRV"
+#define PMX_PATH_PRIMXSERVER_PRODUCT                                 "/PRIMXSERVER/PRODUCT"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_ACCESSFILES                     "/PRIMXSERVER/PRODUCT/ACCESSFILES"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_POLICIES_POLICYSCRIPT           "/PRIMXSERVER/PRODUCT/POLICIES/POLICYSCRIPT"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_POLICIES_ZONECENTRAL            "/PRIMXSERVER/PRODUCT/POLICIES/ZONECENTRAL"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_POLICIES_ZONECENTRAL_PROTECTION "/PRIMXSERVER/PRODUCT/POLICIES/ZONECENTRAL/PROTECTION"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_POLICIES_ZONECENTRAL_POLICY     "/PRIMXSERVER/PRODUCT/POLICIES/ZONECENTRAL/POLICY"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_POLICIES_ORIZON                 "/PRIMXSERVER/PRODUCT/POLICIES/ORIZON"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_POLICIES_ORIZON_PROTECTION      "/PRIMXSERVER/PRODUCT/POLICIES/ORIZON/PROTECTION"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_POLICIES_ORIZON_POLICY          "/PRIMXSERVER/PRODUCT/POLICIES/ORIZON/POLICY"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_POLICIES_CRYHOD                 "/PRIMXSERVER/PRODUCT/POLICIES/CRYHOD"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_POLICIES_CRYHOD_PROTECTION      "/PRIMXSERVER/PRODUCT/POLICIES/CRYHOD/PROTECTION"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_POLICIES_CRYHOD_POLICY          "/PRIMXSERVER/PRODUCT/POLICIES/CRYHOD/POLICY"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_CACHE                           "/PRIMXSERVER/PRODUCT/CACHE"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_KEYMAP                          "/PRIMXSERVER/PRODUCT/KEYMAP"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_LOGS                            "/PRIMXSERVER/PRODUCT/LOGS"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_ZONEMAP                         "/PRIMXSERVER/PRODUCT/ZONEMAP"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_PACKAGE                         "/PRIMXSERVER/PRODUCT/PACKAGE"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_PACKAGE_ZONECENTRAL             "/PRIMXSERVER/PRODUCT/PACKAGE/ZONECENTRAL"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_PACKAGE_ORIZON                  "/PRIMXSERVER/PRODUCT/PACKAGE/ORIZON"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_PACKAGE_CRYHOD                  "/PRIMXSERVER/PRODUCT/PACKAGE/CRYHOD"
+#define PMX_PATH_PRIMXSERVER_PRODUCT_PACKAGE_AGENT                   "/PRIMXSERVER/PRODUCT/PACKAGE/AGENT"
+
+#define PMX_PATH_PRIMXAUTH                                           "/PRIMXAUTH"
+#define PMX_PATH_PRIMXAUTH_BIN                                       "/PRIMXAUTH/BIN"
+#define PMX_PATH_PRIMXAUTH_CONF                                      "/PRIMXAUTH/CONF"
+#define PMX_PATH_PRIMXAUTH_CONF_CERTS                                "/PRIMXAUTH/CONF/CERTS"
+#define PMX_PATH_PRIMXAUTH_CONF_CERTS_MARIADB_CLIENT                 "/PRIMXAUTH/CONF/CERTS/MARIADB_CLIENT"
+#define PMX_PATH_PRIMXAUTH_CONF_CERTS_SERVER                         "/PRIMXAUTH/CONF/CERTS/SERVER"
+#define PMX_PATH_PRIMXAUTH_LIB                                       "/PRIMXAUTH/LIB"
+#define PMX_PATH_PRIMXAUTH_LOGS                                      "/PRIMXAUTH/LOGS"
+
+// configuration file name & path
+#define PMX_CU_CONF_FILE_DIR                      "/PRIMXSERVER/CONF/"    // configure directory path for ctrl & update server
+#define PMX_CU_CONF_FILE_NAME                     "pmx_cu_env.conf"       // control & update server configuration file name
+#define PMX_A_CONF_FILE_DIR                       "/PRIMXAUTH/CONF/"      // configure directory path for auth. server
+#define PMX_A_CONF_FILE_NAME                      "pmx_a_env.conf"        // authentication server configuration file name
+
+// system password
+#define PMX_SYSTEM_PASSOWRD                       "primxadmin1234~!"
+
+// mariadb ssl cert & key files path 
+#define PMX_CU_MARIADB_CA_PEM_FILE_PATH           "/PRIMXSERVER/CONF/CERTS/MARIADB_CLIENT/ca.pem"
+#define PMX_CU_MARIADB_CLIENT_CERT_PEM_FILE_PATH  "/PRIMXSERVER/CONF/CERTS/MARIADB_CLIENT/client-cert.pem"
+#define PMX_CU_MARIADB_CLIENT_KEY_PEM_FILE_PATH   "/PRIMXSERVER/CONF/CERTS/MARIADB_CLIENT/client-key.pem"
+#define PMX_A_MARIADB_CA_PEM_FILE_PATH            "/PRIMXAUTH/CONF/CERTS/MARIADB_CLIENT/ca.pem"
+#define PMX_A_MARIADB_CLIENT_CERT_PEM_FILE_PATH   "/PRIMXAUTH/CONF/CERTS/MARIADB_CLIENT/client-cert.pem"
+#define PMX_A_MARIADB_CLIENT_KEY_PEM_FILE_PATH    "/PRIMXAUTH/CONF/CERTS/MARIADB_CLIENT/client-key.pem"
+
+// server ssl password & files path
+#define PMX_SERVER_SSL_PASSWORD                   "PxAdmin9280!"
+#define PMX_CU_SERVER_CERT_INFO_PATH              "/PRIMXSERVER/CONF/CERTS/SERVER/server.crt"
+#define PMX_CU_SERVER_CA_LIST_PATH                "/PRIMXSERVER/CONF/CERTS/SERVER/server.key"
+#define PMX_A_SERVER_CERT_INFO_PATH               "/PRIMXAUTH/CONF/CERTS/SERVER/server.crt"
+#define PMX_A_SERVER_CA_LIST_PATH                 "/PRIMXAUTH/CONF/CERTS/SERVER/server.key"
+
+// PID file directory path
+#define PMX_CU_PID_FILE_DIR_PATH                  "/PRIMXSERVER/CONF/"
+#define PMX_A_PID_FILE_DIR_PATH                   "/PRIMXAUTH/CONF/"
+
+// module names
+#define PMX_MODULE_NAME_CTRLD_AGENT_IO_HANDLER    "pmx_ctrld_agent_io_handler"
+#define PMX_MODULE_NAME_UPDATED_AGENT_IO_HANDLER  "pmx_updated_agent_io_handler"
+#define PMX_MODULE_NAME_AUTHD_AGENT_IO_HANDLER    "pmx_authd_agent_io_handler"
+
+// environmental values
+#define PMX_DEFAULT_IO_TIMEOUT     20
+
+/// base methods and tools defined class
+/*
+class CBase
+{
+public:
+	static VOID MakeDirsForCtrlUpdateServer();
+	static VOID MakeDirsForAuthServer();
+	static VOID ChkMakeDir(IN const CHAR* sDir, IN const CHAR* sUser, IN const CHAR* sGroup, IN INT nOwner, IN INT nGroup, IN INT nOther);
+
+	CBase() {};
+	~CBase() {};
+};
+*/
+
+//-----------------------------------------------------------------------------
+#endif // __PMX_BASE_DEF_H__

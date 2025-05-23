@@ -1,0 +1,1050 @@
+/// @file xma_xml.cpp
+/// @author Park, sung soo
+/// @date 2023-06-12
+/// @brief I/O handling related class methods
+
+#include <pmx_io.h>
+
+#ifndef __PMX_IO_CPP__
+#define __PMX_IO_CPP__
+
+//-----------------------------------------------------------------------------
+// LOCAL DEFINTION
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// METHODS DEFINTION
+//-----------------------------------------------------------------------------
+CPmxXmlIO::CPmxXmlIO(IN WCString sXml)
+{
+	if (TRUE == SetXml(sXml))
+	{
+		ExtractCommandInfo();
+	}
+	else
+	{
+		_LOG_ERR("xml file loading failed. %s", GetLastErrStr());
+	}
+}
+
+WCString CPmxXmlIO::HandleEscapeChar(IN WCString sSrc)
+{
+	WCString sRet = "";
+	WCString sDoubleQuote = "", sPercentSign = "", sSingleQuote = "";
+	WCString sDoubleQuoteReplace = "", sPercentSignReplace = "", sSingleQuoteReplace = "";
+
+	sDoubleQuote = (CHAR)34; sDoubleQuote += '\0';
+	sPercentSign = (CHAR)37; sPercentSign += '\0';
+	sSingleQuote = (CHAR)39; sSingleQuote += '\0';
+	sDoubleQuoteReplace = (CHAR)92; sDoubleQuoteReplace += (CHAR)34; sDoubleQuoteReplace += '\0';
+	sPercentSignReplace = (CHAR)92; sPercentSignReplace += (CHAR)37; sPercentSignReplace += '\0';
+	sSingleQuoteReplace = (CHAR)92; sSingleQuoteReplace += (CHAR)39; sSingleQuoteReplace += '\0';
+
+	sRet = sSrc;
+	sRet.Replace(92, 92, 2); // '\' -> '\\'
+	sRet.Replace(sDoubleQuote, sDoubleQuoteReplace);
+	sRet.Replace(sPercentSign, sPercentSignReplace);
+	sRet.Replace(sSingleQuote, sSingleQuoteReplace);
+	return sRet;
+}
+
+SWC_BOOL CPmxXmlIO::FindAndIntoElem(IN const CHAR* sElem, IN SWC_BOOL bIgnoreError)
+{
+	if (FALSE == m_Markup.FindElem(sElem)) 
+	{ 
+		if (FALSE == bIgnoreError) 
+		{
+			MakeLastError(m_Markup, PMX_ERR_XML_RW_FINDELM_FAILED);
+			_LOG_ERR("can not find element %s. %s", sElem, GetLastErrStr()); 
+		}
+		else
+		{
+			MakeLastError(m_Markup, PMX_ERR_XML_RW_SUCCESS);
+			_LOG_ERR("can not find element %s", sElem); 
+		}
+		return FALSE; 
+	}
+	if (FALSE == m_Markup.IntoElem()) 
+	{ 
+		if (FALSE == bIgnoreError) 
+		{
+			MakeLastError(m_Markup, PMX_ERR_XML_RW_INTOELEM_FAILED); 
+			_LOG_ERR("can not move into element %s. %s", sElem, GetLastErrStr()); 
+		}
+		else
+		{
+			MakeLastError(m_Markup, PMX_ERR_XML_RW_SUCCESS);
+			_LOG_ERR("can not move into element %s", sElem); 
+		}
+		return FALSE; 
+	}
+	return TRUE;
+}
+
+SWC_BOOL CPmxXmlIO::FindElem(IN const CHAR* sElem, IN SWC_BOOL bIgnoreError)
+{
+	if (FALSE == m_Markup.FindElem(sElem)) 
+	{ 
+		if (FALSE == bIgnoreError) 
+		{
+			MakeLastError(m_Markup, PMX_ERR_XML_RW_FINDELM_FAILED);
+			_LOG_ERR("can not find element %s. %s", sElem, GetLastErrStr()); 
+		}
+		else
+		{
+			MakeLastError(m_Markup, PMX_ERR_XML_RW_SUCCESS);
+			_LOG_ERR("can not find element %s", sElem); 
+		}
+
+		return FALSE; 
+	}
+	return TRUE;
+}
+
+WCString CPmxXmlIO::GetElemData()
+{
+	WCString sRet = (CHAR*)"";
+	MCD_STR sBuf = m_Markup.GetData();
+	sRet = sBuf.data();
+	return sRet;
+}
+
+WCString CPmxXmlIO::GetAttrData(IN const CHAR* sAttr)
+{
+	WCString sRet = (CHAR*)"";
+	MCD_STR sBuf = m_Markup.GetAttrib(sAttr);
+	sRet = sBuf.data();
+	return sRet;
+}
+
+WCString CPmxXmlIO::GetStrFromXml(IN CMarkup& xml)
+{
+	WCString sRet = "";
+	MCD_STR sDoc = xml.GetDoc();
+	if (0 == sDoc.length())
+	{
+		MakeLastError(xml, PMX_ERR_XML_RW_SETDOC_FAILED);
+		_LOG_ERR("extract string from xml object failed. %s", GetLastErrStr());
+		return sRet;
+	}
+	sRet = sDoc;
+	return sDoc;
+}
+
+SWC_BOOL CPmxXmlIO::ExtractCommandInfo()
+{
+	MakeLastError(m_Markup, PMX_ERR_XML_RW_SUCCESS);
+	// <request>
+	if (FALSE == FindAndIntoElem(PMX_XML_ELM_REQUEST)) return FALSE;
+	// <command>
+	if (FALSE == FindAndIntoElem(PMX_XML_ELM_COMMAND)) return FALSE;
+	else
+	{
+		// <code>
+		if (TRUE == FindElem(PMX_XML_ELM_CODE, TRUE))         m_sCode         = GetElemData();
+		// <subcode>
+		if (TRUE == FindElem(PMX_XML_ELM_SUBCODE, TRUE))      m_sSubCode      = GetElemData();
+		// <AgentID>
+		if (FALSE == FindElem(PMX_XML_ELM_AGENTID))           return FALSE;
+		else                                                  m_sAgentID      = GetElemData();
+		// <AgentVersion>
+		if (TRUE == FindElem(PMX_XML_ELM_AGENTVERSION, TRUE)) m_sAgentVersion = HandleEscapeChar(GetElemData());
+		// <UserID>
+		if (TRUE == FindElem(PMX_XML_ELM_USERID, TRUE))       m_sUserID       = HandleEscapeChar(GetElemData());
+		// <CompanyID>
+		if (TRUE == FindElem(PMX_XML_ELM_COMPANYID, TRUE))    m_sCompanyID    = GetElemData();
+		// <DateTime>
+		if (TRUE == FindElem(PMX_XML_ELM_DATETIME, TRUE))     m_sDateTime     = GetElemData();
+		// <AgentPolicyStamp>
+		if (TRUE == FindElem(PMX_XML_ELM_AGENTPOLICYSTAMP, TRUE)) 
+		{
+			m_sAgentPolicyStamp = GetElemData();
+			if (0 < m_sAgentPolicyStamp.GetLength() && TRUE == SWC::swc_isnumber_str(m_sAgentPolicyStamp))
+			{
+				m_tAgentPolicyStamp = (time_t)strtoul(LPCSTR(m_sAgentPolicyStamp), NULL, 10);
+				_LOG_DBG("'AgentPolicyStamp': (string)%s / (number)%u", LPCSTR(m_sAgentPolicyStamp), m_tAgentPolicyStamp);
+			}
+			else
+			{
+				if(0 == m_sAgentPolicyStamp.GetLength()) _LOG_ERR("'AgentPolicyStamp' is emptty");
+				else                                     _LOG_ERR("invalid value 'AgentPolicyStamp':%s", m_sAgentPolicyStamp);
+
+				m_tAgentPolicyStamp = 0;
+			}
+		}
+		m_Markup.OutOfElem(); // </command>
+
+		m_sCode.MakeUpper();
+		m_sSubCode.MakeUpper();
+	}
+
+	return TRUE;
+}
+
+SWC_BOOL CPmxXmlIO::MakeTransactionQueriesFromSystemData(OUT WCArray<WCString>& arrQueries)
+{
+	WCString sWinVersionString = "", sUUID = "";
+	WCString sMajorVersion = "0", sMinorVersion = "0", sBuildNumber = "0";
+	WCString sServicePackMajor = "0", sServicePackMinor = "0";
+	WCString sProcessorArchitecture = "0", sReleaseID = "";
+	WCString sComputerName = "", sWorkGroupName = "";
+	WCString sSharePC = "";
+
+	MakeLastError(m_Markup, PMX_ERR_XML_RW_SUCCESS);
+	// <DT:SystemData>
+	if (FALSE == FindAndIntoElem(PMX_XML_ELM_DT_SYSTEMDATA)) return FALSE;
+
+	// <WinVersion>
+	if (TRUE == FindAndIntoElem(PMX_XML_ELM_WINVERSION, TRUE))
+	{
+		// <Name>
+		if (TRUE == FindElem(PMX_XML_ELM_NAME, TRUE))                sWinVersionString = HandleEscapeChar(GetElemData());
+		// <UUID>
+		if (TRUE == FindElem(PMX_XML_ELM_UUID, TRUE))                sUUID = GetElemData();
+		// <MajorVersion>
+		if (TRUE == FindElem(PMX_XML_ELM_MAJORVERSION, TRUE))        sMajorVersion = GetElemData();
+		// <MinorVersion>
+		if (TRUE == FindElem(PMX_XML_ELM_MINORVERSION, TRUE))        sMinorVersion = GetElemData();
+		// <BuildNumber>
+		if (TRUE == FindElem(PMX_XML_ELM_BUILDNUMBER, TRUE))         sBuildNumber = HandleEscapeChar(GetElemData());
+		// <ServicePackMajor>
+		if (TRUE == FindElem(PMX_XML_ELM_SERVICEPACKMAJOR, TRUE))    sServicePackMajor = GetElemData();
+		// <ServicePackMinor>
+		if (TRUE == FindElem(PMX_XML_ELM_SERVICEPACKMINOR, TRUE))    sServicePackMinor = GetElemData();
+		// <ProcessorArchitecture>
+		if (TRUE == FindElem(PMX_XML_ELM_PROCESSARCHITECTURE, TRUE)) sProcessorArchitecture = GetElemData();
+		// <ReleaseID>
+		if (TRUE == FindElem(PMX_XML_ELM_RELEASEID, TRUE))           sReleaseID = HandleEscapeChar(GetElemData());
+
+		// </WinVersion>
+		m_Markup.OutOfElem();
+	}
+
+	// <DiskDrives>
+	if (TRUE == FindElem(PMX_XML_ELM_DISKDRIVES, TRUE))
+	{
+		m_Markup.IntoElem();
+
+		WCString sExistDisks = "";	
+
+		// <DiskDrive>
+		while (true == m_Markup.FindElem(PMX_XML_ELM_DISKDRIVE))
+		{
+			WCString sDiskName = "", sDiskType = "", sVolumnName = "", sFileSystemName = "";
+			WCString sTitalSize = "", sFreeSize = "";
+
+			m_Markup.IntoElem();
+			// <Name>
+			if (TRUE == FindElem(PMX_XML_ELM_NAME, TRUE))           sDiskName = HandleEscapeChar(GetElemData());
+			// <Type>
+			if (TRUE == FindElem(PMX_XML_ELM_TYPE, TRUE))           sDiskType = GetElemData();
+			// <VolumnName>
+			if (TRUE == FindElem(PMX_XML_ELM_VOLUMENAME, TRUE))     sVolumnName = HandleEscapeChar(GetElemData());
+			// <FileSystemName>
+			if (TRUE == FindElem(PMX_XML_ELM_FILESYSTEMNAME, TRUE)) sFileSystemName = HandleEscapeChar(GetElemData());
+			// <TotalSize>
+			if (TRUE == FindElem(PMX_XML_ELM_TOTALSIZE, TRUE))      sTitalSize = GetElemData();
+			// <FreeSize>
+			if (TRUE == FindElem(PMX_XML_ELM_FREESIZE, TRUE))       sFreeSize = GetElemData();
+			m_Markup.OutOfElem();
+
+			if (0 < sDiskName.GetLength())
+			{
+				WCString sDiskQuery = "";
+				sDiskQuery  = "INSERT INTO T_DISK_INFO ( ";
+				sDiskQuery += "C_AGENT_ID, C_DISK_NAME, C_DISK_TYPE, C_VOLUMN_NAME, C_FILE_SYSTEM_NAME, ";
+				sDiskQuery += "C_TOTAL_SIZE, C_FREE_SIZE, C_INSERT_DATE) ";
+				sDiskQuery += "VALUES ( ";
+				sDiskQuery.AppendFormat(" '%s', '%s', %s, '%s', '%s', ", LPCSTR(m_sAgentID), LPCSTR(sDiskName), LPCSTR(sDiskType), LPCSTR(sVolumnName), LPCSTR(sFileSystemName));
+				sDiskQuery.AppendFormat(" %s, %s,  UTC_TIMESTAMP()) ", LPCSTR(sTitalSize), LPCSTR(sFreeSize));
+				sDiskQuery += "ON DUPLICATE KEY ";
+				sDiskQuery += "UPDATE ";
+				sDiskQuery.AppendFormat("C_DISK_TYPE = %s, C_VOLUMN_NAME = '%s', C_FILE_SYSTEM_NAME = '%s', ", LPCSTR(sDiskType), LPCSTR(sVolumnName), LPCSTR(sFileSystemName));
+				sDiskQuery.AppendFormat("C_TOTAL_SIZE = %s, C_FREE_SIZE = %s, C_UPDATE_DATE = UTC_TIMESTAMP() ", LPCSTR(sTitalSize), LPCSTR(sFreeSize));
+
+				arrQueries.Add(sDiskQuery);
+
+				if (0 < sExistDisks.GetLength()) sExistDisks += ", ";
+				sExistDisks.AppendFormat("'%s'", LPCSTR(sDiskName));
+			}
+		}
+
+		m_Markup.OutOfElem();
+
+		if (0 < sExistDisks.GetLength())
+		{
+			WCString sGarbageDiskDeleteQuery = "";
+			sGarbageDiskDeleteQuery.Format("DELETE FROM T_DISK_INFO WHERE C_AGENT_ID = '%s' AND C_DISK_NAME NOT IN (%s)", LPCSTR(m_sAgentID), LPCSTR(sExistDisks));
+			arrQueries.Add(sGarbageDiskDeleteQuery);
+		}
+	}
+
+	// <NICs>
+	if (TRUE == FindElem(PMX_XML_ELM_NICS, TRUE))
+	{
+		m_Markup.IntoElem();
+
+		WCString sExistNICs = "";
+
+		// <NIC>
+		while (true == m_Markup.FindElem(PMX_XML_ELM_NIC))
+		{
+			WCString sMAC = "", sName = "", sDHCPEnable = "", sIP = "", sGW = "", sDNS = "", sDHCPServer = "";
+
+			sMAC        = GetAttrData(PMX_XML_ATR_MAC);
+			sName       = GetAttrData(PMX_XML_ATR_NAME);
+			sDHCPEnable = GetAttrData(PMX_XML_ATR_DHCP); sDHCPEnable.MakeUpper();
+
+			m_Markup.IntoElem();
+			// <IP>
+			if (TRUE == FindElem(PMX_XML_ELM_IP, TRUE))         sIP = GetElemData();
+			// <GW>
+			if (TRUE == FindElem(PMX_XML_ELM_GW, TRUE))         sGW = GetElemData();
+			// <DNS>
+			if (TRUE == FindElem(PMX_XML_ELM_DNS, TRUE))        sDNS = GetElemData();
+			// <DHCPServer>
+			if (TRUE == FindElem(PMX_XML_ELM_DHCPSERVER, TRUE)) sDHCPServer = GetElemData();
+			m_Markup.OutOfElem();
+
+			if (0 < sMAC.GetLength())
+			{
+				WCString sNicQuery = "";
+				sNicQuery  = "INSERT INTO T_NIC_INFO ( ";
+				sNicQuery += "C_AGENT_ID, C_IP, C_MAC, C_NAME, C_GATEWAY, ";
+				sNicQuery += "C_DNS, C_DHCP_ENABLE, C_DHCP_SERVER, C_INSERT_DATE) ";
+				sNicQuery += "VALUES ( ";
+				sNicQuery.AppendFormat(" '%s', '%s', '%s', '%s', '%s', ", LPCSTR(m_sAgentID), LPCSTR(sIP), LPCSTR(sMAC), LPCSTR(sName), LPCSTR(sGW));
+				sNicQuery.AppendFormat(" '%s', %d, '%s', UTC_TIMESTAMP()) ", LPCSTR(sDNS), ((sDHCPEnable == PMX_XML_VAL_YES) ? PMX_AGENT_DHCP_IP : PMX_AGENT_STATIC_IP), LPCSTR(sDHCPServer));
+				sNicQuery += "ON DUPLICATE KEY ";
+				sNicQuery += "UPDATE ";
+				sNicQuery.AppendFormat("C_IP = '%s', C_NAME = '%s', C_GATEWAY ='%s', C_DNS = '%s', ", LPCSTR(sIP), LPCSTR(sName), LPCSTR(sGW), LPCSTR(sDNS));
+				sNicQuery.AppendFormat("C_DHCP_ENABLE = %d, C_DHCP_SERVER = '%s', C_UPDATE_DATE = UTC_TIMESTAMP() ", ((sDHCPEnable == PMX_XML_VAL_YES) ? PMX_AGENT_DHCP_IP : PMX_AGENT_STATIC_IP), LPCSTR(sDHCPServer));
+
+				arrQueries.Add(sNicQuery);
+
+				if (0 < sExistNICs.GetLength()) sExistNICs += ", ";
+				sExistNICs.AppendFormat("'%s'", LPCSTR(sMAC));
+			}
+		}
+
+		m_Markup.OutOfElem();
+
+		if (0 < sExistNICs.GetLength())
+		{
+			WCString sGarbageNICDeleteQuery = "";
+			sGarbageNICDeleteQuery.Format("DELETE FROM T_NIC_INFO WHERE C_AGENT_ID = '%s' AND C_MAC NOT IN (%s)", LPCSTR(m_sAgentID), LPCSTR(sExistNICs));
+			arrQueries.Add(sGarbageNICDeleteQuery);
+		}
+	}
+
+	// <NetBios>
+	if (TRUE == FindAndIntoElem(PMX_XML_ELM_NETBIOS, TRUE))
+	{
+		// <ComputerName>
+		if (TRUE == FindElem(PMX_XML_ELM_COMPUTERNAME, TRUE))  sComputerName = HandleEscapeChar(GetElemData());
+		// <WorkGroupName>
+		if (TRUE == FindElem(PMX_XML_ELM_WORKGROUPNAME, TRUE)) sWorkGroupName = HandleEscapeChar(GetElemData());
+
+		// </NetBios>
+		m_Markup.OutOfElem();
+
+		if (m_sSubCode == PMX_XML_VAL_UPDATE)
+		{
+			WCString sSystemMasterUpdateQuery = "";
+			sSystemMasterUpdateQuery.Format("UPDATE T_SYSTEM_MASTER SET C_COMPUTER_NAME = '%s', C_WORKGROUP_NAME = '%s' ", LPCSTR(sComputerName), LPCSTR(sWorkGroupName));
+			sSystemMasterUpdateQuery.AppendFormat("WHERE C_AGENT_ID = '%s' ", LPCSTR(m_sAgentID));
+
+			arrQueries.Add(sSystemMasterUpdateQuery);
+		}
+	}
+
+	// <SharePC>
+	if (TRUE == FindElem(PMX_XML_ELM_SHAREPC, TRUE))  
+	{
+		sSharePC = GetElemData(); sSharePC.MakeUpper();
+
+		if (m_sSubCode == PMX_XML_VAL_UPDATE)
+		{
+			WCString sSystemMasterUpdateQuery = "";
+			sSystemMasterUpdateQuery.Format("UPDATE T_SYSTEM_MASTER SET C_COMMON_SYSTEM_YN = '%c' ", ((sSharePC == PMX_XML_VAL_YES) ? PMX_VALUE_Y : PMX_VALUE_N));
+			sSystemMasterUpdateQuery.AppendFormat("WHERE C_AGENT_ID = '%s' ", LPCSTR(m_sAgentID));
+
+			arrQueries.Add(sSystemMasterUpdateQuery);
+		}
+		m_sSharePC = sSharePC;
+	}
+
+	if (m_sSubCode == PMX_XML_VAL_INSERT)
+	{
+		WCString sSystemMasterInsertQuery = "";
+		sSystemMasterInsertQuery  = "INSERT INTO T_SYSTEM_MASTER ( ";
+		sSystemMasterInsertQuery += "C_AGENT_ID, C_WIN_VERSION_STRING, C_UUID, C_MAJOR_VERSION, C_MINOR_VERSION, ";
+		sSystemMasterInsertQuery += "C_BUILD_NUMBER, C_SERVICEPACK_MAJOR, C_SERVICEPACK_MINOR, C_PROCESSOR_ARCHITECTURE, C_RELEASE_ID, ";
+		sSystemMasterInsertQuery += "C_COMPUTER_NAME, C_WORKGROUP_NAME, C_AGENT_STATE, C_LAST_KA_DATE, ";
+		sSystemMasterInsertQuery += "C_COMMON_SYSTEM_YN, C_USE_YN, C_UNINSTALL_YN, C_INSERT_DATE) ";
+		sSystemMasterInsertQuery += "VALUES ( ";
+		sSystemMasterInsertQuery.AppendFormat(" '%s', '%s', '%s', %s, %s, ", LPCSTR(m_sAgentID), LPCSTR(sWinVersionString), LPCSTR(sUUID), LPCSTR(sMajorVersion), LPCSTR(sMinorVersion));
+		sSystemMasterInsertQuery.AppendFormat(" '%s', %s, %s, %s, '%s', ", LPCSTR(sBuildNumber), LPCSTR(sServicePackMajor), LPCSTR(sServicePackMinor), LPCSTR(sProcessorArchitecture), LPCSTR(sReleaseID));
+		sSystemMasterInsertQuery.AppendFormat(" '%s', '%s', %d, UTC_TIMESTAMP(), ", LPCSTR(sComputerName), LPCSTR(sWorkGroupName), PMX_AGENT_STATE_ONLINE);
+		sSystemMasterInsertQuery.AppendFormat(" '%c', '%c', '%c', UTC_TIMESTAMP()) ", ((sSharePC == PMX_XML_VAL_YES) ? PMX_VALUE_Y : PMX_VALUE_N), PMX_VALUE_Y, PMX_VALUE_N);
+		sSystemMasterInsertQuery += "ON DUPLICATE KEY ";
+		sSystemMasterInsertQuery += "UPDATE ";
+		sSystemMasterInsertQuery.AppendFormat("C_WIN_VERSION_STRING = '%s', C_UUID = '%s', C_MAJOR_VERSION = %s, C_MINOR_VERSION = %s, ", LPCSTR(sWinVersionString), LPCSTR(sUUID), LPCSTR(sMajorVersion), LPCSTR(sMinorVersion));
+		sSystemMasterInsertQuery.AppendFormat("C_BUILD_NUMBER = '%s', C_SERVICEPACK_MAJOR = %s, C_SERVICEPACK_MINOR = %s, C_PROCESSOR_ARCHITECTURE = %s, C_RELEASE_ID = '%s', ", LPCSTR(sBuildNumber), LPCSTR(sServicePackMajor), LPCSTR(sServicePackMinor), LPCSTR(sProcessorArchitecture), LPCSTR(sReleaseID));
+		sSystemMasterInsertQuery.AppendFormat("C_COMPUTER_NAME = '%s', C_WORKGROUP_NAME = '%s', C_AGENT_STATE = %d, C_LAST_KA_DATE = UTC_TIMESTAMP(), ", LPCSTR(sComputerName), LPCSTR(sWorkGroupName), PMX_AGENT_STATE_ONLINE);
+		sSystemMasterInsertQuery.AppendFormat("C_COMMON_SYSTEM_YN = '%c', C_USE_YN = 'Y', C_UPDATE_DATE = UTC_TIMESTAMP() ", ((sSharePC == PMX_XML_VAL_YES) ? PMX_VALUE_Y : PMX_VALUE_N), PMX_VALUE_Y, PMX_VALUE_N);
+
+		arrQueries.Add(sSystemMasterInsertQuery);
+
+		WCString sAgentPolicySystemMatchQuery = "";
+		sAgentPolicySystemMatchQuery  = "INSERT IGNORE INTO T_AGENT_POLICY_SYSTEM_MATCH ";
+		sAgentPolicySystemMatchQuery += "(C_AGENT_POLICY_CODE, C_AGENT_ID, C_POLICY_TIMESTAMP, C_INSERT_DATE) VALUES ( ";
+ 		sAgentPolicySystemMatchQuery += "(IFNULL((SELECT C_AGENT_POLICY_CODE FROM T_AGENT_POLICY_MASTER WHERE C_DEFAULT_POLICY_YN = 'Y' ORDER BY C_INSERT_DATE DESC LIMIT 1), 100)), ";
+ 		sAgentPolicySystemMatchQuery.AppendFormat("'%s', UTC_TIMESTAMP(), UTC_TIMESTAMP()) ", LPCSTR(m_sAgentID));
+
+		arrQueries.Add(sAgentPolicySystemMatchQuery);
+	}
+
+	return TRUE;
+}
+
+WCString CPmxXmlIO::GetCurrentGlobalTime()
+{
+	WCString sCurTime = "";
+	time_t   tCur = 0;
+
+	time(&tCur);
+	SWC::swc_get_global_time(tCur, sCurTime);
+	return sCurTime;
+}
+
+WCString CPmxXmlIO::MakeSystemDataRelyXml(IN SWC_BOOL bSuccess, IN const WCString sFailCode, IN const WCString sFailMsg)
+{
+	MCD_STR  sDecl = PMX_XML_HEADER;
+	CMarkup  xml(sDecl + "/n");
+	WCString sCurTime = GetCurrentGlobalTime();
+
+	// <respnose>
+	xml.AddElem(PMX_XML_ELM_RESPONSE);
+	xml.IntoElem();
+	// <reply>
+	xml.AddElem(PMX_XML_ELM_REPLY);
+	xml.IntoElem();
+	xml.AddElem(PMX_XML_ELM_CODE,     LPCSTR(m_sCode));
+	xml.AddElem(PMX_XML_ELM_SUBCODE,  LPCSTR(m_sSubCode));
+	xml.AddElem(PMX_XML_ELM_DATETIME, LPCSTR(sCurTime));
+	xml.AddElem(PMX_XML_ELM_RESULT,   (TRUE == bSuccess) ? PMX_XML_VAL_1 : PMX_XML_VAL_0);
+	if (FALSE == bSuccess)
+	{
+		xml.AddElem(PMX_XML_ELM_FAILCODE, LPCSTR(sFailCode));
+		xml.AddElem(PMX_XML_ELM_FAILMSG,  LPCSTR(sFailMsg), MNF_WITHCDATA);
+	}
+	return GetStrFromXml(xml);
+}
+
+WCString CPmxXmlIO::MakeUserDataReplyXml(IN CMyRSet* pRSet, IN const WCString sFailCode, IN const WCString sFailMsg)
+{
+	MCD_STR sDecl = PMX_XML_HEADER;
+	CMarkup xml(sDecl + "\n");
+	WCString sCurTime = GetCurrentGlobalTime();
+
+	// <response>
+	xml.AddElem(PMX_XML_ELM_RESPONSE);
+	xml.IntoElem();
+	// <reply>
+	xml.AddElem(PMX_XML_ELM_REPLY);
+	xml.IntoElem();
+	xml.AddElem(PMX_XML_ELM_CODE,     LPCSTR(m_sCode));
+	xml.AddElem(PMX_XML_ELM_SUBCODE,  LPCSTR(m_sSubCode));
+	xml.AddElem(PMX_XML_ELM_DATETIME, LPCSTR(sCurTime));
+	xml.AddElem(PMX_XML_ELM_RESULT,   (NULL != pRSet) ? PMX_XML_VAL_1 : PMX_XML_VAL_0);
+	if (NULL == pRSet)
+	{
+		xml.AddElem(PMX_XML_ELM_FAILCODE, LPCSTR(sFailCode));
+		xml.AddElem(PMX_XML_ELM_FAILMSG,  LPCSTR(sFailMsg), MNF_WITHCDATA);
+	}
+	else
+	{
+		if (TRUE == pRSet->FetchRow())
+		{
+			// </reply>
+			xml.OutOfElem();
+			// <DT:UserData>
+			xml.AddElem(PMX_XML_ELM_DT_USERDATA);
+			xml.IntoElem();
+			xml.AddElem(PMX_XML_ELM_USERID,         pRSet->GetStrValue("USER_ID"),       MNF_WITHCDATA);
+			xml.AddElem(PMX_XML_ELM_NAME,           pRSet->GetStrValue("USER_NAME"),     MNF_WITHCDATA);
+			xml.AddElem(PMX_XML_ELM_TEL,            pRSet->GetStrValue("TEL_NO"),        MNF_WITHCDATA);
+			xml.AddElem(PMX_XML_ELM_CELLPHONE,      pRSet->GetStrValue("CELL_PHONE_NO"), MNF_WITHCDATA);
+			xml.AddElem(PMX_XML_ELM_EXPNO,          pRSet->GetStrValue("EXT_NO"),        MNF_WITHCDATA);
+			xml.AddElem(PMX_XML_ELM_DEPARTMENTMENT, pRSet->GetStrValue("DEPT_NAME"),     MNF_WITHCDATA);
+			xml.AddElem(PMX_XML_ELM_MAIL,           pRSet->GetStrValue("EMAIL_ADDR"),    MNF_WITHCDATA);
+		}
+	}
+	return GetStrFromXml(xml);
+}
+
+VOID CPmxXmlIO::MakeRpoductInstallInfoMngQuery(IN const CHAR* sProductElemName, OUT WCArray<WCString>& arrQueries)
+{
+	// <Install>
+	if (TRUE == FindElem(PMX_XML_ELM_INSTALL, TRUE))
+	{
+		WCString sInstall = "", sVersion = "", sLastPolicyDate = "";
+		WCString sProductName = "", sProductElemNameCopy = sProductElemName;
+		INT nProductType = PMX_PRODUCT_TYPE_UNDEFINED;
+
+		if (0 == sProductElemNameCopy.GetLength()) return;
+
+		sInstall = GetElemData();
+		sInstall.MakeUpper();
+		sProductElemNameCopy.MakeUpper();
+
+		if      (sProductElemNameCopy == PMX_XML_ELM_ZONECENTRAL)
+		{
+			nProductType = PMX_PRODUCT_TYPE_ZONECENTRAL;
+			sProductName = PMX_PRODUCT_NAME_ZONECENTRAL;
+		}
+		else if (sProductElemNameCopy == PMX_XML_ELM_ORIZON)
+		{
+			nProductType = PMX_PRODUCT_TYPE_ORIZON;
+			sProductName = PMX_PRODUCT_NAME_ORIZON;
+		}
+		else if (sProductElemNameCopy == PMX_XML_ELM_CRYHOD)
+		{
+			nProductType = PMX_PRODUCT_TYPE_CRYHOD;
+			sProductName = PMX_PRODUCT_NAME_CRYHOD;
+		}
+
+		if (sInstall == PMX_XML_VAL_YES)
+		{
+			if (TRUE == FindElem(PMX_XML_ELM_VERSION,        TRUE)) sVersion        = HandleEscapeChar(GetElemData());
+			if (TRUE == FindElem(PMX_XML_ELM_LASTPOLICYDATE, TRUE)) sLastPolicyDate = GetElemData();
+
+			if(0 == sLastPolicyDate.GetLength()) sLastPolicyDate = "NULL";
+			else                                 sLastPolicyDate.Format("'%s'", LPCSTR(sLastPolicyDate));
+
+			WCString sTRQuery1 = "";
+			sTRQuery1 = "INSERT INTO T_PRIMX_SETUP_INFO (C_AGENT_ID, C_PRODUCT_TYPE, C_PRODUCT_VERSION, C_LAST_POLICY_DATE, C_INSERT_DATE) VALUES ";
+			sTRQuery1.AppendFormat("('%s', %d, '%s', %s, UTC_TIMESTAMP()) ", 
+				LPCSTR(m_sAgentID), nProductType, LPCSTR(sVersion), LPCSTR(sLastPolicyDate));
+			sTRQuery1 += "ON DUPLICATE KEY UPDATE ";
+			sTRQuery1.AppendFormat("C_PRODUCT_VERSION = '%s', ", LPCSTR(sVersion));
+			sTRQuery1.AppendFormat("C_LAST_POLICY_DATE = %s, ", LPCSTR(sLastPolicyDate));
+			sTRQuery1 += "C_UPDATE_DATE = UTC_TIMESTAMP() ";
+			arrQueries.Add(sTRQuery1);
+
+			WCString sTRQuery2 = "";
+			sTRQuery2.Format("CALL PROC_OPERATE_T_POLICY_SYSTEM_MAP('%s', %d, 'ADD') ", LPCSTR(m_sAgentID), nProductType);
+			arrQueries.Add(sTRQuery2);
+		}
+		else
+		{
+			WCString sTRQuery1 = "";
+			sTRQuery1.Format("DELETE FROM T_PRIMX_SETUP_INFO WHERE C_AGENT_ID = '%s' AND C_PRODUCT_TYPE = %d ", LPCSTR(m_sAgentID), nProductType);
+			arrQueries.Add(sTRQuery1);
+
+			WCString sTRQuery2 = "";
+			sTRQuery2.Format("CALL PROC_OPERATE_T_POLICY_SYSTEM_MAP('%s', %d, 'DELETE') ", LPCSTR(m_sAgentID), nProductType);
+			arrQueries.Add(sTRQuery2);
+		}
+	}
+}
+
+VOID CPmxXmlIO::MakeTransactionQueriesFromKADataUpdate(OUT WCArray<WCString>& arrQueries)
+{
+
+	if (0 < m_sAgentVersion.GetLength())
+	{
+		WCString sAgentStatusUpdateQUery = "";
+		sAgentStatusUpdateQUery.Format(" UPDATE T_SYSTEM_MASTER SET C_AGENT_VERSION = '%s', C_AGENT_STATE = %d, ", LPCSTR(m_sAgentVersion), PMX_AGENT_STATE_ONLINE);
+		sAgentStatusUpdateQUery.AppendFormat(" C_LAST_KA_DATE = UTC_TIMESTAMP(), C_UPDATE_DATE = UTC_TIMESTAMP() WHERE C_AGENT_ID = '%s' ", LPCSTR(m_sAgentID));
+		arrQueries.Add(sAgentStatusUpdateQUery);
+	
+		WCString sAgentProductInfo = "";
+		sAgentProductInfo = "INSERT INTO T_PRIMX_SETUP_INFO (C_AGENT_ID, C_PRODUCT_TYPE, C_PRODUCT_VERSION, C_LAST_POLICY_DATE, C_INSERT_DATE) VALUES ";
+		sAgentProductInfo.AppendFormat("('%s', %d, '%s', NULL, UTC_TIMESTAMP()) ", 
+			LPCSTR(m_sAgentID), PMX_PRODUCT_TYPE_AGENT, LPCSTR(m_sAgentVersion));
+		sAgentProductInfo += "ON DUPLICATE KEY UPDATE ";
+		sAgentProductInfo.AppendFormat("C_PRODUCT_VERSION = '%s', ", LPCSTR(m_sAgentVersion));
+		sAgentProductInfo += "C_UPDATE_DATE = UTC_TIMESTAMP() ";
+		arrQueries.Add(sAgentProductInfo);
+	}
+
+	MakeLastError(m_Markup, PMX_ERR_XML_RW_SUCCESS);
+
+	// <DT:ModuleState>
+	if (TRUE == FindAndIntoElem(PMX_XML_ELM_DT_MODULESTATE, TRUE))
+	{
+		// <ZONECENTRAL>
+		if (TRUE == FindAndIntoElem(PMX_XML_ELM_ZONECENTRAL, TRUE))
+		{
+			MakeRpoductInstallInfoMngQuery(PMX_XML_ELM_ZONECENTRAL, arrQueries);
+
+			// </ZONECENTRAL>
+			m_Markup.OutOfElem();
+		}
+
+		// <ORIZON>
+		if (TRUE == FindAndIntoElem(PMX_XML_ELM_ORIZON, TRUE))
+		{
+			MakeRpoductInstallInfoMngQuery(PMX_XML_ELM_ORIZON, arrQueries);
+
+			// </ORIZON>
+			m_Markup.OutOfElem();
+		}
+
+		// <CRYHOD>
+		if (TRUE == FindAndIntoElem(PMX_XML_ELM_CRYHOD, TRUE))
+		{
+			MakeRpoductInstallInfoMngQuery(PMX_XML_ELM_CRYHOD, arrQueries);
+
+			// </CRYHOD>
+			m_Markup.OutOfElem();
+		}
+
+		// <SharePC>
+		if (TRUE == FindElem(PMX_XML_ELM_SHAREPC, TRUE))
+		{
+			WCString sSharePC = "";
+			sSharePC = GetElemData(); 
+			sSharePC.MakeUpper();
+			m_sSharePC = sSharePC;
+		}
+
+		// </DT:ModuleState>
+		m_Markup.OutOfElem();
+	}
+}
+
+WCString CPmxXmlIO::MakeKeepAliveReplyXml(IN SWC_BOOL bSuccess, 
+										  IN WCString sExpandCommmand,                // 6. extended command
+										  IN INT nKeepAliveCycle,                     // 7. keep alive interval (seconds)
+										  IN INT nLogCycle,                           // 8. log send interval (seconds)
+										  IN WCString sAgentUpdate,                   // 9. PRIMX agent update or not (YES/NO)
+										  IN WCString sZonecentralUpdate,             // 10. PRIMX ZoneCentral update or not (YES/NO)
+										  IN WCString sOrizonUpdate,                  // 11. PRIMX Orizon update or not (YES/NO)
+										  IN WCString sCryhodUpdate,                  // 12. PRIMX Cryhod update or not (YES/NO)
+										  IN WCString sServerTime,                    // 13. current server time
+										  IN INT nExportShelfLife,                    // 14. export file day limit (days)
+										  IN WCString sCompanyID,                     // 15. out company ID
+										  IN WCString sAuthServerAddr,                // 16. authentication server address
+										  IN INT nAuthServerPort,                     // 17. authentication server port
+										  IN WCString sProductMenuEnable,             // 18. product ment enable (YES/NO)
+										  IN WCString sWebManagerConsoleMenuEnable,   // 19. web manager console menu enable (YES/NO)
+										  IN WCString sWebManagerConsoleURL,          // 20. web manager console url
+										  IN WCString sExportMenuEnable,              // 21. export menu enable (YES/NO)
+										  IN WCString sAuthWebManager,                // 22. file export request, confirm auth. (YES/NO)
+										  IN WCString sAuthExportFile,                // 23. create export file auth. (YES/NO)
+										  IN WCString sAuthNotEncryptionPath,         // 24. use not encryption path auth. (YES/NO)
+										  IN WCArray<WCString> arrNotEncryptPathList, // 25. not encryption path list ('|' divied)
+										  IN WCString sPolicyUpdateQuery,
+	 									  IN WCString sFailCode, 
+										  IN WCString sFailMsg)
+{
+	MCD_STR sDecl = PMX_XML_HEADER;
+	CMarkup xml(sDecl + "\n");
+	WCString sCurTime = GetCurrentGlobalTime();
+
+	// <respnose>
+	xml.AddElem(PMX_XML_ELM_RESPONSE);
+	xml.IntoElem();
+	// <reply>
+	xml.AddElem(PMX_XML_ELM_REPLY);
+	xml.IntoElem();
+	xml.AddElem(PMX_XML_ELM_CODE,     LPCSTR(m_sCode));
+	xml.AddElem(PMX_XML_ELM_SUBCODE,  LPCSTR(m_sSubCode));
+	xml.AddElem(PMX_XML_ELM_DATETIME, LPCSTR(sCurTime));
+	xml.AddElem(PMX_XML_ELM_RESULT,   (TRUE == bSuccess) ? PMX_XML_VAL_1 : PMX_XML_VAL_0);
+	if (FALSE == bSuccess)
+	{
+		xml.AddElem(PMX_XML_ELM_FAILCODE, LPCSTR(sFailCode));
+		xml.AddElem(PMX_XML_ELM_FAILMSG,  LPCSTR(sFailMsg), MNF_WITHCDATA);
+	}
+	// </reply>
+	xml.OutOfElem();
+
+	// <DT:KeepAliveResponse>
+	xml.AddElem(PMX_XML_ELM_DT_KEEYALIVERESPONSE);
+	xml.IntoElem();
+	xml.AddElem(PMX_XML_ELM_EXPANDCOMMAND, LPCSTR(sExpandCommmand));
+
+	if (sExpandCommmand == PMX_XML_VAL_NONE)
+	{
+		xml.AddElem(PMX_XML_ELM_KEEPALIVECYCLE,    nKeepAliveCycle);
+		xml.AddElem(PMX_XML_ELM_LOGCYCLE,          nLogCycle);
+		xml.AddElem(PMX_XML_ELM_AGENTUPDATE,       LPCSTR(sAgentUpdate));
+		xml.AddElem(PMX_XML_ELM_ZONECENTRALUPDATE, LPCSTR(sZonecentralUpdate));
+		xml.AddElem(PMX_XML_ELM_ORIZONUPDATE,      LPCSTR(sOrizonUpdate));
+		xml.AddElem(PMX_XML_ELM_CRYHODUPDATE,      LPCSTR(sCryhodUpdate));
+		xml.AddElem(PMX_XML_ELM_COMPANYID,         LPCSTR(sCompanyID), MNF_WITHCDATA);
+		xml.AddElem(PMX_XML_ELM_AUTHSERVERADDR,    LPCSTR(sAuthServerAddr), MNF_WITHCDATA);
+		if (0 == nAuthServerPort) xml.AddElem(PMX_XML_ELM_AUTHSERVERPORT);
+		else                      xml.AddElem(PMX_XML_ELM_AUTHSERVERPORT, nAuthServerPort);
+		
+		xml.AddElem(PMX_XML_ELM_POLICYUPDATE, LPCSTR(sPolicyUpdateQuery));
+	}
+	xml.OutOfElem();
+	// </DT:KeepAliveResponse>
+ 	_LOG_ERR("sPolicyUpdateQuery = %s",LPCSTR(sPolicyUpdateQuery) );	
+	// <DT:PolicyData>
+	if (sExpandCommmand == PMX_XML_VAL_NONE)
+	{
+		xml.AddElem(PMX_XML_ELM_DT_POLICYDATA);
+		xml.IntoElem();
+
+		xml.AddElem(PMX_XML_ELM_AUTHWEBMANAGER);
+		xml.SetAttrib(PMX_XML_ATR_URL, LPCSTR(sWebManagerConsoleURL));
+		xml.SetData(LPCSTR(sAuthWebManager));
+
+		xml.AddElem(PMX_XML_ELM_AUTHEXPORFILE);
+		xml.SetAttrib(PMX_XML_ATR_SHELFLIFE, nExportShelfLife);
+		xml.SetAttrib(PMX_XML_ATR_SERVERTIME, LPCSTR(sServerTime));
+		xml.SetData(LPCSTR(sAuthExportFile));
+
+		// <Menu>
+		xml.AddElem(PMX_XML_ELM_MENU);
+		xml.IntoElem();
+		xml.AddElem(PMX_XML_ELM_PRODUCTMENU, LPCSTR(sProductMenuEnable));
+		xml.AddElem(PMX_XML_ELM_WEBUSERCONSOLEMENU, LPCSTR(sWebManagerConsoleMenuEnable));
+		xml.AddElem(PMX_XML_ELM_EXPORTFILEMENU, LPCSTR(sExportMenuEnable));
+		// </Menu>
+		xml.OutOfElem();
+
+		// <AuthNotEncryption>
+		xml.AddElem(PMX_XML_ELM_AUTHNOTENCRYPTION);
+		xml.SetAttrib(PMX_XML_ATR_MODE, LPCSTR(sAuthNotEncryptionPath));
+		if ((sAuthNotEncryptionPath == PMX_XML_VAL_YES) && (0 < arrNotEncryptPathList.GetCount()))
+		{
+			xml.IntoElem();
+			for(UINT nID = 0; nID < arrNotEncryptPathList.GetCount(); nID++)
+			{
+				xml.AddElem(PMX_XML_ELM_PATH, LPCSTR(arrNotEncryptPathList[nID]), MNF_WITHCDATA);
+			}
+			xml.OutOfElem();
+		}
+		// <AuthNotEncryption>
+
+		// </DT:PolicyData>
+		xml.OutOfElem();
+	}
+
+	return GetStrFromXml(xml);
+}
+
+SWC_BOOL CPmxXmlIO::MakeTransactionQueriesFromLogData(OUT WCArray<WCString>& arrQueries)
+{
+	MakeLastError(m_Markup, PMX_ERR_XML_RW_SUCCESS);
+	// <DT:LogData>
+	if (FALSE == FindAndIntoElem(PMX_XML_ELM_DT_LOGDATA)) return FALSE;
+
+	// <LogData>
+	while (true == m_Markup.FindElem(PMX_XML_ELM_LOGDATA))
+	{
+		WCString sProductType = "", sLogType = "", sLogCode = "", sLogDateTime = "", sLogLevel = "", sLogDesc = "";
+		INT nProductType = 0;
+
+		m_Markup.IntoElem();
+		// <ProductType>
+		if (TRUE == FindElem(PMX_XML_ELM_PRODUCYTYPE, TRUE)) { sProductType = GetElemData(); sProductType.MakeUpper(); }
+		// <LogType>
+		if (TRUE == FindElem(PMX_XML_ELM_LOGTYPE, TRUE))       sLogType = HandleEscapeChar(GetElemData());
+		// <LogCode>
+		if (TRUE == FindElem(PMX_XML_ELM_LOGCODE, TRUE))       sLogCode = GetElemData();
+		// <LogDateTime>
+		if (TRUE == FindElem(PMX_XML_ELM_LOGDATETIME, TRUE))   sLogDateTime = GetElemData();
+		// <LogLevel>
+		if (TRUE == FindElem(PMX_XML_ELM_LOGLEVEL, TRUE))      sLogLevel = GetElemData();
+		// <LogDesc>
+		if (TRUE == FindElem(PMX_XML_ELM_LOGDESC, TRUE))       sLogDesc = HandleEscapeChar(GetElemData());
+		// </LogData>
+		m_Markup.OutOfElem();
+
+		if      (sProductType == PMX_XML_VAL_ZONECENTRAL) nProductType = PMX_PRODUCT_TYPE_ZONECENTRAL;
+		else if (sProductType == PMX_XML_VAL_ORIZON)      nProductType = PMX_PRODUCT_TYPE_ORIZON;
+		else if (sProductType == PMX_XML_VAL_CRYHOD)      nProductType = PMX_PRODUCT_TYPE_CRYHOD;
+		else                                              nProductType = PMX_PRODUCT_TYPE_UNDEFINED;
+
+		if (0 < sProductType.GetLength() &&
+			0 < sLogType.GetLength() &&
+			0 < sLogCode.GetLength() &&
+			0 < sLogDateTime.GetLength() &&
+			0 < sLogLevel.GetLength())
+		{
+			WCString sLogQuery = "";
+			sLogQuery  = "INSERT INTO T_AGENT_PRODUCTS_LOG (C_LOG_TIME, C_AGENT_ID, C_PRODUCT_TYPE, C_LOG_TYPE, C_LOG_CODE, C_LOG_LEVEL, C_LOG_TEXT) VALUES ";
+			sLogQuery.AppendFormat("('%s', '%s', %d, '%s', '%s', '%s', '%s') ",
+				LPCSTR(sLogDateTime), LPCSTR(m_sAgentID), nProductType, LPCSTR(sLogType), LPCSTR(sLogCode), LPCSTR(sLogLevel), LPCSTR(sLogDesc));
+			arrQueries.Add(sLogQuery);
+		}
+	}
+	// </DT:LogData>
+
+	return TRUE;
+}
+
+WCString CPmxXmlIO::MakeLogDataReplyXml(IN SWC_BOOL bSuccess, IN const WCString sFailCode, IN const WCString sFailMsg)
+{
+	MCD_STR  sDecl = PMX_XML_HEADER;
+	CMarkup  xml(sDecl + "/n");
+	WCString sCurTime = GetCurrentGlobalTime();
+
+	// <respnose>
+	xml.AddElem(PMX_XML_ELM_RESPONSE);
+	xml.IntoElem();
+	// <reply>
+	xml.AddElem(PMX_XML_ELM_REPLY);
+	xml.IntoElem();
+	xml.AddElem(PMX_XML_ELM_CODE,     LPCSTR(m_sCode));
+	xml.AddElem(PMX_XML_ELM_SUBCODE,  LPCSTR(m_sSubCode));
+	xml.AddElem(PMX_XML_ELM_DATETIME, LPCSTR(sCurTime));
+	xml.AddElem(PMX_XML_ELM_RESULT,   (TRUE == bSuccess) ? PMX_XML_VAL_1 : PMX_XML_VAL_0);
+	if (FALSE == bSuccess)
+	{
+		xml.AddElem(PMX_XML_ELM_FAILCODE, LPCSTR(sFailCode));
+		xml.AddElem(PMX_XML_ELM_FAILMSG,  LPCSTR(sFailMsg), MNF_WITHCDATA);
+	}
+	return GetStrFromXml(xml);
+}
+
+SWC_BOOL CPmxXmlIO::ExtracrtUpdateFileRequest(OUT INT& nProductType, OUT WCString& sInstalledVersion)
+{
+	MakeLastError(m_Markup, PMX_ERR_XML_RW_SUCCESS);
+	// <DT:UpdateFileRequest>
+	if (FALSE == FindAndIntoElem(PMX_XML_ELM_DT_UPDATEFILEREQUEST)) return FALSE;
+	else
+	{
+		// <Type>
+		if (FALSE == FindElem(PMX_XML_ELM_TYPE)) return FALSE;
+		else
+		{
+			WCString sType = GetElemData();
+			sType.MakeUpper();
+			if      (sType == PMX_XML_VAL_ZONECENTRAL) nProductType = PMX_PRODUCT_TYPE_ZONECENTRAL;
+			else if (sType == PMX_XML_VAL_ORIZON)      nProductType = PMX_PRODUCT_TYPE_ORIZON;
+			else if (sType == PMX_XML_VAL_CRYHOD)      nProductType = PMX_PRODUCT_TYPE_CRYHOD;
+			else if (sType == PMX_XML_VAL_AGENT)       nProductType = PMX_PRODUCT_TYPE_AGENT;
+			else
+			{
+				_LOG_ERR("unkonwn or invalid product type:%s", LPCSTR(sType));
+				return FALSE;
+			}
+		}
+		// <UpdateVersion>
+		if (FALSE == FindElem(PMX_XML_ELM_UPDATEVERSION)) return FALSE;
+		else
+		{
+			sInstalledVersion = GetElemData();
+		}
+	}
+	return TRUE;
+}
+
+WCString CPmxXmlIO::MakeUpdateFileReplyXml(IN SWC_BOOL bSuccess, 
+										   IN INT nProductType,
+										   IN WCString sCurrentProductVersion,
+										   IN WCString sFileHash,
+										   IN WCArray<WCString> arrExServerURL,
+										   IN UINT nFileSize,
+										   IN WCString sFailCode,
+										   IN WCString sFailMsg)
+{
+	MCD_STR sDecl = PMX_XML_HEADER;
+    CMarkup xml(sDecl + "\n");
+	WCString sCurTime = GetCurrentGlobalTime(), sProductType = "";
+
+	if      (PMX_PRODUCT_TYPE_ZONECENTRAL == nProductType) sProductType = PMX_XML_VAL_ZONECENTRAL;
+	else if (PMX_PRODUCT_TYPE_ORIZON      == nProductType) sProductType = PMX_XML_VAL_ORIZON;
+	else if (PMX_PRODUCT_TYPE_CRYHOD      == nProductType) sProductType = PMX_XML_VAL_CRYHOD;
+	else if (PMX_PRODUCT_TYPE_AGENT       == nProductType) sProductType = PMX_XML_VAL_AGENT;
+
+	// <respnose>
+	xml.AddElem(PMX_XML_ELM_RESPONSE);
+	xml.IntoElem();
+	// <reply>
+	xml.AddElem(PMX_XML_ELM_REPLY);
+	xml.IntoElem();
+	xml.AddElem(PMX_XML_ELM_CODE,     LPCSTR(m_sCode));
+	xml.AddElem(PMX_XML_ELM_SUBCODE,  LPCSTR(m_sSubCode));
+	xml.AddElem(PMX_XML_ELM_DATETIME, LPCSTR(sCurTime));
+	xml.AddElem(PMX_XML_ELM_RESULT,   (TRUE == bSuccess) ? PMX_XML_VAL_1 : PMX_XML_VAL_0);
+	if (FALSE == bSuccess)
+	{
+		xml.AddElem(PMX_XML_ELM_FAILCODE, LPCSTR(sFailCode));
+		xml.AddElem(PMX_XML_ELM_FAILMSG,  LPCSTR(sFailMsg), MNF_WITHCDATA);
+	}
+	// </reply>
+	xml.OutOfElem();
+
+	// <DT:UpdateFileResponse>
+	xml.AddElem(PMX_XML_ELM_DT_UPDATEFILERESPONSE);
+	xml.IntoElem();
+	xml.AddElem(PMX_XML_ELM_TYPE, LPCSTR(sProductType));
+	xml.AddElem(PMX_XML_ELM_UPDATEVERSION, LPCSTR(sCurrentProductVersion));
+	xml.AddElem(PMX_XML_ELM_HASHDATA, LPCSTR(sFileHash));
+	if (0 == nFileSize) xml.AddElem(PMX_XML_ELM_FILESIZE);
+	else                xml.AddElem(PMX_XML_ELM_FILESIZE, nFileSize);
+	xml.AddElem(PMX_XML_ELM_DOWNLOADINFO);
+	// <DownloadInfo>
+	// multiple url 
+	xml.IntoElem();
+	for (UINT nID = 0; nID < arrExServerURL.GetCount(); nID++)
+	{
+		if (0 < arrExServerURL[nID].GetLength()) 
+		{
+			xml.AddElem(PMX_XML_ELM_DOWNLOADURL, LPCSTR(arrExServerURL[nID]));;
+		}
+	}
+	// </DownloadInfo>
+	xml.OutOfElem();
+	// </DT:UpdateFileResponse>
+	
+	return GetStrFromXml(xml);
+}
+
+SWC_BOOL CPmxXmlIO::ExtractAuthFileInfo(OUT WCString& sFileKey, OUT WCString& sCompanyID, OUT WCString& sFileHash, OUT WCString& sRequestIP, OUT WCString& sRequestMAC)
+{
+	MakeLastError(m_Markup, PMX_ERR_XML_RW_SUCCESS);
+	// <DT:DecryptionAuthRequest>
+	if (FALSE == FindAndIntoElem(PMX_XML_ELM_DT_DECRYPTIONAUTHREQUEST)) return FALSE;
+	else
+	{
+		if (FALSE == FindElem(PMX_XML_ELM_FILEKEY)) return FALSE;
+		else                                        sFileKey = GetElemData(); 
+
+		if (TRUE == FindElem(PMX_XML_ELM_COMPANYID, TRUE)){
+		       	sCompanyID = GetElemData();
+		}else 
+		{
+		_LOG_ERR("extractAuthFileInfo  compny fail ");		
+		}
+
+		if (0 == sCompanyID.GetLength()) sCompanyID = GetCompanyID();
+
+		if (FALSE == FindElem(PMX_XML_ELM_FILEHASH)) return FALSE;
+		else                                         sFileHash = GetElemData();
+
+		if (TRUE == FindElem(PMX_XML_ELM_IP)) sRequestIP = GetElemData();
+		if (TRUE == FindElem(PMX_XML_ELM_MAC)) sRequestMAC = GetElemData();
+
+		_LOG_ERR("extractAuthFileInfo  ok ");
+	}
+	return TRUE;
+}
+
+WCString CPmxXmlIO::MakeAuthExDecryptReplyXml(IN SWC_BOOL bSuccess, IN const WCString sFailCode, IN const WCString sFailMsg)
+{
+	MCD_STR  sDecl = PMX_XML_HEADER;
+	CMarkup  xml(sDecl + "/n");
+	WCString sCurTime = GetCurrentGlobalTime();
+
+	// <respnose>
+	xml.AddElem(PMX_XML_ELM_RESPONSE);
+	xml.IntoElem();
+	// <reply>
+	xml.AddElem(PMX_XML_ELM_REPLY);
+	xml.IntoElem();
+	xml.AddElem(PMX_XML_ELM_CODE,     LPCSTR(m_sCode));
+	xml.AddElem(PMX_XML_ELM_SUBCODE,  LPCSTR(m_sSubCode));
+	xml.AddElem(PMX_XML_ELM_DATETIME, LPCSTR(sCurTime));
+	xml.AddElem(PMX_XML_ELM_RESULT,   (TRUE == bSuccess) ? PMX_XML_VAL_1 : PMX_XML_VAL_0);
+	if (FALSE == bSuccess)
+	{
+		xml.AddElem(PMX_XML_ELM_FAILCODE, LPCSTR(sFailCode));
+		xml.AddElem(PMX_XML_ELM_FAILMSG,  LPCSTR(sFailMsg), MNF_WITHCDATA);
+	}
+	return GetStrFromXml(xml);
+}
+
+SWC_BOOL CPmxXmlIO::ExtractExportFileInfo(OUT WCString& sFileKey, 
+										  OUT WCString& sFileHash, 
+										  OUT WCString& sFileName, 
+										  OUT UINT64& lFileSize,
+										  OUT WCArray<WCString>& arrFilesInsQueuries)
+{
+	MakeLastError(m_Markup, PMX_ERR_XML_RW_SUCCESS);
+	// <DT:ExportFile>
+	if (FALSE == FindAndIntoElem(PMX_XML_ELM_DT_EXPORTFILE)) return FALSE;
+	else
+	{
+		if (FALSE == FindElem(PMX_XML_ELM_FILEKEY)) return FALSE;
+		else                                        sFileKey = GetElemData(); 
+
+		// <OrgFiles>
+		if (FALSE == FindAndIntoElem(PMX_XML_ELM_ORGFILES)) return FALSE;
+		else
+		{
+			// <Filename>
+			while (true == m_Markup.FindElem(PMX_XML_ELM_FILENAME))
+			{
+				WCString sCurFileName = "", sCurFileSize = "", sInsertQuery = "";
+				UINT64   lCurFileSize = 0;
+
+				sCurFileName = HandleEscapeChar(GetElemData());
+				sCurFileSize = GetAttrData(PMX_XML_ATR_SIZE);
+				if (TRUE == SWC::swc_isnumber_str(sCurFileSize))
+				{
+					lCurFileSize = strtoull(LPCSTR(sCurFileSize), NULL, 10);
+				}
+				else
+				{
+					_LOG_ERR("file name: %s / file size: %s. invalid file size string", LPCSTR(sCurFileName), LPCSTR(sCurFileSize));
+					lCurFileSize = 0;
+				}
+
+				sInsertQuery = "INSERT IGNORE INTO T_EX_ARCHIVED_FILE_INFO (C_FILE_KEY, C_FILE_NAME, C_FILE_SIZE, C_INSERT_DATE) ";
+				sInsertQuery.AppendFormat("VALUES ('%s', '%s', %lu, UTC_TIMESTAMP()) ", LPCSTR(sFileKey), LPCSTR(sCurFileName), lCurFileSize);
+
+				arrFilesInsQueuries.Add(sInsertQuery);
+			}
+			m_Markup.OutOfElem(); // </OrgFiles>
+		}
+
+		if (FALSE == FindElem(PMX_XML_ELM_FILEHASH)) return FALSE;
+		else                                         sFileHash = GetElemData();
+		if (TRUE == FindElem(PMX_XML_ELM_FILESIZE)) 
+		{
+			WCString sFileSize = "";
+
+			sFileSize = GetElemData();
+			if (TRUE == SWC::swc_isnumber_str(sFileSize))
+			{
+				lFileSize = strtoull(LPCSTR(sFileSize), NULL, 10);
+			}
+			else
+			{
+				lFileSize = 0;
+			}
+		}
+		if (TRUE == FindElem(PMX_XML_ELM_FILENAME))
+		{
+			sFileName = HandleEscapeChar(GetElemData());
+		}
+	}
+	return TRUE;
+}
+
+WCString CPmxXmlIO::MakeInsertExDecryptReplyXml(IN SWC_BOOL bSuccess, IN const WCString sFailCode, IN const WCString sFailMsg)
+{
+	MCD_STR  sDecl = PMX_XML_HEADER;
+	CMarkup  xml(sDecl + "/n");
+	WCString sCurTime = GetCurrentGlobalTime();
+
+	// <respnose>
+	xml.AddElem(PMX_XML_ELM_RESPONSE);
+	xml.IntoElem();
+	// <reply>
+	xml.AddElem(PMX_XML_ELM_REPLY);
+	xml.IntoElem();
+	xml.AddElem(PMX_XML_ELM_CODE,     LPCSTR(m_sCode));
+	xml.AddElem(PMX_XML_ELM_SUBCODE,  LPCSTR(m_sSubCode));
+	xml.AddElem(PMX_XML_ELM_DATETIME, LPCSTR(sCurTime));
+	xml.AddElem(PMX_XML_ELM_RESULT,   (TRUE == bSuccess) ? PMX_XML_VAL_1 : PMX_XML_VAL_0);
+	if (FALSE == bSuccess)
+	{
+		xml.AddElem(PMX_XML_ELM_FAILCODE, LPCSTR(sFailCode));
+		xml.AddElem(PMX_XML_ELM_FAILMSG,  LPCSTR(sFailMsg), MNF_WITHCDATA);
+	}
+	return GetStrFromXml(xml);
+}
+
+//-----------------------------------------------------------------------------
+#endif // __PMX_IO_CPP__

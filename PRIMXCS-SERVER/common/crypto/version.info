@@ -1,0 +1,13 @@
+#
+# version infomation
+#
+MAJOR_VER=1
+MINOR1_VER=0
+MINOR2_VER=0
+BUILD_NO=1
+ADD_TAG=""
+
+PROJECT_NAME=pmxcrypto
+
+# history
+# [2023-06-18] v1.0.0.1 : created 
