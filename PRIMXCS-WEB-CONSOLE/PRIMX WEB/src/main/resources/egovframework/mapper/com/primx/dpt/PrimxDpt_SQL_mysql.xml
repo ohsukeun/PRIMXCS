@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="departmentDAO">
+
+    <!-- 부서 목록 조회 -->
+    
+    <!-- 
+        부서 목록 조회 
+        DeptSearchVO:
+          - searchKeyword (String)
+          - includeSubDept (boolean)
+          - 기타 필요 필드...
+        DeptVO로 결과 매핑
+     -->
+    <select id="selectDeptTree"
+            parameterType="egovframework.com.primx.fun.dpt.service.DeptSearchVO"
+            resultType="egovframework.com.primx.fun.dpt.service.DeptVO">
+
+        <!-- 
+            검색 조건 등에 따라
+            1) 하위부서 포함 여부 (includeSubDept == true)
+               -> 검색된 부서 + 상위 부서 + 하위 부서 전체
+            2) 하위부서 미포함 (includeSubDept == false)
+               -> 검색된 부서 + 상위 부서
+         -->
+        <choose>
+
+            <!-- ====================== ① 하위부서 포함 (includeSubDept = true) ====================== -->
+            <when test="includeSubDept == true">
+				WITH RECURSIVE
+				search_dept AS (
+				    SELECT 
+				        DEPT_SEQ          AS deptSeq,
+				        COMPANY_ID        AS companyId,
+				        DEPT_ID           AS deptId,
+				        DEPT_NAME         AS deptName,
+				        PARENT_ID         AS parentId,
+				        LEVEL             AS level,
+				        SORT_ORDER        AS sortOrder,
+				        INSERTED_BY_HR_YN AS insertedByHrYn,
+				        USE_YN            AS useYn
+				    FROM COMTNDEPTINFOMGR
+				    WHERE 1=1
+				    <if test="searchKeyword != null and searchKeyword != ''">
+				    	AND DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                   </if>
+				),
+				descendants AS (
+				    SELECT 
+				        deptSeq,
+				        companyId,
+				        deptId,
+				        deptName,
+				        parentId,
+				        level,
+				        sortOrder,
+				        insertedByHrYn,
+				        useYn
+				    FROM search_dept
+				    UNION ALL
+				    SELECT 
+				        child.DEPT_SEQ          AS deptSeq,
+				        child.COMPANY_ID        AS companyId,
+				        child.DEPT_ID           AS deptId,
+				        child.DEPT_NAME         AS deptName,
+				        child.PARENT_ID         AS parentId,
+				        child.LEVEL             AS level,
+				        child.SORT_ORDER        AS sortOrder,
+				        child.INSERTED_BY_HR_YN AS insertedByHrYn,
+				        child.USE_YN            AS useYn
+				    FROM COMTNDEPTINFOMGR child
+				         JOIN descendants d 
+				           ON child.PARENT_ID = d.deptId
+				),
+				ancestors AS (
+				    SELECT 
+				        deptSeq,
+				        companyId,
+				        deptId,
+				        deptName,
+				        parentId,
+				        level,
+				        sortOrder,
+				        insertedByHrYn,
+				        useYn
+				    FROM search_dept
+				    UNION ALL
+				    SELECT
+				        parent.DEPT_SEQ          AS deptSeq,
+				        parent.COMPANY_ID        AS companyId,
+				        parent.DEPT_ID           AS deptId,
+				        parent.DEPT_NAME         AS deptName,
+				        parent.PARENT_ID         AS parentId,
+				        parent.LEVEL             AS level,
+				        parent.SORT_ORDER        AS sortOrder,
+				        parent.INSERTED_BY_HR_YN AS insertedByHrYn,
+				        parent.USE_YN            AS useYn
+				    FROM COMTNDEPTINFOMGR parent
+				         JOIN ancestors a 
+				           ON a.parentId = parent.DEPT_ID
+				),
+				all_related AS (
+				    SELECT * FROM descendants
+				    UNION
+				    SELECT * FROM ancestors
+				)
+				SELECT
+				    deptSeq,
+				    companyId,
+				    deptId,
+				    deptName,
+				    parentId,
+				    level,
+				    sortOrder,
+				    insertedByHrYn,
+				    useYn
+				FROM all_related
+                WHERE useYn = 'Y'
+				ORDER BY deptId ASC, sortOrder ASC
+            </when>
+            <!-- ====================== ② 하위부서 미포함 (includeSubDept = false) ====================== -->
+            <otherwise>
+				WITH RECURSIVE
+				search_dept AS (
+				    SELECT 
+				        DEPT_SEQ          AS deptSeq,
+				        COMPANY_ID        AS companyId,
+				        DEPT_ID           AS deptId,
+				        DEPT_NAME         AS deptName,
+				        PARENT_ID         AS parentId,
+				        LEVEL             AS level,
+				        SORT_ORDER        AS sortOrder,
+				        INSERTED_BY_HR_YN AS insertedByHrYn,
+				        USE_YN            AS useYn
+				    FROM COMTNDEPTINFOMGR
+				    WHERE 1=1
+				    <if test="searchKeyword != null and searchKeyword != ''">
+				    	AND DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                   </if>
+				),
+				ancestors AS (
+				    SELECT 
+				        deptSeq,
+				        companyId,
+				        deptId,
+				        deptName,
+				        parentId,
+				        level,
+				        sortOrder,
+				        insertedByHrYn,
+				        useYn
+				    FROM search_dept
+				    UNION ALL
+				    SELECT
+				        parent.DEPT_SEQ          AS deptSeq,
+				        parent.COMPANY_ID        AS companyId,
+				        parent.DEPT_ID           AS deptId,
+				        parent.DEPT_NAME         AS deptName,
+				        parent.PARENT_ID         AS parentId,
+				        parent.LEVEL             AS level,
+				        parent.SORT_ORDER        AS sortOrder,
+				        parent.INSERTED_BY_HR_YN AS insertedByHrYn,
+				        parent.USE_YN            AS useYn
+				    FROM COMTNDEPTINFOMGR parent
+				         JOIN ancestors a
+				           ON a.parentId = parent.DEPT_ID  
+				),
+				all_related AS (
+				    SELECT * FROM search_dept
+				    UNION
+				    SELECT * FROM ancestors
+				)
+				SELECT
+				    deptSeq,
+				    companyId,
+				    deptId,
+				    deptName,
+				    parentId,
+				    level,
+				    sortOrder,
+				    insertedByHrYn,
+				    useYn
+				FROM all_related
+				WHERE useYn = 'Y'
+				ORDER BY deptId ASC, sortOrder ASC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <select id="selectDeptTreeCount"
+            parameterType="egovframework.com.primx.fun.dpt.service.DeptSearchVO"
+            resultType="int">
+
+        <choose>
+
+            <!-- ====================== ① 하위부서 포함 (includeSubDept = true) ====================== -->
+            <when test="includeSubDept == true">
+                WITH RECURSIVE
+                search_dept AS (
+                    SELECT 
+                        DEPT_SEQ          AS deptSeq,
+                        COMPANY_ID        AS companyId,
+                        DEPT_ID           AS deptId,
+                        DEPT_NAME         AS deptName,
+                        PARENT_ID         AS parentId,
+                        LEVEL             AS level,
+                        SORT_ORDER        AS sortOrder,
+                        INSERTED_BY_HR_YN AS insertedByHrYn,
+                        USE_YN            AS useYn
+                    FROM COMTNDEPTINFOMGR
+                    WHERE 1=1
+                    <if test="searchKeyword != null and searchKeyword != ''">
+                        AND DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </if>
+                ),
+                descendants AS (
+                    SELECT 
+                        deptSeq,
+                        companyId,
+                        deptId,
+                        deptName,
+                        parentId,
+                        level,
+                        sortOrder,
+                        insertedByHrYn,
+                        useYn
+                    FROM search_dept
+                    UNION ALL
+                    SELECT 
+                        child.DEPT_SEQ          AS deptSeq,
+                        child.COMPANY_ID        AS companyId,
+                        child.DEPT_ID           AS deptId,
+                        child.DEPT_NAME         AS deptName,
+                        child.PARENT_ID         AS parentId,
+                        child.LEVEL             AS level,
+                        child.SORT_ORDER        AS sortOrder,
+                        child.INSERTED_BY_HR_YN AS insertedByHrYn,
+                        child.USE_YN            AS useYn
+                    FROM COMTNDEPTINFOMGR child
+                         JOIN descendants d 
+                           ON child.PARENT_ID = d.deptId
+                ),
+                ancestors AS (
+                    SELECT 
+                        deptSeq,
+                        companyId,
+                        deptId,
+                        deptName,
+                        parentId,
+                        level,
+                        sortOrder,
+                        insertedByHrYn,
+                        useYn
+                    FROM search_dept
+                    UNION ALL
+                    SELECT
+                        parent.DEPT_SEQ          AS deptSeq,
+                        parent.COMPANY_ID        AS companyId,
+                        parent.DEPT_ID           AS deptId,
+                        parent.DEPT_NAME         AS deptName,
+                        parent.PARENT_ID         AS parentId,
+                        parent.LEVEL             AS level,
+                        parent.SORT_ORDER        AS sortOrder,
+                        parent.INSERTED_BY_HR_YN AS insertedByHrYn,
+                        parent.USE_YN            AS useYn
+                    FROM COMTNDEPTINFOMGR parent
+                         JOIN ancestors a 
+                           ON a.parentId = parent.DEPT_ID
+                ),
+                all_related AS (
+                    SELECT * FROM descendants
+                    UNION
+                    SELECT * FROM ancestors
+                )
+                SELECT COUNT(*)
+                FROM all_related
+                WHERE useYn = 'Y'
+            </when>
+
+            <!-- ====================== ② 하위부서 미포함 (includeSubDept = false) ====================== -->
+            <otherwise>
+                WITH RECURSIVE
+                search_dept AS (
+                    SELECT 
+                        DEPT_SEQ          AS deptSeq,
+                        COMPANY_ID        AS companyId,
+                        DEPT_ID           AS deptId,
+                        DEPT_NAME         AS deptName,
+                        PARENT_ID         AS parentId,
+                        LEVEL             AS level,
+                        SORT_ORDER        AS sortOrder,
+                        INSERTED_BY_HR_YN AS insertedByHrYn,
+                        USE_YN            AS useYn
+                    FROM COMTNDEPTINFOMGR
+                    WHERE 1=1
+                    <if test="searchKeyword != null and searchKeyword != ''">
+                        AND DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </if>
+                ),
+                ancestors AS (
+                    SELECT 
+                        deptSeq,
+                        companyId,
+                        deptId,
+                        deptName,
+                        parentId,
+                        level,
+                        sortOrder,
+                        insertedByHrYn,
+                        useYn
+                    FROM search_dept
+                    UNION ALL
+                    SELECT
+                        parent.DEPT_SEQ          AS deptSeq,
+                        parent.COMPANY_ID        AS companyId,
+                        parent.DEPT_ID           AS deptId,
+                        parent.DEPT_NAME         AS deptName,
+                        parent.PARENT_ID         AS parentId,
+                        parent.LEVEL             AS level,
+                        parent.SORT_ORDER        AS sortOrder,
+                        parent.INSERTED_BY_HR_YN AS insertedByHrYn,
+                        parent.USE_YN            AS useYn
+                    FROM COMTNDEPTINFOMGR parent
+                         JOIN ancestors a
+                           ON a.parentId = parent.DEPT_ID  
+                ),
+                all_related AS (
+                    SELECT * FROM search_dept
+                    UNION
+                    SELECT * FROM ancestors
+                )
+                SELECT COUNT(*)
+                FROM all_related
+                WHERE useYn = 'Y'
+            </otherwise>
+
+        </choose>
+    </select>
+
+    <!-- 마지막 order_index 조회 -->
+    <select id="selectOrderIndex" resultType="java.lang.Long">
+        SELECT 
+        IFNULL((
+            SELECT 
+                SORT_ORDER
+            FROM 
+                COMTNDEPTINFOMGR
+            WHERE 
+                INSERTED_BY_HR_YN = 'N'
+                AND SORT_ORDER IS NOT NULL
+                AND USE_YN = 'Y'
+            ORDER BY 
+                SORT_ORDER DESC 
+            LIMIT 1
+        ), 0) AS SORT_ORDER;
+    </select>
+
+    <!-- 부서 등록 -->
+    <insert id="insertDepartment" parameterType="egovframework.com.primx.fun.dpt.service.DeptVO">
+        INSERT INTO COMTNDEPTINFOMGR (
+            DEPT_ID,
+            COMPANY_ID,
+            PARENT_ID,
+            DEPT_NAME,
+            INSERTED_BY_HR_YN,
+            SORT_ORDER,
+            LEVEL,
+            CREATED_DATE,
+            UPDATE_DATE,
+            USE_YN
+        ) VALUES (
+            #{deptId},
+            #{companyId},
+            #{parentId},
+            #{deptName},
+            #{insertedByHrYn},
+            #{level},
+            #{sortOrder},
+            UTC_TIMESTAMP(),
+            UTC_TIMESTAMP(),
+            'Y'
+        )
+    </insert>
+
+    <!-- 부서 상세 조회 (HR 연동 여부 체크 없이) -->
+    <select id="selectDeptId" parameterType="map" resultType="egovframework.com.primx.fun.dpt.service.DeptVO">
+        SELECT 
+            cdi.DEPT_SEQ as deptSeq,
+            cdi.COMPANY_ID as companyId,
+            cdi.DEPT_ID as deptId,
+            cdi.PARENT_ID as parentId,
+            cdi.DEPT_NAME as deptName,
+            cdi.INSERTED_BY_HR_YN as insertedByHrYn,
+            DATE_FORMAT(cdi.CREATED_DATE, '%Y-%m-%d') as createdDate,
+            DATE_FORMAT(cdi.UPDATE_DATE, '%Y-%m-%d') as updateDate,
+            cdi.SORT_ORDER as sortOrder,
+            (
+                SELECT p.DEPT_NAME 
+                FROM COMTNDEPTINFOMGR p 
+                WHERE p.DEPT_ID = cdi.PARENT_ID
+                LIMIT 1  -- 여러 결과가 있을 경우 첫 번째 결과만 반환
+            ) as parentDeptName,
+            cdi.USE_YN as useYn
+        FROM 
+            COMTNDEPTINFOMGR cdi
+        WHERE 
+            cdi.DEPT_ID = #{deptId}
+            AND cdi.USE_YN = 'Y'
+    </select>
+
+    <!-- 부서명 수정 -->
+    <update id="updateDeptName" parameterType="map">
+        UPDATE COMTNDEPTINFOMGR 
+        SET 
+            DEPT_NAME = #{deptName},
+            UPDATE_DATE = UTC_TIMESTAMP()
+        WHERE 
+            DEPT_ID = #{deptId}
+            AND INSERTED_BY_HR_YN = 'N'
+    </update>
+
+    <!-- 하위 부서들의 상위 부서 ID 변경 -->
+    <update id="updateChildrenParentId" parameterType="map">
+        UPDATE COMTNDEPTINFOMGR 
+        SET 
+            PARENT_ID = #{newParentId},
+            UPDATE_DATE = UTC_TIMESTAMP()
+        WHERE 
+            PARENT_ID = #{deptId}
+    </update>
+
+    <!-- 부서에 속한 사용자들의 부서를 NO_DEPT로 변경 -->
+    <update id="updateUsersDeptToNoDept" parameterType="map">
+        UPDATE COMTNEMPLYRINFO 
+        SET 
+            ORGNZT_ID = 'NO_DEPT', 
+            UPDATE_DATE = UTC_TIMESTAMP()
+        WHERE 
+            ORGNZT_ID = #{deptId}
+    </update>
+
+    <!-- 부서 삭제 -->
+    <update id="deleteDepartment" parameterType="map">
+        UPDATE COMTNDEPTINFOMGR 
+        SET 
+            USE_YN = 'N',
+            UPDATE_DATE = UTC_TIMESTAMP()
+        WHERE 
+            DEPT_ID = #{deptId}
+    </update>
+
+    <!-- 하위 부서 목록 조회 -->
+    <select id="selectParentId" parameterType="map" resultType="egovframework.com.primx.fun.dpt.service.DeptVO">
+        SELECT 
+            cdi.DEPT_SEQ as deptSeq,
+            cdi.COMPANY_ID as companyId,
+            cdi.DEPT_ID as deptId,
+            cdi.PARENT_ID as parentId,
+            cdi.DEPT_NAME as deptName,
+            cdi.INSERTED_BY_HR_YN as insertedByHrYn,
+            DATE_FORMAT(cdi.CREATED_DATE, '%Y-%m-%d') as createdDate,
+            DATE_FORMAT(cdi.UPDATE_DATE, '%Y-%m-%d') as updateDate,
+            cdi.SORT_ORDER as sortOrder
+        FROM 
+            COMTNDEPTINFOMGR cdi
+        WHERE 
+            cdi.PARENT_ID = #{parentId}
+            AND cdi.USE_YN = 'Y'
+    </select>
+
+    <!-- 회사 목록 조회 -->
+    <select id="selectCompanyList" resultType="egovframework.com.primx.fun.dpt.service.CompanyDTO">
+        SELECT 
+            DEPT_ID AS companyId,
+            DEPT_NAME AS companyName
+        FROM 
+            COMTNDEPTINFOMGR
+        WHERE 
+            USE_YN = 'Y'
+            AND PARENT_ID is null
+        ORDER BY 
+            SORT_ORDER ASC, DEPT_NAME ASC
+    </select>
+
+    <!-- 부서 트리 조회 (부서 이름 기준) -->
+    <select id="selectDeptUserIdList" parameterType="egovframework.com.primx.fun.dpt.service.DeptSearchVO" resultType="egovframework.com.primx.fun.dpt.service.DeptVO">
+        WITH RECURSIVE DEPT_CTE AS (
+            SELECT
+                DEPT_SEQ as deptSeq,
+                DEPT_ID as deptId,
+                DEPT_NAME as deptName,
+                PARENT_ID as parentId,
+                1 AS depth
+            FROM COMTNDEPTINFOMGR
+            WHERE DEPT_NAME = #{searchKeyword}
+
+            UNION ALL
+
+            SELECT
+                c.DEPT_SEQ as deptSeq,
+                c.DEPT_ID as deptId,
+                c.DEPT_NAME as deptName,
+                c.PARENT_ID as parentId,
+                d.depth + 1 AS depth
+            FROM COMTNDEPTINFOMGR AS c
+            INNER JOIN DEPT_CTE AS d ON d.deptId = c.PARENT_ID
+        )
+        SELECT 
+            deptSeq,
+            deptId,
+            deptName,
+            parentId,
+            depth  
+        FROM DEPT_CTE
+        WHERE (#{includeSubDept} = 'true' OR depth = 1)
+        ORDER BY depth, deptSeq;
+    </select>
+
+    <!-- 부서명 조회 -->
+    <select id="selectDeptName" parameterType="map" resultType="String">
+        SELECT DEPT_NAME FROM COMTNDEPTINFOMGR WHERE DEPT_ID = #{deptId}
+    </select>
+
+    <!-- selectDeptTreeByDeptId -->
+    <select id="selectDeptTreeByDeptId"
+            parameterType="egovframework.com.primx.fun.dpt.service.DeptSearchVO"
+            resultType="egovframework.com.primx.fun.dpt.service.DeptVO">
+
+        <choose>
+            <!-- ====================== ① 하위부서 포함 (includeSubDept = true) ====================== -->
+            <when test="includeSubDept == true">
+                WITH RECURSIVE dept_hierarchy AS (
+                    SELECT 
+                        DEPT_SEQ          AS deptSeq
+                        , COMPANY_ID        AS companyId
+                        , DEPT_ID           AS deptId
+                        , DEPT_NAME         AS deptName
+                        , PARENT_ID         AS parentId
+                        , LEVEL             AS level
+                        , SORT_ORDER        AS sortOrder
+                        , INSERTED_BY_HR_YN AS insertedByHrYn
+                        , USE_YN            AS useYn
+                    FROM COMTNDEPTINFOMGR
+                    WHERE DEPT_ID = #{deptId}
+                    UNION ALL
+                    SELECT
+                        c.DEPT_SEQ          AS deptSeq
+                        , c.COMPANY_ID        AS companyId
+                        , c.DEPT_ID           AS deptId
+                        , c.DEPT_NAME         AS deptName
+                        , c.PARENT_ID         AS parentId
+                        , c.LEVEL             AS level
+                        , c.SORT_ORDER        AS sortOrder
+                        , c.INSERTED_BY_HR_YN AS insertedByHrYn
+                        , c.USE_YN            AS useYn
+                    FROM COMTNDEPTINFOMGR AS c
+                    JOIN dept_hierarchy AS h ON c.PARENT_ID = h.deptId
+                )
+                SELECT 
+                    deptSeq
+                    , companyId
+                    , deptId
+                    , deptName
+                    , parentId
+                    , level
+                    , sortOrder
+                    , insertedByHrYn
+                    , useYn
+                FROM dept_hierarchy;
+            </when>
+            <!-- ====================== ② 하위부서 미포함 (includeSubDept = false) ====================== -->
+            <otherwise>
+                SELECT 
+                    DEPT_SEQ          AS deptSeq,
+                    COMPANY_ID        AS companyId,
+                    DEPT_ID           AS deptId,
+                    DEPT_NAME         AS deptName,
+                    PARENT_ID         AS parentId,
+                    LEVEL             AS level,
+                    SORT_ORDER        AS sortOrder,
+                    INSERTED_BY_HR_YN AS insertedByHrYn,
+                    USE_YN            AS useYn
+                FROM COMTNDEPTINFOMGR
+                WHERE DEPT_ID = #{deptId}
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 회사 ID 수정 -->
+    <update id="updateDeptMasterCompanyId" parameterType="map">
+        UPDATE COMTNDEPTINFOMGR
+        SET 
+            COMPANY_ID = #{companyId},
+            DEPT_ID = #{companyId}
+        WHERE 
+            COMPANY_ID = #{preCompanyId}
+    </update>
+
+    <!-- 회사 중복 체크 -->
+    <select id="selectCompanyCode" parameterType="string" resultType="int">
+        SELECT COUNT(*) 
+        FROM COMTNDEPTINFOMGR 
+        WHERE COMPANY_ID = #{companyCode} OR DEPT_ID = #{companyCode}
+    </select>
+
+    <!-- 루트 회사 정보 조회 -->
+    <select id="selectRootCompanyInfo" resultType="egovframework.com.primx.fun.dpt.service.DeptVO">
+        SELECT 
+            DEPT_SEQ          AS deptSeq,
+            COMPANY_ID        AS companyId,
+            DEPT_ID           AS deptId,
+            DEPT_NAME         AS deptName,
+            PARENT_ID         AS parentId,
+            LEVEL             AS level,
+            SORT_ORDER        AS sortOrder,
+            INSERTED_BY_HR_YN AS insertedByHrYn,
+            USE_YN            AS useYn
+        FROM COMTNDEPTINFOMGR
+        WHERE COMPANY_ID = DEPT_ID AND PARENT_ID is null AND INSERTED_BY_HR_YN = 'Y' AND USE_YN = 'Y'
+        ORDER BY SORT_ORDER ASC, DEPT_NAME ASC
+    </select>
+
+    <!-- 부서 경로 조회 -->
+    <select id="selectDeptPath" parameterType="string" resultType="string">
+        WITH RECURSIVE dept_path AS (
+            SELECT 
+                DEPT_SEQ,
+                COMPANY_ID,
+                DEPT_ID,
+                DEPT_NAME,
+                PARENT_ID,
+                CAST(DEPT_NAME AS CHAR(255)) AS full_path,
+                1 AS level
+            FROM COMTNDEPTINFOMGR
+            WHERE DEPT_ID = (SELECT PARENT_ID FROM COMTNDEPTINFOMGR WHERE DEPT_ID = #{deptId})
+            UNION ALL
+            SELECT 
+                parent.DEPT_SEQ,
+                parent.COMPANY_ID,
+                parent.DEPT_ID,
+                parent.DEPT_NAME,
+                parent.PARENT_ID,
+                CAST(CONCAT(parent.DEPT_NAME, '/', child.full_path) AS CHAR(255)) AS full_path,
+                child.level + 1 AS level
+            FROM COMTNDEPTINFOMGR parent
+            JOIN dept_path child 
+            ON child.PARENT_ID = parent.DEPT_ID 
+            AND child.COMPANY_ID = parent.COMPANY_ID
+            WHERE child.level &lt; 10
+        )
+        SELECT 
+            full_path AS deptPath
+        FROM dept_path
+        ORDER BY level DESC
+        LIMIT 1;
+    </select>
+
+    <!-- 회사 경로 조회-->
+    <select id="selectCompanyPath" parameterType="string" resultType="string">
+        SELECT 
+            DEPT_NAME AS companyName
+        FROM COMTNDEPTINFOMGR
+        WHERE DEPT_ID = #{companyId}
+    </select>
+    
+
+    <!-- 회사 코드 목록 조회 -->
+    <select id="loadCompanyCodeList" resultType="egovframework.com.primx.fun.dpt.service.CompanyDTO">
+        SELECT 
+            DEPT_ID AS companyId,
+            DEPT_NAME AS companyName
+        FROM COMTNDEPTINFOMGR
+        WHERE USE_YN = 'Y'
+        AND COMPANY_ID  = DEPT_ID
+    </select>
+    
+
+    <!-- 하위 부서 조회 -->
+    <select id="selectIncludeSubDeptByDeptId" parameterType="string" resultType="egovframework.com.primx.fun.dpt.service.DeptVO">
+        WITH RECURSIVE sub_dept AS (
+            SELECT
+                DEPT_SEQ          AS deptSeq,
+                COMPANY_ID        AS companyId,
+                DEPT_ID           AS deptId,
+                DEPT_NAME         AS deptName,
+                PARENT_ID         AS parentId,
+                LEVEL             AS level,
+                SORT_ORDER        AS sortOrder,
+                INSERTED_BY_HR_YN AS insertedByHrYn,
+                USE_YN            AS useYn
+            FROM COMTNDEPTINFOMGR
+            WHERE DEPT_ID = #{deptId}
+            AND USE_YN = 'Y'
+            UNION ALL
+            SELECT
+                c.DEPT_SEQ,
+                c.COMPANY_ID,
+                c.DEPT_ID,
+                c.DEPT_NAME,
+                c.PARENT_ID,
+                c.LEVEL,
+                c.SORT_ORDER,
+                c.INSERTED_BY_HR_YN,
+                c.USE_YN
+            FROM COMTNDEPTINFOMGR c
+            INNER JOIN sub_dept s ON s.deptId = c.PARENT_ID
+            WHERE c.USE_YN = 'Y'
+        )
+        SELECT 
+            deptSeq,
+            companyId,
+            deptId,
+            deptName,
+            parentId,
+            level,
+            sortOrder,
+            insertedByHrYn,
+            useYn
+        FROM sub_dept s
+    </select>
+</mapper>

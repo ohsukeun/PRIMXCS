@@ -1,0 +1,71 @@
+{
+  "navigation": {
+    "dashboard": "대쉬보드",
+    "request":
+    {
+        "title": "신청 및 결재",
+        "request": "신청 현황",
+        "approve": "결재 현황"
+    },
+    "status": 
+    {
+        "title": "현황",
+        "system": "시스템 현황",
+        "product": "제품 정책 현황",
+        "agent": "에이전트 정책 현황",
+        "movingfile": "이동파일 현황"
+    },
+    "log": 
+    {
+        "title": "로그",
+        "product": "제품 로그",
+        "manage": "운영 로그"
+    },
+    "setting":
+    {
+      "title": "설정",
+      "admin": "관리자 설정",
+      "user": "부서 및 사용자 설정",
+      "config":
+      {
+        "title": "환경 설정",
+        "general": 
+        {
+          "title": "일반",
+          "companyinfo": "회사 정보",
+          "programinfo": "프로그램 정보",
+          "programpath": "프로그램 경로"
+        },
+        "verification": 
+        {
+          "title": "인증",
+          "managerpwd": "관리자 패스워드",
+          "userpwd": "사용자 패스워드"
+        },
+        "request": 
+        {
+          "title": "신청 및 결재",
+          "approvalmethod": "결재 방식",
+          "requestform": "신청서"
+
+        },
+        "policy": 
+        {
+          "title": "정책",
+          "productpolicyscript": "제품 정책 스크립트",
+          "movingfilepolicy": "이동파일 정책",
+          "notconnectedsystem": "미접속 시스템 정첵",
+          "organizationinterface": "인사 연동",
+          "logdatapolicy": "로그 데이터 정책"
+        },
+        "agent": 
+        {
+          "title": "에이전트",
+          "cycletime": "주기 및 시간",
+          "programupdate": "프로그램 업데이트",
+          "downloadserver": "다운로드 서버"
+        }
+      }
+    }
+  }
+}

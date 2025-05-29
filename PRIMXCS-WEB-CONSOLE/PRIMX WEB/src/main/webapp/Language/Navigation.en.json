@@ -1,0 +1,70 @@
+{
+  "navigation": {
+    "dashboard": "Dashboard",
+    "request": 
+    {
+        "title": "Request",
+        "request": "Create Request",
+        "approve": "Approve"
+    },
+    "status": 
+    {
+        "title": "Status",
+        "system": "System status",
+        "product": "Product policy status",
+        "agent": "Agent policy status",
+        "movingfile": "Moving file status"
+    },
+    "log": 
+    {
+        "title": "Log",
+        "product": "Product log",
+        "manage": "Manage log"
+    },
+    "setting":
+    {
+      "title": "Setting",
+      "admin": "Admin Setting",
+      "user": "User Setting",
+      "config":
+      {
+        "title": "Configration",
+        "general": 
+        {
+          "title": "General",
+          "companyinfo": "Company Information",
+          "programinfo": "Program Information",
+          "programpath": "Program Path"
+        },
+        "verification": 
+        {
+          "title": "Verification",
+          "managerpwd": "Manager Password",
+          "userpwd": "User Password"
+        },
+        "request": 
+        {
+          "title": "Request & Approval",
+          "approvalmethod": "Approval Method",
+          "requestform": "Request form"
+        },
+        "policy": 
+        {
+          "title": "Policy",
+          "productpolicyscript": "Product policy script",
+          "movingfilepolicy": "Moving file policy",
+          "notconnectedsystem": "Not connected system",
+          "organizationinterface": "Organization interface",
+          "logdatapolicy": "Log data ploicy"
+        },
+        "agent": 
+        {
+          "title": "Agent",
+          "cycletime": "Cycle & Time",
+          "programupdate": "Program Update",
+          "downloadserver": "Download Server"
+        }
+      }
+    }
+  }
+}

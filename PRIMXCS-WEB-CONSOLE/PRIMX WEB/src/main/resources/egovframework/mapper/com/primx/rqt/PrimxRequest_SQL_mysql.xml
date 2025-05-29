@@ -1,0 +1,903 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="requestDAO">
+
+	<select id="selectListRequestInfoV2" parameterType="map" resultType="egovframework.com.primx.fun.rqt.service.RequestResultDTO">
+		SELECT
+			tr.request_id AS requestId
+			, tr.REQUEST_APPROVAL_CODE AS requestApprovalCode
+			, tr.request_code AS requestCode
+		    , tr.status_cd AS statusCd
+		    , tr.result_cd AS resultCd
+		    , COALESCE(c.USER_NM, '') AS userNm
+		    , tr.title
+		    , tr.created_date AS createdDate
+		    , tr.modified_date AS modifiedDate
+			, tr.file_group_id AS fileGroupId
+			, tr.reason AS reason
+			, c.USER_ROLE AS userRole
+		    , (SELECT result_date FROM T_REQUEST_APPROVERS WHERE request_code = tr.request_code ORDER BY order_number DESC LIMIT 1) as resultDate
+		FROM
+		    T_REQUEST tr
+		    LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tr.C_USER_ID
+		    LEFT JOIN COMTNDEPTINFOMGR dept ON dept.DEPT_ID = c.ORGNZT_ID
+	    <where>
+			<if test="auth != null and auth.contains('ADMIN') == false">
+				AND EXISTS (
+					SELECT 1
+					FROM T_REQUEST_APPROVERS tra
+					WHERE tra.request_code = tr.request_code
+					AND tra.approval_status IN (1, 2)
+					AND tra.C_USER_ID = #{userId}
+				)
+			</if>
+			<if test="auth != null and auth.contains('ADMIN') == true">
+				AND EXISTS (
+					SELECT 1
+					FROM T_REQUEST_APPROVERS tra
+					WHERE tra.request_code = tr.request_code
+					AND tra.approval_status IN (1, 2)
+				)
+			</if>
+	        <if test="requestSearchVO.startDt != null and requestSearchVO.startDt != '' and requestSearchVO.endDt != null and requestSearchVO.endDt != ''">
+	        AND tr.created_date BETWEEN #{requestSearchVO.startDt } AND #{requestSearchVO.endDt }
+	        </if>
+	        <if test="requestSearchVO.statusCd != null and requestSearchVO.statusCd != ''">
+	        AND tr.status_cd = #{requestSearchVO.statusCd }
+	        </if>
+	        <if test="requestSearchVO.resultCd != null and requestSearchVO.resultCd != ''">
+	        AND tr.result_cd = #{requestSearchVO.resultCd }
+	        </if>
+			<if test="requestSearchVO.searchWord != null and requestSearchVO.searchWord != ''">
+				<choose>
+					<when test='requestSearchVO.searchType == "all"'>
+						AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+							c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+							tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+							dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "user"'>
+					AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "title"'>
+					AND tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+					<when test='requestSearchVO.searchType == "dept"'>
+					AND dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+				</choose>
+			</if>
+			<if test='requestSearchVO.requestApprovalCode != null and requestSearchVO.requestApprovalCode !=""'>
+	        AND tr.REQUEST_APPROVAL_CODE = #{requestSearchVO.requestApprovalCode }
+	        </if>
+			<!-- <if test="auth != null and auth.contains('ADMIN') == false">
+			AND tr.C_USER_ID = #{userId }
+			</if> -->
+	    </where>
+	    ORDER BY tr.created_date DESC
+   		LIMIT #{requestSearchVO.start}, #{requestSearchVO.recordCountPerPage}
+	</select>
+
+
+	<select id="selectListRequestInfoV2Cnt" parameterType="map" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+		    T_REQUEST tr
+		    LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tr.C_USER_ID
+		    LEFT JOIN COMTNDEPTINFOMGR dept ON dept.DEPT_ID = c.ORGNZT_ID
+	    <where>
+			<if test="auth != null and auth.contains('ADMIN') == false">
+				AND EXISTS (
+					SELECT 1
+					FROM T_REQUEST_APPROVERS tra
+					WHERE tra.request_code = tr.request_code
+					AND tra.approval_status IN (1, 2)
+					AND tra.C_USER_ID = #{userId}
+				)
+			</if>
+			<if test="auth != null and auth.contains('ADMIN') == true">
+				AND EXISTS (
+					SELECT 1
+					FROM T_REQUEST_APPROVERS tra
+					WHERE tra.request_code = tr.request_code
+					AND tra.approval_status IN (1, 2)
+				)
+			</if>
+	        <if test="requestSearchVO.startDt != null and requestSearchVO.startDt != '' and requestSearchVO.endDt != null and requestSearchVO.endDt != ''">
+	        AND tr.created_date BETWEEN #{requestSearchVO.startDt } AND #{requestSearchVO.endDt }
+	        </if>
+	        <if test="requestSearchVO.statusCd != null and requestSearchVO.statusCd != ''">
+	        AND tr.status_cd = #{requestSearchVO.statusCd }
+	        </if>
+	        <if test="requestSearchVO.resultCd != null and requestSearchVO.resultCd != ''">
+	        AND tr.result_cd = #{requestSearchVO.resultCd }
+	        </if>
+			<if test="requestSearchVO.searchWord != null and requestSearchVO.searchWord != ''">
+				<choose>
+					<when test='requestSearchVO.searchType == "all"'>
+						AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+							c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+							tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+							dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "user"'>
+					AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "title"'>
+					AND tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+					<when test='requestSearchVO.searchType == "dept"'>
+					AND dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+				</choose>
+			</if>
+			<if test='requestSearchVO.requestApprovalCode != null and requestSearchVO.requestApprovalCode !=""'>
+	        AND tr.REQUEST_APPROVAL_CODE = #{requestSearchVO.requestApprovalCode }
+	        </if>
+			<!-- <if test="auth != null and auth.contains('ADMIN') == false">
+			AND tr.C_USER_ID = #{userId }
+			</if> -->
+	    </where>
+	</select>
+
+
+	<!-- 내 결재선을 포함한 내 결재가 필요한 정보들만 나열 해야하기 때문에 -->
+	<select id="selectListRequestApprovalById" parameterType="map" resultType="string">
+		SELECT request_code
+		FROM T_REQUEST_APPROVERS 
+		<where>
+			<if test="auth != null and auth.contains('ADMIN') == false">
+			AND C_USER_ID = #{userId }
+			AND (approval_status = 1 OR approval_status = 2)
+			</if>
+		</where>
+	</select>
+
+    <!-- 신청 전체 조회 -->
+    <select id="selectListRequestInfo" parameterType="map" resultType="egovframework.com.primx.fun.rqt.service.RequestResultDTO">
+		SELECT
+			tr.request_id AS requestId
+			, tr.REQUEST_APPROVAL_CODE AS requestApprovalCode
+			, tr.request_code AS requestCode
+		    , tr.status_cd AS statusCd
+		    , tr.result_cd AS resultCd
+		    , COALESCE(c.USER_NM, '') AS userNm
+		    , tr.title
+		    , tr.created_date AS createdDate
+		    , tr.modified_date AS modifiedDate
+			, tr.file_group_id AS fileGroupId
+			, tr.reason AS reason
+			, c.USER_ROLE AS userRole
+		    , (SELECT result_date FROM T_REQUEST_APPROVERS WHERE request_code = tr.request_code ORDER BY order_number DESC LIMIT 1) as resultDate
+		FROM
+		    T_REQUEST tr
+		    LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tr.C_USER_ID
+		    LEFT JOIN COMTNDEPTINFOMGR dept ON dept.DEPT_ID = c.ORGNZT_ID
+	    <where>
+			<if test="requestCodes != null and requestCodes.size() > 0">
+			AND tr.request_code IN (
+				<foreach collection="requestCodes" item="requestCode" separator=",">
+				#{requestCode}
+				</foreach>
+			)
+			</if>
+	        <if test="requestSearchVO.startDt != null and requestSearchVO.startDt != '' and requestSearchVO.endDt != null and requestSearchVO.endDt != ''">
+	        AND tr.created_date BETWEEN #{requestSearchVO.startDt } AND #{requestSearchVO.endDt }
+	        </if>
+	        <if test="requestSearchVO.statusCd != null and requestSearchVO.statusCd != ''">
+	        AND tr.status_cd = #{requestSearchVO.statusCd }
+	        </if>
+	        <if test="requestSearchVO.resultCd != null and requestSearchVO.resultCd != ''">
+	        AND tr.result_cd = #{requestSearchVO.resultCd }
+	        </if>
+			<if test="requestSearchVO.searchWord != null and requestSearchVO.searchWord != ''">
+				<choose>
+					<when test='requestSearchVO.searchType == "all"'>
+						AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+							c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+							tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+							dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "user"'>
+					AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "title"'>
+					AND tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+					<when test='requestSearchVO.searchType == "dept"'>
+					AND dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+				</choose>
+			</if>
+			<if test='requestSearchVO.requestApprovalCode != null and requestSearchVO.requestApprovalCode !=""'>
+	        AND tr.REQUEST_APPROVAL_CODE = #{requestSearchVO.requestApprovalCode }
+	        </if>
+			<if test="auth != null and auth.contains('ADMIN') == false">
+			AND tr.C_USER_ID = #{userId }
+			</if>
+	    </where>
+	    ORDER BY tr.created_date DESC
+   		LIMIT #{requestSearchVO.start}, #{requestSearchVO.recordCountPerPage}
+    </select>
+
+    <!-- 신청 갯수 조회 -->
+    <select id="selectListRequestInfoCnt" parameterType="map" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            T_REQUEST tr
+            LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tr.C_USER_ID
+            LEFT JOIN COMTNDEPTINFOMGR dept ON dept.DEPT_ID = c.ORGNZT_ID
+	    <where>
+			<if test="requestCodes != null and requestCodes.size() > 0">
+			AND tr.request_code IN (
+				<foreach collection="requestCodes" item="requestCode" separator=",">
+				#{requestCode}
+				</foreach>
+			)
+			</if>
+	        <if test="requestSearchVO.startDt != null and requestSearchVO.startDt != '' and requestSearchVO.endDt != null and requestSearchVO.endDt != ''">
+	        AND tr.created_date BETWEEN #{requestSearchVO.startDt } AND #{requestSearchVO.endDt }
+	        </if>
+	        <if test="requestSearchVO.statusCd != null and requestSearchVO.statusCd != ''">
+	        AND tr.status_cd = #{requestSearchVO.statusCd }
+	        </if>
+	        <if test="requestSearchVO.resultCd != null and requestSearchVO.resultCd != ''">
+	        AND tr.result_cd = #{requestSearchVO.resultCd }
+	        </if>
+			<if test="requestSearchVO.searchWord != null and requestSearchVO.searchWord != ''">
+				<choose>
+					<when test='requestSearchVO.searchType == "all"'>
+						AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+							c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+							tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+							dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "user"'>
+					AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "title"'>
+					AND tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+					<when test='requestSearchVO.searchType == "dept"'>
+					AND dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+				</choose>
+			</if>
+			<if test='requestSearchVO.requestApprovalCode != null and requestSearchVO.requestApprovalCode !=""'>
+	        AND tr.REQUEST_APPROVAL_CODE = #{requestSearchVO.requestApprovalCode }
+	        </if>
+			<if test="auth != null and auth.contains('ADMIN') == false">
+			AND tr.C_USER_ID = #{userId }
+			</if>
+	    </where>
+    </select>
+
+    <!-- 신청 정보 조회 -->
+    <select id="selectRequestInfo" parameterType="Integer" resultType="egovframework.com.primx.fun.rqt.service.RequestResultDTO">
+        SELECT
+			tr.request_id AS requestId
+			, c.EMPLYR_ID AS userId
+			, tr.REQUEST_APPROVAL_CODE AS requestApprovalCode
+			, tr.request_code AS requestCode
+		    , tr.status_cd AS statusCd
+		    , tr.result_cd AS resultCd
+		    , COALESCE(c.USER_NM, '') AS userNm
+		    , tr.title AS title
+            , tr.reason AS reason
+            , tr.file_group_id AS fileGroupId
+            , tr.created_date AS createdDate
+   		    , tr.modified_date AS modifiedDate
+            , COALESCE(dept.DEPT_NAME, '') AS deptName
+			, c.ORGNZT_ID AS deptId
+        FROM
+            T_REQUEST tr
+            LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tr.C_USER_ID
+            LEFT JOIN COMTNDEPTINFOMGR dept ON dept.DEPT_ID = c.ORGNZT_ID
+	    WHERE
+	        tr.request_id = #{value }
+    </select>
+
+	<!-- 신청 정보 조회 -->
+	<select id="selectRequestInfoByRequestCode" parameterType="String" resultType="egovframework.com.primx.fun.rqt.service.RequestResultDTO">
+		SELECT
+			tr.request_id AS requestId
+			, c.EMPLYR_ID AS userId
+			, tr.REQUEST_APPROVAL_CODE AS requestApprovalCode
+			, tr.request_code AS requestCode
+		    , tr.status_cd AS statusCd
+		    , tr.result_cd AS resultCd
+		    , COALESCE(c.USER_NM, '') AS userNm
+		    , tr.title AS title
+            , tr.reason AS reason
+            , tr.file_group_id AS fileGroupId
+            , tr.created_date AS createdDate
+   		    , tr.modified_date AS modifiedDate
+            , COALESCE(dept.DEPT_NAME, '') AS deptName
+			, c.ORGNZT_ID AS deptId
+		FROM
+			T_REQUEST tr
+			LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tr.C_USER_ID
+			LEFT JOIN COMTNDEPTINFOMGR dept ON dept.DEPT_ID = c.ORGNZT_ID
+		WHERE
+			tr.request_code = #{requestCode }
+    </select>
+
+
+    <!-- 결재 정보 조회 -->
+    <select id="selectListRequestApprover" parameterType="String" resultType="egovframework.com.primx.fun.rqt.service.RequestApproverResultDTO">
+		SELECT
+			tra.id AS requestId
+			, tra.request_code AS requestCode
+			, COALESCE(c.USER_NM, '') AS userNm
+			, tra.C_USER_ID AS emplyrId
+			, tra.order_number AS orderNumber
+			, tra.result_cd AS resultCd
+
+			, tra.description
+			, tra.result_date AS resultDate
+			, tra.is_auto_rejected AS isAutoRejected
+			, COALESCE(dept.DEPT_NAME, '') AS deptName
+			, dept.DEPT_ID AS deptId
+			, tra.approval_status AS approvalStatus
+			, c.USER_ROLE AS userRole
+		FROM
+			T_REQUEST_APPROVERS tra 
+		    LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tra.C_USER_ID
+		    LEFT JOIN COMTNDEPTINFOMGR dept ON dept.DEPT_ID = c.ORGNZT_ID
+		WHERE
+			request_code = #{requestCode }
+			ORDER BY order_number ASC
+    </select>
+
+	
+    <!-- 결재 정보 조회 -->
+    <select id="selectListRequestApproverByApprovalStatus" parameterType="String" resultType="egovframework.com.primx.fun.rqt.service.RequestApproverResultDTO">
+		SELECT
+			tra.id AS requestId
+			, tra.request_code AS requestCode
+			, COALESCE(c.USER_NM, '') AS userNm
+			, tra.C_USER_ID AS emplyrId
+			, tra.order_number AS orderNumber
+			, tra.result_cd AS resultCd
+
+			, tra.description
+			, tra.result_date AS resultDate
+			, tra.is_auto_rejected AS isAutoRejected
+			, COALESCE(dept.DEPT_NAME, '') AS deptName
+			, dept.DEPT_ID AS deptId
+			, tra.approval_status AS approvalStatus
+			, c.USER_ROLE AS userRole
+		FROM
+			T_REQUEST_APPROVERS tra 
+		    LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tra.C_USER_ID
+		    LEFT JOIN COMTNDEPTINFOMGR dept ON dept.DEPT_ID = c.ORGNZT_ID
+		WHERE
+			request_code = #{requestCode }
+			AND (approval_status = 0 OR approval_status = 1)
+			ORDER BY order_number ASC
+    </select>
+    
+    <!-- 신청 정보 수정 -->
+    <update id="updateRequestInfo" parameterType="egovframework.com.primx.fun.rqt.service.RequestModifiedVO">
+		UPDATE T_REQUEST
+		SET
+			status_cd = #{statusCd }
+			<if test="title != null and title != ''">
+			, title = #{title }
+			</if>
+			<if test="reason != null and reason != ''">
+			, reason = #{reason }
+			</if>
+			, modified_by = #{modifiedBy }
+			, modified_date = UTC_TIMESTAMP() 
+			, modified_ip = #{modifiedIp }
+		WHERE
+			request_id = #{requestId }
+			AND request_code = #{requestCode }
+    </update>
+
+	
+    <!-- 결재 전체 조회 -->
+    <select id="selectListRequestApprovalInfoV2" parameterType="map" resultType="egovframework.com.primx.fun.rqt.service.RequestResultDTO">
+		SELECT
+			tr.request_id AS requestId
+			, tr.REQUEST_APPROVAL_CODE AS requestApprovalCode
+			, tr.request_code AS requestCode
+		    , tr.status_cd AS statusCd
+		    , tr.result_cd AS resultCd
+		    , COALESCE(c.USER_NM, '') AS userNm
+		    , tr.title
+		    , tr.created_date AS createdDate
+		    , tr.modified_date AS modifiedDate
+			, tr.file_group_id AS fileGroupId
+			, tr.reason AS reason
+		    , (SELECT result_date FROM T_REQUEST_APPROVERS WHERE request_code = tr.request_code ORDER BY order_number DESC LIMIT 1) as resultDate
+		FROM
+		    T_REQUEST tr
+		    LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tr.C_USER_ID
+		    LEFT JOIN COMTNDEPTINFOMGR dept ON dept.DEPT_ID = c.ORGNZT_ID
+	    <where>
+			<if test="auth != null and auth.contains('ADMIN') == false">
+			AND (
+				EXISTS (
+				SELECT 1
+				FROM T_REQUEST_APPROVERS tra
+				WHERE tra.request_code = tr.request_code
+				AND tra.approval_status IN (1, 2)
+				AND tra.C_USER_ID = #{userId}
+				)
+				OR tr.C_USER_ID = #{userId}
+			)
+			</if>
+			<if test="auth != null and auth.contains('ADMIN') == true">
+			AND EXISTS (
+				SELECT 1
+				FROM T_REQUEST_APPROVERS tra
+				WHERE tra.request_code = tr.request_code
+				AND tra.approval_status IN (1, 2)
+			)
+			</if>
+	        <if test="requestSearchVO.startDt != null and requestSearchVO.startDt != '' and requestSearchVO.endDt != null and requestSearchVO.endDt != ''">
+
+	        AND tr.created_date BETWEEN #{requestSearchVO.startDt } AND #{requestSearchVO.endDt }
+	        </if>
+	        <if test="requestSearchVO.statusCd != null and requestSearchVO.statusCd != ''">
+	        AND tr.status_cd = #{requestSearchVO.statusCd }
+	        </if>
+	        <if test="requestSearchVO.resultCd != null and requestSearchVO.resultCd != ''">
+	        AND tr.result_cd = #{requestSearchVO.resultCd }
+	        </if>
+			<if test="requestSearchVO.searchWord != null and requestSearchVO.searchWord != ''">
+				<choose>
+					<when test='requestSearchVO.searchType == "all"'>
+					AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "user"'>
+					AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "title"'>
+					AND tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+					<when test='requestSearchVO.searchType == "dept"'>
+					AND dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+				</choose>
+			</if>
+			<if test='requestSearchVO.requestApprovalCode != null and requestSearchVO.requestApprovalCode !=""'>
+	        AND tr.REQUEST_APPROVAL_CODE = #{requestSearchVO.requestApprovalCode }
+	        </if>
+	    </where>
+	    ORDER BY tr.created_date DESC
+   		LIMIT #{requestSearchVO.start}, #{requestSearchVO.recordCountPerPage}
+    </select>
+    
+    <!-- 결재 갯수 조회 -->
+    <select id="selectListRequestApprovalInfoV2Cnt" parameterType="map" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+		    T_REQUEST tr
+		    LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tr.C_USER_ID
+		    LEFT JOIN COMTNDEPTINFOMGR dept ON dept.DEPT_ID = c.ORGNZT_ID
+	    <where>
+			<if test="auth != null and auth.contains('ADMIN') == false">
+			AND (
+				EXISTS (
+				SELECT 1
+				FROM T_REQUEST_APPROVERS tra
+				WHERE tra.request_code = tr.request_code
+				AND tra.approval_status IN (1, 2)
+				AND tra.C_USER_ID = #{userId}
+				)
+				OR tr.C_USER_ID = #{userId}
+			)
+			</if>
+			<if test="auth != null and auth.contains('ADMIN') == true">
+			AND EXISTS (
+				SELECT 1
+				FROM T_REQUEST_APPROVERS tra
+				WHERE tra.request_code = tr.request_code
+				AND tra.approval_status IN (1, 2)
+			)
+			</if>
+			<if test="auth != null and auth.contains('ADMIN') == false">
+			OR tr.C_USER_ID = #{userId }
+			</if>
+	        <if test="requestSearchVO.startDt != null and requestSearchVO.startDt != '' and requestSearchVO.endDt != null and requestSearchVO.endDt != ''">
+
+	        AND tr.created_date BETWEEN #{requestSearchVO.startDt } AND #{requestSearchVO.endDt }
+	        </if>
+	        <if test="requestSearchVO.statusCd != null and requestSearchVO.statusCd != ''">
+	        AND tr.status_cd = #{requestSearchVO.statusCd }
+	        </if>
+	        <if test="requestSearchVO.resultCd != null and requestSearchVO.resultCd != ''">
+	        AND tr.result_cd = #{requestSearchVO.resultCd }
+	        </if>
+			<if test="requestSearchVO.searchWord != null and requestSearchVO.searchWord != ''">
+				<choose>
+					<when test='requestSearchVO.searchType == "all"'>
+					AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "user"'>
+					AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "title"'>
+					AND tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+					<when test='requestSearchVO.searchType == "dept"'>
+					AND dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+				</choose>
+			</if>
+			<if test='requestSearchVO.requestApprovalCode != null and requestSearchVO.requestApprovalCode !=""'>
+	        AND tr.REQUEST_APPROVAL_CODE = #{requestSearchVO.requestApprovalCode }
+	        </if>
+	    </where>
+    </select>
+
+    <!-- 결재 전체 조회 -->
+    <select id="selectListRequestApprovalInfo" parameterType="map" resultType="egovframework.com.primx.fun.rqt.service.RequestResultDTO">
+		SELECT
+			tr.request_id AS requestId
+			, tr.REQUEST_APPROVAL_CODE AS requestApprovalCode
+			, tr.request_code AS requestCode
+		    , tr.status_cd AS statusCd
+		    , tr.result_cd AS resultCd
+		    , COALESCE(c.USER_NM, '') AS userNm
+		    , tr.title
+		    , tr.created_date AS createdDate
+		    , tr.modified_date AS modifiedDate
+			, tr.file_group_id AS fileGroupId
+			, tr.reason AS reason
+		    , (SELECT result_date FROM T_REQUEST_APPROVERS WHERE request_code = tr.request_code ORDER BY order_number DESC LIMIT 1) as resultDate
+		FROM
+		    T_REQUEST tr
+		    LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tr.C_USER_ID
+		    LEFT JOIN COMTNDEPTINFOMGR dept ON dept.DEPT_ID = c.ORGNZT_ID
+	    <where>
+			<if test="requestCodes != null and requestCodes.size() > 0">
+			AND tr.request_code IN (
+				<foreach collection="requestCodes" item="requestCode" separator=",">
+				#{requestCode}
+				</foreach>
+			)
+			</if>
+			<if test="auth != null and auth.contains('ADMIN') == false">
+			OR tr.C_USER_ID = #{userId }
+			</if>
+	        <if test="requestSearchVO.startDt != null and requestSearchVO.startDt != '' and requestSearchVO.endDt != null and requestSearchVO.endDt != ''">
+
+	        AND tr.created_date BETWEEN #{requestSearchVO.startDt } AND #{requestSearchVO.endDt }
+	        </if>
+	        <if test="requestSearchVO.statusCd != null and requestSearchVO.statusCd != ''">
+	        AND tr.status_cd = #{requestSearchVO.statusCd }
+	        </if>
+	        <if test="requestSearchVO.resultCd != null and requestSearchVO.resultCd != ''">
+	        AND tr.result_cd = #{requestSearchVO.resultCd }
+	        </if>
+			<if test="requestSearchVO.searchWord != null and requestSearchVO.searchWord != ''">
+				<choose>
+					<when test='requestSearchVO.searchType == "all"'>
+					AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "user"'>
+					AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "title"'>
+					AND tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+					<when test='requestSearchVO.searchType == "dept"'>
+					AND dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+				</choose>
+			</if>
+			<if test='requestSearchVO.requestApprovalCode != null and requestSearchVO.requestApprovalCode !=""'>
+	        AND tr.REQUEST_APPROVAL_CODE = #{requestSearchVO.requestApprovalCode }
+	        </if>
+	    </where>
+	    ORDER BY tr.created_date DESC
+   		LIMIT #{requestSearchVO.start}, #{requestSearchVO.recordCountPerPage}
+    </select>
+
+    <!-- 결재 갯수 조회 -->
+    <select id="selectListRequestApprovalInfoCnt" parameterType="map" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+		    T_REQUEST tr
+		    LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tr.C_USER_ID
+		    LEFT JOIN COMTNDEPTINFOMGR dept ON dept.DEPT_ID = c.ORGNZT_ID
+	    <where>
+			<if test="requestCodes != null and requestCodes.size() > 0">
+			AND tr.request_code IN (
+				<foreach collection="requestCodes" item="requestCode" separator=",">
+				#{requestCode}
+				</foreach>
+			)
+			</if>
+			<if test="auth != null and auth.contains('ADMIN') == false">
+			OR tr.C_USER_ID = #{userId }
+			</if>
+	        <if test="requestSearchVO.startDt != null and requestSearchVO.startDt != '' and requestSearchVO.endDt != null and requestSearchVO.endDt != ''">
+
+	        AND tr.created_date BETWEEN #{requestSearchVO.startDt } AND #{requestSearchVO.endDt }
+	        </if>
+	        <if test="requestSearchVO.statusCd != null and requestSearchVO.statusCd != ''">
+	        AND tr.status_cd = #{requestSearchVO.statusCd }
+	        </if>
+	        <if test="requestSearchVO.resultCd != null and requestSearchVO.resultCd != ''">
+	        AND tr.result_cd = #{requestSearchVO.resultCd }
+	        </if>
+			<if test="requestSearchVO.searchWord != null and requestSearchVO.searchWord != ''">
+				<choose>
+					<when test='requestSearchVO.searchType == "all"'>
+					AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "user"'>
+					AND (tr.C_USER_ID LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%') OR
+						c.USER_NM LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+						)
+					</when>
+					<when test='requestSearchVO.searchType == "title"'>
+					AND tr.title LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+					<when test='requestSearchVO.searchType == "dept"'>
+					AND dept.DEPT_NAME LIKE CONCAT('%', #{requestSearchVO.searchWord }, '%')
+					</when>
+				</choose>
+			</if>
+			<if test='requestSearchVO.requestApprovalCode != null and requestSearchVO.requestApprovalCode !=""'>
+	        AND tr.REQUEST_APPROVAL_CODE = #{requestSearchVO.requestApprovalCode }
+	        </if>
+	    </where>
+    </select>
+
+	<!-- 전결 -->
+    <update id="updateRequestApprovalDelegatedInfo" parameterType="egovframework.com.primx.fun.rqt.service.RequestApproversVO">
+		UPDATE T_REQUEST_APPROVERS
+		SET
+			result_cd = #{resultCd },
+			description = #{description },
+			result_date = UTC_TIMESTAMP(),
+			approval_status = #{approvalStatus }
+		WHERE
+			C_USER_ID = #{userId }
+			AND request_code = #{requestCode }
+			
+    </update>
+
+    <!-- 결재 정보 수정 -->
+    <update id="updateRequestApprovalInfo" parameterType="egovframework.com.primx.fun.rqt.service.RequestApproversVO">
+		UPDATE T_REQUEST_APPROVERS
+		SET
+			result_cd = #{resultCd },
+			description = #{description },
+			result_date = UTC_TIMESTAMP(),
+			approval_status = #{approvalStatus }
+		WHERE
+			C_USER_ID = #{userId }
+			AND request_code = #{requestCode }
+			AND order_number = #{orderNumber }
+    </update>
+
+	<!-- 결재자 상태코드 업데이트 -->
+	<update id="updateApprovalStatus" parameterType="egovframework.com.primx.fun.rqt.service.RequestApproversVO">
+		UPDATE T_REQUEST_APPROVERS
+		SET
+			approval_status = #{approvalStatus }
+		WHERE
+			C_USER_ID = #{userId }
+			AND request_code = #{requestCode }
+			AND order_number = #{orderNumber }
+	</update>
+    <!-- 결재 처리 -->
+    <update id="updateRequestResult" parameterType="egovframework.com.primx.fun.rqt.service.RequestResultDTO">
+		UPDATE T_REQUEST
+		SET
+			<if test="statusCd != null and statusCd != ''">
+			status_cd = #{statusCd }
+			</if>
+			<if test="resultCd != null and resultCd != ''">
+				<if test="statusCd != null and statusCd != ''">,</if>
+			result_cd = #{resultCd }
+			</if>
+		WHERE
+			request_id = #{requestId }
+			AND request_code = #{requestCode }
+    </update>
+
+    <!-- 다음 request 시퀀스 조회 -->
+    <select id="getNextRequestSeq" resultType="int">
+        SELECT IFNULL(MAX(CAST(SUBSTRING(request_code, 10) AS UNSIGNED)), 0) + 1
+        FROM T_REQUEST
+        WHERE request_code LIKE CONCAT('R', DATE_FORMAT(UTC_TIMESTAMP(), '%Y%m%d'), '%')
+    </select>
+
+    <!-- 신청 정보 저장 -->
+    <insert id="insertRequest" parameterType="egovframework.com.primx.fun.rqt.service.RequestDTO">
+        INSERT INTO T_REQUEST (
+            request_code,
+            REQUEST_APPROVAL_CODE,
+            status_cd,
+            title,
+            reason,
+            C_USER_ID,
+            created_date,
+            created_ip
+        ) VALUES (
+            #{requestCode},
+            #{requestApprovalCode},
+            #{statusCd},
+            #{title},
+            #{reason},
+            #{CUserId},
+            UTC_TIMESTAMP(),
+            #{createdIp}
+        )
+    </insert>
+
+    <!-- 사용자 승인 요청 저장 -->
+    <insert id="insertUserApproval" parameterType="egovframework.com.primx.fun.rqt.service.RequestUserApprovalDTO">
+        INSERT INTO T_REQUEST_USER_APPROVAL (
+            request_code,
+            EMPLYR_ID,
+            COMPANY_ID,
+            ORGNZT_ID,
+            USER_NM,
+            EMAIL_ADRES,
+            USER_ROLE,
+
+            EXPIRED_DATE,
+            REQUEST_APPROVAL_CODE,
+            PASSWORD
+        ) VALUES (
+            #{requestCode},
+            #{userId},
+            #{companyId},
+            #{deptId},
+            #{userName},
+            #{email},
+            #{userRole},
+
+            #{expiredDate},
+            #{requestApprovalCode},
+            #{userPassword}
+        )
+    </insert>
+
+    <!-- 결재선 정보 저장 -->
+    <insert id="insertRequestApprover" parameterType="egovframework.com.primx.fun.rqt.service.RequestApproversVO">
+        INSERT INTO T_REQUEST_APPROVERS (
+            request_code
+            , C_USER_ID
+            , order_number
+            , is_auto_rejected
+			, approval_status
+			<if test="resultCd != null and resultCd != ''">
+			, result_cd
+			, result_date
+			</if>
+        ) VALUES (
+            #{requestCode}
+            , #{userId}
+            , #{orderNumber}
+            , 'N'
+			, #{approvalStatus}
+			<if test="resultCd != null and resultCd != ''">
+			, #{resultCd}
+			, UTC_TIMESTAMP()
+			</if>
+        )
+    </insert>
+
+    <!-- 신청 정보 수정 -->
+    <update id="updateRequest" parameterType="egovframework.com.primx.fun.rqt.service.RequestDTO">
+	<!-- RequestDTO에 있는 데이털르 전부 업데이트 한다-->
+        UPDATE T_REQUEST
+        SET
+			title = #{title},
+			description = #{reason},
+			modified_by = #{modifiedBy},
+			modified_date = UTC_TIMESTAMP(),
+			modified_ip = #{modifiedIp}
+        WHERE
+            request_code = #{requestCode}
+    </update>
+
+    <!-- 결재선 삭제 -->
+    <delete id="deleteRequestApprover" parameterType="String">
+        DELETE FROM T_REQUEST_APPROVERS WHERE request_code = #{requestCode}
+    </delete>
+
+    <!-- 사용자 결재 요청 조회 -->
+    <select id="selectRequestUserApproval" parameterType="String" resultType="egovframework.com.primx.fun.rqt.service.RequestUserApprovalDTO">
+        SELECT 
+			request_code AS requestCode,
+			EMPLYR_ID AS userId,
+			COMPANY_ID AS companyId,
+			ORGNZT_ID AS deptId,
+			USER_NM AS userName,
+			EMAIL_ADRES AS email,
+			USER_ROLE AS userRole,
+			EXPIRED_DATE AS expiredDate,
+			REQUEST_APPROVAL_CODE AS requestApprovalCode
+
+		FROM T_REQUEST_USER_APPROVAL WHERE request_code = #{requestCode}
+    </select>
+
+	<!-- 결재선 개수 조회 -->
+	<select id="selectRequestApproverCnt" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM T_REQUEST_APPROVERS
+		WHERE request_code = #{requestCode}
+	</select>
+	
+	<!-- 신청 결재 설정 조회 -->
+	<select id="selectListCreateRequestSetting" resultType="egovframework.com.primx.fun.rqt.service.NoticeSettingVO">
+		SELECT 
+			NOTICE_SEQ AS noticeSeq,
+			REQUEST_USER_ROLE AS requestUserRole,
+			REQUEST_APPROVAL_CODE AS requestApprovalCode,
+			APPROV_TARGET AS approvTarget,
+			DELEGATED_YN AS delegatedYn,
+			NOTICE_CONTENT AS noticeContent,
+			NOTICE_REASON AS noticeReason,
+			REASON_USED_YN AS reasonUsedYn,
+			USE_YN AS useYn,
+			CREATED_DATE AS createdDate,
+			MODIFIED_DATE AS modifiedDate
+		FROM T_NOTICE_SETTING
+		ORDER BY CREATED_DATE ASC
+	</select>
+
+	<!-- 신청 결재 설정 수정 -->
+	<update id="updateCreateRequestSetting" parameterType="egovframework.com.primx.fun.rqt.service.NoticeSettingVO">
+		UPDATE T_NOTICE_SETTING SET
+			APPROV_TARGET = #{approvTarget},
+			DELEGATED_YN = #{delegatedYn},
+			NOTICE_CONTENT = #{noticeContent},
+			NOTICE_REASON = #{noticeReason},
+			REASON_USED_YN = #{reasonUsedYn},
+			USE_YN = #{useYn},
+			MODIFIED_DATE = UTC_TIMESTAMP() 
+		WHERE NOTICE_SEQ = #{noticeSeq}
+	</update>
+</mapper>
+			

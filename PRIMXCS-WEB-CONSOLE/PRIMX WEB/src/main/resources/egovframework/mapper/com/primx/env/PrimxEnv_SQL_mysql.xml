@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  수정일                   수정자            수정내용
+  =========     =======    =================================================
+  2011.08.26   	서준식            SSO 로그인을 위한 쿼리 추가
+  2011.09.27    서준식            컬럼 변경 SUB_DN 을  CRTFC_DN_VALUE 로 변경
+  2011.09.28    서준식            컬럼 변경 entrprsmber_id 을  ENTRPRS_MBER_ID 로 변경
+  2020.07.06    신용호            비밀번호 만료여부 조회
+  2021.05.30    정진오            디지털원패스 로그인을 위한 쿼리 추가
+-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="environmentDAO">
+
+
+    <!-- 환경설정 정보 조회 -->
+    <select id="selectEnvGeneralById" parameterType="long" resultType="egovframework.com.primx.fun.env.service.EnvGeneralVO">
+        SELECT 
+            id,
+            company_name as company,
+            company_id as companyId,
+            admin_console_version as adminConsoleVersion,
+            user_console_version as userConsoleVersion,
+            database_version as databaseVersion
+        FROM 
+            T_ENV_GENERAL 
+        WHERE 
+            id = #{id}
+    </select>
+
+    <!-- MAC 주소 조회 -->
+    <select id="selectMacAddress" parameterType="string" resultType="egovframework.com.primx.fun.env.service.EnvSystemSettingsVO">
+        SELECT 
+            id,
+            mac_address as macAddress
+        FROM 
+            T_ENV_SYSTEM_SETTINGS
+        WHERE 
+            mac_address = #{macAddress}
+    </select>
+
+    <!-- MAC 주소 등록 -->
+    <insert id="insertEnvSystemSettings" parameterType="egovframework.com.primx.fun.env.service.EnvSystemSettingsVO">
+        INSERT INTO T_ENV_SYSTEM_SETTINGS (mac_address)
+        VALUES (#{macAddress})
+    </insert>
+
+    <!-- 환경설정 정보 수정 -->
+    <update id="updateEnvGeneral" parameterType="egovframework.com.primx.fun.env.service.EnvGeneralVO">
+        UPDATE T_ENV_GENERAL
+        SET 
+            company_name = #{companyName},
+            company_id = #{companyId},
+            admin_console_version = #{adminConsoleVersion},
+            user_console_version = #{userConsoleVersion},
+            database_version = #{databaseVersion}
+        WHERE 
+            id = #{id}
+    </update>
+
+    <!-- 회사 ID 조회 -->
+    <select id="selectServerConfigCompanyId" resultType="string">
+        SELECT 
+            C_VALUE_DATA as companyId
+        FROM 
+            T_SERVER_CONFIG
+        WHERE 
+            C_KEY_NAME = 'CompanyID'
+        LIMIT 1
+    </select>
+    
+
+    <!-- 회사 ID 수정 -->
+    <update id="updateServerConfigCompanyId" parameterType="string">
+        UPDATE T_SERVER_CONFIG
+        SET 
+            C_VALUE_DATA = #{companyId}
+        WHERE  
+            C_KEY_NAME = 'CompanyID'
+    </update>
+
+
+<!-- 
+CREATE TABLE `T_LICENSE_GENERAL` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '자동 생성',
+  `company` varchar(255) NOT NULL COMMENT '회사',
+  `mac_address` varchar(255) NOT NULL COMMENT 'mac address',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='라이선스';
+-->
+    <!-- 라이선스 정보 등록 -->
+    <insert id="insertLicenseGeneral" parameterType="egovframework.com.primx.fun.lic.service.LicenseGeneralVO">
+        INSERT INTO T_LICENSE_GENERAL (company, mac_address)
+        VALUES (#{company}, #{macAddress})
+    </insert>
+
+
+    <!-- 라이선스 정보 수정 -->
+    <update id="updateLicenseGeneral" parameterType="egovframework.com.primx.fun.lic.service.LicenseGeneralVO">
+        UPDATE T_LICENSE_GENERAL
+        SET 
+            company = #{company},
+            mac_address = #{macAddress}
+        WHERE 
+            id = #{id}
+    </update>
+
+    <!-- mac address 조회 -->
+    <select id="selectLicenseGeneralByMacAddress" parameterType="string" resultType="int">
+        SELECT 
+            id
+        FROM 
+            T_LICENSE_GENERAL
+        WHERE 
+            mac_address = #{macAddress}
+    </select>
+
+    <!-- 라이선스 정보 조회 -->
+    <select id="selectLicenseGeneralById" parameterType="long" resultType="egovframework.com.primx.fun.lic.service.LicenseGeneralVO">
+        SELECT 
+            id,
+            company,
+            mac_address as macAddress
+        FROM 
+            T_LICENSE_GENERAL
+        WHERE 
+            id = #{id}
+    </select>
+
+    <!-- 라이선스 상세 정보 조회 -->
+    <select id="selectLicenseDetailById" parameterType="long" resultType="egovframework.com.primx.fun.lic.service.LicenseDetailVO">
+        SELECT 
+            id,
+            product_name as productName,
+            license_key as licenseKey,
+            license_type as licenseType,
+            license_start_date as licenseStartDate,
+            license_end_date as licenseEndDate,
+            license_status as licenseStatus
+        FROM 
+            T_LICENSE_DETAIL  
+        WHERE 
+            id = #{id}
+    </select>
+
+    <!-- 라이선스 상세 정보 삭제 -->
+    <delete id="deleteLicenseDetailById" parameterType="long">
+        DELETE FROM T_LICENSE_DETAIL
+        WHERE 
+            id = #{id}
+    </delete>
+    
+    <!-- findByProductName -->
+    <select id="findByProductName" parameterType="string" resultType="egovframework.com.primx.fun.lic.service.LicenseDetailVO">
+        SELECT 
+            id,
+            status_cd as statusCd,
+            product_name as productName,
+            quantity,
+            start_date as startDate,
+            end_date as endDate,
+            general_id as generalId,
+            product_key as productKey
+        FROM 
+            T_LICENSE_DETAIL
+        WHERE 
+            product_name = #{productName}
+    </select>
+
+    <!-- deleteById -->
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM T_LICENSE_DETAIL
+        WHERE 
+            id = #{id}
+    </delete>
+
+    <!-- insertLicenseDetail -->
+    <insert id="insertLicenseDetail" parameterType="egovframework.com.primx.fun.lic.service.LicenseDetailVO">
+        INSERT INTO T_LICENSE_DETAIL 
+        (
+            status_cd, 
+            product_name, 
+            quantity, 
+            start_date, 
+            end_date, 
+            general_id, 
+            product_key
+        )
+        VALUES (
+            #{statusCd}, 
+            #{productName}, 
+            #{quantity}, 
+            #{startDate}, 
+            #{endDate}, 
+            #{generalId}, 
+            #{productKey})
+    </insert>
+</mapper>

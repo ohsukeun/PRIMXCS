@@ -1,0 +1,11 @@
+{
+  "message": {
+    "login":
+    {"logout": {"title": "Logout", "message": "Do you want to logout"},
+    "password": {"title": "passowrdchange", "message": "You can edit your password"}},
+    "select": 
+    {"select":{"title": "Select", "message": "Please select"},
+    "user":{"title": "User select", "message": "Please user select"},
+    "department":{"title": "Department select", "message": "Please department select"}}
+  }
+}

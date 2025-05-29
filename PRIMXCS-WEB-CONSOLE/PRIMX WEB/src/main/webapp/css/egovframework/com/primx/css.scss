@@ -1,0 +1,814 @@
+/* 페이지별 css. 이부분부터는 수정시 해당페이지에서만 변경됩니다. */
+@import 'var';
+
+/* table스크롤크기 */
+.tableWrap{ height: calc(100vh - 229px);}
+.popup .tableWrap{ height: auto !important;}
+form{
+    &.departmentUserSettings{
+        .tableWrap{ height: calc(100vh - 280px);}
+    }
+    &.update, &.productPolicySettings, &.createRequestSetting, &.fileTransferZoneSetting, &.mySystemInfo{
+        .tableWrap{ height: auto !important;}
+    }
+    &.fileTransferZoneSetting{
+        .tableWrap{overflow: unset;}   
+    }
+}
+
+/* 대시보드 */
+.dashboradContainer { width: 100%; height: calc(100% - 50px);
+    // *{font-family:'NanumSquareNeoHeavy', sans-serif;}
+    // 제품 정책
+    #policy-bar { display: flex; height: 100%; border-radius: 10px; overflow: hidden; 
+        .policy-segment { transition: 0.3s;
+            &.basic-applied, &.indiv-applied {
+                .policy-segment-inner{align-content: start; left: 0;
+                    .policy-value{font-size: 50px;}
+                }
+            }
+            &.basic-notapplied, &.indiv-notapplied {
+                .policy-segment-inner{align-content: end; text-align: right; right: 0;}
+            }
+            .policy-segment-inner{ z-index: 1; position: absolute;
+                display: flex; flex-wrap: wrap; color: #fff; font-weight: 700; font-size: 1.1rem; height: 100%; white-space: nowrap; padding: 14px;
+                > div{width: 100%;}
+                .policy-value{ margin-bottom: 5px;}
+                .policy-type, .policy-status{font-family:'NanumSquareNeo', sans-serif; opacity: 0.8; font-size: 14px;}
+                .policy-status{margin-top: 5px;}
+            }
+            &.basic-applied { background: #26225e; 
+                &:hover{background-color: #1a174e !important;}
+            }
+            &.basic-notapplied { background: #47437a; 
+                &:hover{background-color: #534f91 !important;}
+            }
+            &.indiv-applied { background: #ffb32c; color: #fff; 
+                &:hover{background-color: #ffa200 !important;}
+            }
+            &.indiv-notapplied { background: #ffc76a; color: #fff; 
+                &:hover{background-color: #ffd48e !important;}
+            }
+        }
+    }
+    .policy-tooltip { position: fixed; z-index: 9999; border: 2px solid #ffb32c; border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.15); padding: 16px 12px; min-width: 350px; max-width: 90vw; min-height: 80px; display: none; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); background-color: rgba(255, 255, 255, 0.815); max-height: 247px; overflow-y: auto;
+        .dashPolicyTableWrap{width: 480px;
+            table{
+                tr{height: 36px;}
+                td, th{border: 0; color: #26225e;}
+                thead{
+                    tr{background-color: #d4d9df !important;}
+                }
+                tbody{
+                    tr{ background-color: transparent;}
+                }
+            }
+        }
+    }
+
+    // 라이선스 설치
+    &.licenseItem{
+        .legend-container{width: 120px; display: flex; flex-wrap: wrap; align-content: end;
+            .legend-item{ font-size: 15px; margin-top: 10px;
+                .legend-color{width: 50px; height: 25px; border-radius: 50px; margin-bottom: 5px;}
+                span{margin-top: 2px; font-weight: bold;
+                    &.legend-value{ font-size: 20px;}
+                }
+                &.not-used{ color: #26225e;
+                    .legend-color{background-color: #26225e;}
+                }
+                &.used{ color: #ffb32c;
+                    .legend-color{background-color: #ffb32c;}
+                }
+            }
+        }
+        .chart-container{ width: calc(100% - 120px);
+            .chart-bg{position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #26225e; padding: 10px; border-radius: 100%; width:80%; height: 80%;}
+            .chart-center-text{position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);  color: #fff; padding: 10px;  display: flex; justify-content: center; align-items: center; font-size: 37px;}
+            #licenseChart{z-index: 3; width: 100%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);}
+        }
+    }
+    &.systemStatusItem, &.requestAndApprovalItem{display: flex; flex-wrap: wrap;
+        .tit{font-size: 18px; margin-bottom: 15px; height: 30px;}
+        li{position: relative; color: #26225e;
+            a{width: 100%;}
+            &::before{content:''; position: absolute; top: 50%; right: 0; transform: translateY(-50%); width: 1px; height: 80%; background-color: #fff;}
+            &:last-child::before{display: none;}
+            .cont{ display: flex; align-items: baseline;
+                .value{font-size: 50px;}
+                .unit{font-size: 16px;}
+            }
+        }
+    }
+    &.systemStatusItem{
+        .top-list{width: 100%; height: calc(50% - 3px); display: flex; border-radius: 10px; overflow: hidden; background-color: #dedff0; margin-bottom: 6px;
+            li{width: calc(100% / 3); height: 100%; padding: 18px;}
+        }
+        .bot-list{width: 100%; height: calc(50% - 3px); display: flex;
+            .left-list{width: calc((100% / 3)*2 - 3px); height: 100%; display: flex; border-radius: 10px; overflow: hidden; background-color: #cce4ff; margin-right: 6px;
+                li{width: 50%; padding: 18px;}
+            }
+            .right-list{width: calc(100% / 3 - 3px); height: 100%; border-radius: 10px; overflow: hidden; background-color: #d4d9df;
+                li{width: 100%; height: 100%; padding: 18px;}
+            }
+        }
+    }
+    &.requestAndApprovalItem{
+        .tit{font-size: 18px; margin-bottom: 25px; height: 30px;}
+        .top-list{width: 100%; height: calc(50% - 3px); display: flex; border-radius: 10px; overflow: hidden; background-color: #dedff0; margin-bottom: 6px;
+            li{width: calc(100% / 4); height: 100%; padding: 18px;}
+        }
+        .bot-list{width: 100%; height: calc(50% - 3px); display: flex; background-color: #cce4ff; border-radius: 10px; overflow: hidden;
+            li{width: calc(100% / 3); height: 100%; padding: 18px;}
+        }
+    }
+    &.fileMoveHistoryItem{
+        .legend-container{width: 85px; display: flex; flex-wrap: wrap; align-content: end;
+            li{ display: flex; align-items: center; margin-bottom: 8px;
+                span{width: 30px; height: 29px; border-radius: 50px 50px 0 0; display: block;
+                    &.new{background-color: #ffb32c;
+                        ~p{color: #ffb32c;}
+                    }
+                    &.used{background-color: #26225e;
+                        ~p{color: #26225e;}
+                    }
+                    &.expired{background-color: #bdbdbd;
+                        ~p{color: #bdbdbd;}
+                    }
+                }
+                p{font-size: 15px; margin-left: 5px;}
+            }
+        }
+        .chart-container{width: calc(100% - 85px); display: flex;  flex-wrap: wrap; align-content: space-between; height: 100%;
+            .chartWrap{width: 100%; height: calc(100% - 36px);}
+            #fileMoveChart{height: calc(100% - 20px);}
+            .chart-period-selector{display: flex; justify-content: space-around; width: 100%;
+                label{display: flex; align-items: center; font-size: 16px; color: #26225e;
+                    input[type="radio"]{width: 20px; height: 20px; margin-right: 5px; accent-color: #26225e !important;}
+                }
+            }
+        }
+    }
+}
+
+/* page */
+/* (사용자) 시스템 정보 */
+.mySystemInfo{
+    .tableWrap{border-radius: 10px; overflow: hidden;}
+}
+/* 9.설정 > 관리자 설정 */
+.administratorSettings{
+    .search_wrap{
+        .search_condition{
+            ul{
+                li.line{
+                    .item{ width: 100%;
+                        .txtBox{width: calc(100% - 348px); margin-right: 0;}
+                    }
+                }
+            }
+        }
+    }
+}
+/* 10.설정 > 부서 및 사용자 설정 */
+.departmentUserSettings, .approvalListPopup, .distributionPolicy{
+    .departUserSection{display: flex; justify-content: space-between; width: 100%; height: calc(100vh - 176px);
+        .departmentArea{width: calc(28% - 20px); border-radius: 10px;
+        }
+        .userArea{width: 72%; height: 100%; border-radius: 10px;}
+    }
+    .searchInnerWrap .searchBox input.searchInput{width: 130px;}
+}
+.departTreeMap, .userBottom{width: 100%; height: calc(100vh - 235px); padding: 20px; background-color: #b5bbc514; border-radius: 10px; border: 1px solid $border-color;overflow: auto;}
+/* 10.설정 > 라이선스 */
+.license{
+    .flexWrap{ align-items: center; margin-bottom: 10px;
+        h3.contTitle{margin-bottom: 0;}
+        .bu_wrap{
+            button{margin-left: 14px;}
+        }
+    }
+}
+/* 정책 > 배포 정책 */
+.distributionPolicy{
+    .checkWrap{width: auto !important;}
+    .departTreeMap, .userBottom{
+        height: calc(100vh - 174px);
+    }
+}
+
+/* 설정 > 부서 및 사용자 설정 */
+.departmentUserSettings{
+    .checkWrap{width: auto !important;}
+}
+/* 10.설정 > 인증 */
+.certified{
+    .setWrap{
+        .line{
+            .item{
+                >div{
+                    .itemDivision{
+                        li{
+                            label{margin-right: 10px;}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+/* 10.설정 > 운영 */
+.operation{
+    .setWrap{
+        .line{
+            .item{
+                em{width: 170px;}
+                >div{width: calc(100% - 170px);
+                    .itemDivision{
+                        li{ width: calc(100%/3);
+                            label{ width: 140px;}
+                        }
+                    }
+                    .bu_wrap{position: absolute; right: 7px; top: 50%; transform: translateY(-50%);
+                        button{margin-left: 7px;}
+                    }
+                }
+            }
+        }
+    }
+}
+/* 설정 > 업데이트 */
+.update{
+    .tableWrap{
+        .bu_wrap{justify-content: start;}
+    }
+}
+
+
+
+/* 설정 > 제품 정책 설정 */
+.productPolicySettings{
+    .inputFileWrap{width: calc(100% - 7px);}
+    .setWrap{
+        .line{
+            .item{
+                em{width: 460px;}
+                >div{width: calc(100% - 460px);}
+            }
+        }
+    }
+}
+/* 설정 > 신청 및 결재 설정 */
+.createRequestSetting{
+    .settingSection{width: 100%; padding: 20px; background-color: #b5bbc514; border-radius: 10px; border: 1px solid $border-color;overflow: auto;}
+}
+
+
+/* popup */
+/* 0.공통 > 검색(popup) */
+.searchAreaPopup, .searchArea_p_Popup{ z-index: 9999999999;
+    .pop_wrap{width: 869px;}
+}
+/* 0.공통 > 알림(popup) */
+/* .topAlarmPopup{
+    .pop_wrap{width: 1551px;}
+    .pop_cont{height: 670px;}
+
+} */
+.topAlarmPopup.popup{background-color: transparent;}
+.topAlarmPopup{
+    .pop_wrap{width: 451px; box-shadow: 0px 0px 16px #00000082; transform: none; top: 70px; right: 100px; left: auto; border: 1px solid #959595d3;}
+    .pop_head{background-color: transparent !important;}
+    .topBtnWrap{ position: relative !important; padding: 0 14px 0 0 !important;}
+    .pop_cont{height: 654px; padding: 0 !important; overflow: hidden; margin-bottom: 0;
+        .alarmWrap{overflow-y:hidden; max-height: 607px; padding: 10px 20px 20px 20px; margin-top: 10px;
+            li{ display: flex; align-items: center; background-color: $white-color; border-radius: 10px; box-shadow: 0 0 6px #00000025; padding: 14px 15px; transition: 0.3s;
+                &:not(:last-child){margin-bottom: 10px;}
+                &:hover{transform: scale(1.03);}
+                .status{width: 15px; height: 15px; background-color: rgb(223, 40, 40); border-radius: 100%; margin: 0 10px; cursor: pointer;}
+                .typeCir{width: 50px; height: 50px; background-repeat: no-repeat; background-position: center; margin-right: 10px;
+                    &.history{background-image: url(../../../../images/egovframework/com/primx/codescan-checkmark.svg);}
+                    &.approval{background-image: url(../../../../images/egovframework/com/primx/tasklist.svg);}
+                    &.sys{background-image: url(../../../../images/egovframework/com/primx/pc.svg);}
+                    &.profile{background-image: url(../../../../images/egovframework/com/primx/people.svg);}
+                }
+                .cont{ width: calc(100% - 95px); cursor: pointer;
+                    .txt{margin-bottom: 5px; font-size: 15px;}
+                    .date{opacity: 0.7;}
+                }
+                &.view{ opacity: 0.5; cursor: default; pointer-events: none;
+                    &:hover{transform: scale(1);}
+                    .status{background-color: rgb(136, 136, 136);}
+
+                }
+            }
+            &.readAll{overflow-y: auto; }
+        }
+        .moreBtnWrap{ position: absolute;display: flex; justify-content: end; right: 0; bottom: 0; width: 100%; padding: 14px; background-color: $pop-bg-color;z-index: 10;
+            button{width: 100%; background-color: #fff; color: $black-color; border: 1px solid $border-color; margin: 0; padding: 10px;}
+        }
+    }
+}
+
+/* 1.신청 및 결재 > 신청(popup) */
+.createRequestPopup{
+    .deleteBtn{display: none !important;}
+    .questionMark{
+        .questionTxt{left: -493px;}
+    }
+    .setWrap{
+        .line{
+            .item{
+                .idCheck{width: calc(100% - 140px); display: flex;
+                    .bu_wrap{
+                        button{ width: 100px; margin-left: 0;}
+                    }
+                }
+                .useDate{
+                    .txtBox{width: 160px;
+                        &:last-child{margin-right: 0;}
+                    }
+                }
+            }
+        }
+    }
+}
+/* 스마트컨트랙트 설정 */
+.xzedSmartContractSettingPopup{
+    .pop_wrap{width: 1781px;}
+    .pop_cont{height: 850px;
+        .smartDivision{ display: flex; width: 100%; height: calc(100% - 54px); flex-direction: column; justify-content: space-between;
+            .topArea, .bottomArea{width: 100%; height: calc(50% - 10px); display: flex; justify-content: space-between;
+                >div{
+                    .contTitle{margin-bottom: 0 !important; line-height: 37px;}
+                    &:first-child{width: calc(23% - 20px);}
+                    &:last-child{width: 77%;}
+                }
+                .tableWrap{overflow-y: auto;height: calc(100% - 51px) !important; margin-top: 10px;
+                    .dt-layout-row{ margin-top: 0 !important;}
+                }
+            }
+            .topArea{
+                .departTreeMap{height: 100%;}
+            }
+            .bottomArea{border-radius: 10px; background-color: #d2dae826; border: 1px solid #899bcf75; padding: 15px;}
+                #xzedSmartContractSettingTable{min-width: 1150px;
+                    .periodTh{width: 480px;}
+                }
+            
+/*      .companyArea{width: calc(23% - 20px);
+                .departTreeMap{height: 100%;}
+            }
+            .userArea{width: 77%; flex-wrap: wrap;
+                .contWrap{width: 100%; height: 50%;}
+                .tableWrap{width: 100%; height: calc(100% - 51px);}
+            } */
+        }
+    }
+}
+
+.moveFileListSearchPopup{ z-index: 99999;
+    .pop_wrap{width: 1551px;}
+    .pop_cont{height: 600px;}
+}
+/* 2.신청 및 결재 > 결재(popup) */
+.createRequestViewPopup{
+    .setWrap{
+        .line{
+            .item{
+                .idCheck{width: calc(100% - 140px); display: flex;
+                    .bu_wrap{
+                        button{ width: 100px; margin-left: 0;}
+                    }
+                }
+                .useDate{
+                    .txtBox{width: 160px;
+                        &:last-child{margin-right: 0;}
+                    }
+                }
+            }
+        }
+    }
+}
+
+.createRequestPopup, .createRequestViewPopup, .approvalListPopup{
+    .pop_wrap{width: 1401px; max-height: 91vh;}
+    .pop_cont{ height: 681px;
+        .lineWrap{width:100%; display: flex; margin-bottom: 20px; z-index: 9; flex-wrap: wrap; padding-left: 48px; position: relative; min-height: 105px;
+            li{width: 120px; height: 100px; background: $table-body-bg-color; border: 1px solid $border-color; border-radius: 10px; padding: 5px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; margin-right: 8px;
+                &.dragging{opacity: 0.5; cursor: grabbing;}
+                &.startLine{width: 40px; justify-content: center; background-color: $em-color; position: absolute; left: 0; top: 0; height: calc(100% - 5px); writing-mode: tb; font-size: 13px;}
+                .tit{border-radius: 10px; background: $em-color; display: block; color: $black-color; font-size: 13px; font-weight: 500; height: 20px;}
+                .info{ height: 65px; display: flex; flex-direction: column; justify-content: space-around;
+                    .name{word-break: break-word;}
+                    .result{font-weight: 600;}
+                    .date{ font-size: 13px; opacity: 0.7;}
+                }
+                &.otherDiv{position: relative; margin-bottom: 5px;
+                    .deleteBtn{position: absolute;background: url(../../../../images/egovframework/com/primx/close_.svg) no-repeat center / 20px $return; width: 29px; height: 29px; border-radius: 100%;right: 3px;top: 3px; border: 1px solid $border-color; opacity: 0; visibility: hidden; transition: 0.3s;}
+                    &:hover .deleteBtn{opacity: 1; visibility: visible;}
+                    &.editLi{cursor: grab;}
+                    // .delBtn{width:100%; height: 100%; background: url(../../../../images/egovframework/com/primx/trash.svg)no-repeat center/30px #00000015; position: absolute; right: 0; top: 0; z-index: 10; border: 1px solid $border-color; cursor: pointer;-webkit-backdrop-filter: blur(7px);backdrop-filter: blur(7px); opacity: 0; transition: 0.3s; border-radius: 10px;
+                    //     &:hover{opacity: 1;}
+                    // }
+                }
+                &.addLineDiv{ justify-content: center; border: 1px solid $button-color; transition: 0.3s ease; order: 9999;
+                    &:hover{background-color: #d2dae850;}
+                    .registrationApprovalBtn{font-size: 30px; color: $button-color; height: 100px;}
+                }
+            }
+        }
+        /* .bu_wrap{background-color: transparent;} */
+    }
+}
+/* 신청 및 결재 > 신청 : 결재선 지정(popup) */
+.approvalListPopup{
+    .pop_wrap{width: 1301px; max-height: 91vh;}
+    .pop_cont{height: auto;
+        .departTreeMap, .userBottom{height: 685px;}
+        .departUserSection{height: auto;
+            .departmentArea{width: calc(45% - 20px);}
+            .userArea{width: 55%;}
+        }
+    }
+}
+/* 2.신청 및 결재 > 결재 : 결재처리(popup) */
+.approvalProcessPopup{
+    .pop_wrap{width: 601px;}
+    .pop_cont{height: auto;
+        .setWrap{ margin-bottom: 0;
+            .line{
+                .item{
+                    em{width: 170px;}
+                }
+            }
+            .appSelect{display: flex;
+                input[type="radio"]{width: auto; margin: 0 15px;}
+            }
+        }
+    }
+}
+
+/* 3.현황 > 시스템 현황(popup) */
+.systemInformationPopup{
+    .pop_wrap{width: 1201px;}
+    .pop_cont{height: 712px; padding: 0 14px 14px 14px; margin-bottom: 0;
+        .systabWrap{height: calc(100% - 225px);
+            .tabCont{height: calc(100% - 40px);}
+        }
+    }
+}
+/* 3.현황 > 시스템 현황 : 시스템 종류(popup) */
+.changeSystemTypePopup{
+    .pop_wrap{width: 501px;}
+    .pop_cont{height: auto;
+        .setWrap{margin-bottom: 0;}
+    }
+}
+/* 3.현황 > 시스템 현황 : 시스템 삭제(popup) */
+.sysDelPopup{
+    .pop_wrap{width: 401px;}
+    .pop_cont{ height: auto;}
+}
+
+/* 3.현황 > 시스템 현황 : 제품 정책 변경(popup) */
+/* 3.현황 > 시스템 현황 : agent 정책 변경(popup) */
+/* 5.현황 > Agent정책 현황 : 시스템현황(popup) */
+/* 5.현황 > Agent정책 현황 : 시스템현황 > 시스템 추가(popup) */
+.policyChangePopup, .agentChangePopup, .agnSysStatusPopup, .agnSysStatusAddPopup, .polSysStatusPopup, .polSysStatusAddPopup{
+    .pop_wrap{width: 1401px;}
+    .pop_cont{
+        >.selectBox{width: 300px; margin-bottom: 20px;}
+    }
+    .searchInnerWrap_onlySc{
+        .searchBox{width: 100%;
+            .searchInput{width: 490px; cursor:auto;padding-right: 39px;}
+        }
+    }
+}
+.policyChangePopup, .agentChangePopup, .productHistoryPopup, .moveFileHistoryPopup, .polSysStatusPopup, .agnSysStatusPopup {
+    .zonecentralArea, .agentArea, .productHistoryArea, .moveFileHistoryArea, .polSysStatusArea, .agnSysStatusArea{height: calc(100% - 51px); overflow-y: auto;}
+}
+.polSysStatusAddPopup, .agnSysStatusAddPopup {
+    .polSysStatusAddArea, .agnSysStatusAddArea{height: calc(100% - 51px); overflow-y: auto;}
+}
+/* 3.현황 > 시스템 현황 : 제품 이력 현황(popup) */
+/* 3.현황 > 시스템 현황 : 이동 파일 현황(popup) */
+.productHistoryPopup, .moveFileHistoryPopup{
+    .pop_wrap{width: 1701px;}
+}
+/* 3.현황 > 시스템 현황 : 이동 파일 현황 > 상세정보(popup) */
+.moveFileHistoryViewPopup{
+    .pop_wrap{width: 1201px;}
+    .pop_cont{padding: 0 14px 14px 14px; height: 801px; margin-bottom: 0 !important;
+        .moveFileTabWrap{height: calc(100% - 403px);
+            .tabCont{height: calc(100% - 40px);}
+        }
+    }
+}
+
+/* 정책 > 제품 정책 */
+.productBasePolicyPopup{
+    .pop_wrap{width: 1301px;}
+    .pop_cont{height: 685px;
+        .topSetWrap{
+            em{width: 250px !important;}
+        }
+        .setWrap{
+            em{width: 620px;}
+        }
+        .divisionWrap{display: flex; justify-content: space-between; width: 100%; height: calc(100% - 177px);
+            .treeArea{width: calc(28% - 20px); border-radius: 10px;}
+            .polArea{width: 72%; border-radius: 10px;}
+            .polDataArea{width: 100%; border-radius: 10px;
+                .checkTitle{ padding-left: 0; display: flex; align-items: center;
+                    &::before{display: none;}
+                }
+            }
+        }
+        .treeArea, .polArea, .polDataArea{width: 100%; height: 100%; padding: 20px; background-color: #b5bbc514; border-radius: 10px; border: 1px solid $border-color;overflow: auto;}
+    }
+}
+/* .productPolicyPopup{
+    .pop_wrap{width: 1501px;}
+    .pop_cont{height: 685px;
+        .divisionWrap{display: flex; justify-content: space-between; width: 100%; height: calc(100% - 184px);
+            .treeArea{width: calc(28% - 20px); border-radius: 10px;
+            }
+            .polArea{width: 72%; border-radius: 10px;}
+        }
+        .treeArea, .polArea{width: 100%; height: 100%; padding: 20px; background-color: #b5bbc514; border-radius: 10px; border: 1px solid $border-color;overflow: auto;}
+    }
+} */
+
+/* 5.현황 > Agent정책 현황(popup) */
+.agentStatusViewPopup{
+    .pop_wrap{width: 901px;}
+    .pop_cont{height: auto;/*  margin-bottom: 0; */
+        .systabWrap{
+            .tabCont{height: 467px;}
+        }
+        .edittabWrap{height: 353px;
+            .tabCont{height: calc(100% - 40px);}
+        }
+    }
+}
+/* 5.현황 > Agent정책 현황 : 등록(popup) */
+/* 5.현황 > Agent정책 현황 : 정책 복사(popup) */
+.agnAddPopup, .agnCopyPopup{
+    .pop_wrap{width: 901px;}
+    .pop_cont{height: 805px;
+        .edittabWrap, .addtabWrap, .copytabWrap{
+            .tabCont{height: 467px;
+                .setWrap{
+                    .line{
+                        .item{
+                            .em100Per{width: 100%;}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+/* 5.현황 > Agent정책 현황 : 삭제(popup) */
+.agnDelPopup, .polDelPopup{
+    .pop_wrap{width: 401px;}
+    .pop_cont{height: auto;}
+}
+/* 5.현황 > Agent정책 현황 : 기본정책적용(popup) */
+.defaultChangePopup{
+    .pop_wrap{width: 401px; }
+    .pop_cont{height: auto;}
+}
+/* 5.현황 > Agent정책 현황 : 시스템현황(popup) */
+.agnSysStatusPopup, .polSysStatusPopup{
+    .pop_wrap{width: 1101px;}
+    .pop_cont{height: 701px;}
+}
+/* 5.현황 > Agent정책 현황 : 시스템현황 > 시스템 추가(popup) */
+.agnSysStatusAddPopup, .polSysStatusAddPopup{
+    .pop_wrap{width: 1001px;}
+    .pop_cont{height: 651px;}
+}
+/* 5.현황 > Agent정책 현황 : 시스템현황 > 시스템 제거(popup) */
+.agnSysDelPopup, .polSysDelPopup{
+    .pop_wrap{width: 401px;}
+    .pop_cont{height: auto;}
+}
+
+/* 7.이력 > 제품이력(popup) */
+.productHistoryViewPopup{
+    .pop_wrap{width: 901px;}
+    .pop_cont{height: auto; padding: 0 14px 14px 14px; margin-bottom: 0;
+        .setWrap{
+            .line{
+                .item{
+                    .contentArea{min-height: 100px;}
+                }
+            }
+        }
+        .setWrapScroll{height: 204px; overflow-y: auto;}
+    }
+}
+/* 8.이력 > 운영이력(popup) */
+.operationHistoryViewPopup{
+    .pop_wrap{width: 901px;}
+    .pop_cont{height: auto; padding: 0 14px 14px 14px; margin-bottom: 0;
+        .setWrap{
+            .line{
+                .item{
+                    .contentArea{min-height: 100px;}
+                }
+            }
+        }
+        .setWrapScroll{height: 204px; overflow-y: auto;}
+    }
+}
+/* 정책 > 배포 정책 (popup) */
+.distributionPolicyPopup{
+    .pop_wrap{width: 733px;}
+    .pop_cont{height: auto;
+        .setWrap{
+            .line{
+                .item{
+                    > div{
+                        input{width: 160px;}
+                    }
+                }
+            }
+        }
+    }
+}
+/* 9.설정 > 관리자 설정(popup) */
+.administratorSettingsPopup, .userAddPopup, .userModifyPopup, .departAddPopup, .companyAddPopup{
+    .pop_wrap{width: 735px;}
+    .pop_cont{ height: auto;
+        .setWrap{
+            .line{
+                .item{
+                    .idCheck{width: calc(100% - 140px); display: flex;
+                        .bu_wrap{
+                            button{ width: 100px; margin-left: 0;}
+                        }
+                    }
+                    .adminLevel{
+                        .selectBox{width: 100%;}
+                    }
+                    .useDate{
+                        .txtBox{width: 160px;
+                            &:last-child{margin-right: 0;}
+                        }
+                    }
+                }
+            }
+        }
+        .addIp{ margin-bottom: 10px; align-items: center;
+            > div{display: flex; align-items: center;
+                input{margin-right: 5px;}
+            }
+            .bu_wrap{height: 30px;
+                button{width: 50px; margin-left: 6px;}
+            }
+        }
+        .tableWrap{
+            .flexWrap{justify-content: space-between;}
+        }
+    }
+}
+/* 9.설정 > 관리자 설정 : 관리자 삭제(popup) */
+.adminDeletePopup{
+    .pop_wrap{width: 401px; }
+    .pop_cont{ height: auto;}
+}
+/* 9.설정 > 관리자 설정 : 패스워드 초기화(popup) */
+.passwordResetPopup{
+    .pop_wrap{width: 401px; }
+    .pop_cont{ height: auto;}
+}
+
+/* 10.설정 > 부서 및 사용자 설정 : 사용자 수정(popup) */
+.userModifyPopup{
+    .pop_wrap{width: 735px;}
+}
+/* 10.설정 > 부서 및 사용자 설정 : 사용자 등록(popup) */
+.userAddPopup{
+    .pop_wrap{width: 735px;}
+    .ipTable{
+        input.minInput{height: 30px;}
+    }
+}
+/* 10.설정 > 부서 및 사용자 설정 : 사용자 등록 > 부서 선택(popup) */
+.departSelectPopup{ z-index: 99999999;
+    .absolBtn{right: 0 !important; left: unset !important;}
+    .pop_wrap{width: 601px;}
+    .pop_cont{height: 535px;
+        .setWrap{margin-bottom: 0;}
+        .departTreeMap{height: 465px;/*  height: 100%; */}
+    }
+    .searchInnerWrap_p{
+        .searchBox{width: 100%;
+            .searchInput{width: 100%; margin-right: 0; cursor: auto; padding-right: 39px;}
+        }
+    }
+}
+/* 10.설정 > 부서 및 사용자 설정 : 사용자 삭제(popup) */
+.userDeletePopup{
+    .pop_wrap{width: 401px; }
+    .pop_cont{height: auto;}
+}
+/* 10.설정 > 부서 및 사용자 설정 : 부서 등록(popup) */
+.departAddPopup, .companyAddPopup{
+    .pop_wrap{width: 593px; }
+    .setWrap{margin-bottom: 0;}
+}
+/* 10.설정 > 부서 및 사용자 설정 : 부서 수정(popup) */
+.departModifyPopup{
+    .pop_wrap{width: 593px; }
+    .pop_cont{height: auto; 
+        .setWrap{margin-bottom: 0;}
+    }
+}
+/* 10.설정 > 부서 및 사용자 설정 : 부서 삭제(popup) */
+.departDeletePopup{
+    .pop_wrap{width: 401px; }
+    .pop_cont{height: auto;}
+}
+/* 10.설정 > 부서 및 사용자 설정 : 회사 코드 조회(popup) */
+.companyCodeListPopup{
+    .pop_wrap{width: 721px;}
+    .pop_cont{height: auto;}
+}
+/* 10.설정 > 라이선스 : 라이선스 등록 */
+.licenseRegiPopup{
+    .pop_wrap{width: 500px;}
+    .pop_cont{height: auto;}
+}
+
+/* 상단 설정 > 라이선스 */
+.topSetPopup{
+    .pop_wrap{width: 1541px;}
+    .pop_cont{height: 685px;
+        .settabWrap{height: calc(100% - 50px);
+            .tabCont{height: calc(100% - 40px);}
+        }
+    }
+    .license{
+        .flexWrap{ align-items: center; margin-bottom: 10px;
+            h3.contTitle{margin-bottom: 0;}
+            .bu_wrap{
+                button{margin-left: 14px;}
+            }
+        }
+    }
+}
+/* 설정 > 파일전송 Zone 설정 (popup) */
+.addFileTransferZonePopup{
+    .pop_wrap{ width: 841px;}
+    .pop_cont{ height: 600px;
+        .fileZoneTabWrap{height: calc(100% - 180px);
+            .tabCont{height: calc(100% - 40px);}
+        }
+    }
+}
+/* 설정>업데이트 팝업 */
+.clientUploadPopup{
+    .pop_wrap{ width: 641px;}
+    .pop_cont{ height: auto;}
+}
+/* 설정>제품기본정책책 팝업 */
+.fileUploadPopup{
+    .pop_wrap{ width: 641px;}
+    .pop_cont{ height: auto;}
+}
+/* 상단 설정 > 운영 > 미접속 시스템 삭제 */
+.deleteUnconnectedSystemPopup{
+    .pop_wrap{ width: 1041px;}
+    .pop_cont{ height: auto;}
+}
+/* 프로필 설정 팝업 */
+.profilePopup{
+    .pop_wrap{ width: 841px;}
+    .pop_cont{ height: auto;
+        .setWrap{
+            .line{
+                em{width: 200px;}
+                .item{
+                    .bu_wrap{width: 161px;}
+                }
+            }
+        }
+    }
+}
+/* 비밀번호 변경 팝업 */
+.changePasswordPopup{
+    .pop_wrap{ width: 441px;}
+    .pop_cont{ height: auto;
+        ul{
+            li{position: relative; margin-bottom: 10px;
+                .txtBox{ width: 100%; padding-right: 50px;}
+                .pwViewBtn{right: 15px;}
+            }
+        }
+    }
+}

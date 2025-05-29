@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="commonDAO">
+
+    <select id="selectUserInfo" parameterType="String" resultType="egovframework.com.primx.fun.cmm.service.UserInfoVO">
+        
+        SELECT 
+            EMPLYR_ID AS userId,  
+            EMAIL_ADRES AS email, 
+            PHONE_NO AS phoneNumber, 
+            USER_NM AS userName, 
+            COMPANY_ID AS companyCode,
+            PASSWORD AS password
+        FROM COMTNEMPLYRINFO
+        WHERE EMPLYR_ID = #{userId}
+    </select>
+
+    <update id="updateUserInfo" parameterType="egovframework.com.primx.fun.cmm.service.MyPageUpdateDTO">
+        UPDATE COMTNEMPLYRINFO 
+        SET 
+            PHONE_NO = #{phoneNumber},
+            USER_NM = #{userName}
+            <if test="password != null and password != ''">
+            , PASSWORD = #{password}
+            </if>
+        WHERE EMPLYR_ID = #{userId}
+    </update>
+
+</mapper>

@@ -1,0 +1,245 @@
+// SCSS의 'VAR, MIXIN, FUNCTION을 공통으로 사용하기 위한 목적 , 디폴트컬러 지정
+// ########## 다크 모드
+
+// 프라이맥스 컬러, 버튼
+$primx-color: var(--primx-color, #262262);
+// top, left 배경컬러
+$top-color: var(--top-color, #262262);
+$left-color: var(--left-color, #e1e4e9);
+// top, left 기능버튼 활성화 배경컬러
+$active-color: var(--active-color, #ffffff61);
+// 기본 홈 배경컬러
+$home-color: var(--home-color, #f5f5f5);
+// 버튼 배경컬러
+$button-color: var(--button-color, #899bcf);
+// 버튼 호버 배경컬러
+$hover-color: var(--hover-color, #9dafe5);
+// 로그인화면 언어 컬러
+$login-lang-color: var(--login-lang-color, #d2dae8);
+
+// 팝업 배경 컬러
+$pop-bg-color : var(--pop-bg-color, #f5f5f5);
+// 팝업 헤더 컬러
+$pop-head-color : var(--pop-head-color, #d2dae8);
+
+// 보더 컬러
+$border-color : var(--border-color, #cbcbcb);
+// 보더 활성화 컬러
+$border-active-color : var(--border-active-color, #bbb);
+// input 배경 컬러
+$input-txt-bg-color : var(--input-txt-bg-color, #f3f5f9);
+
+// em 컬러
+$em-color : var(--em-color, #d2dae8);
+
+// tab 비활성화 컬러
+$tab-color : var(--tab-color, #d8d8d8);
+$tab-active-color : var(--tab-active-color, #f0f0f0);
+
+// 툴팁 컬러
+$tooltip-color : var(--tooltip-color, #352f6542);
+
+// disable 컬러
+$disable-bg-color : var(--disable-bg-color, #dedede);
+// disable 폰트 컬러
+$disable-font-color : var(--disable-font-color, #949494);
+
+// 검색 섹션 배경 컬러
+$search-bg-color : var(--search-bg-color, #d2dae880);
+// 검색 필터 아이템
+$search-item-color : var(--search-item-color, #ffffff9e);
+
+// 화이트 
+$white-color: var(--white-color, #fff);
+// 블랙 
+$black-color: var(--black-color, #000);
+
+// pager
+// pager select 컬러
+$pager-select-color : var(--pager-select-color, #262262);
+
+
+// 테이블 탑 보더 컬러
+$table-top-border : var(--table-top-border, #979797);
+// 테이블 th/td 보더 컬러
+$table-tr-td-border : var(--table-tr-td-border, #858585);
+// 테이블 헤드 배경 컬러
+$table-head-bg-color : var(--table-head-bg-color, #d2dae8);
+// 테이블 바디 배경 컬러
+$table-body-bg-color : var(--table-body-bg-color, #ffffff);
+// 테이블 tr 호버 컬러
+$table-active-bg-color : var(--table-active-bg-color, #F8F9FC);
+// 테이블 tr 셀렉트 컬러
+$table-select-bg-color : var(--table-select-bg-color, #e1e6f199);
+
+// 인풋배경
+$input-box-color : var(--input-box-color, #ffffff);
+// 타이틀 메뉴경로 처음것
+$title-fir-color : var(--title-fir-color, #666);
+
+// 트리 셀렉트 컬러
+$tree-select-bg-color : var(--tree-select-bg-color, #d2dae8);
+
+// 도움말 텍스트 컬러
+$question-txt-color : var(--question-txt-color, #1e2f67);
+// 도움말 텍스트박스 컬러
+$question-txt-bg-color : var(--question-txt-bg-color, #5f72a72d);
+
+
+
+// 대기
+$wait : var(--wait, #d3d3d3);
+// 진행
+$progress : var(--progress, #93c9fb);
+// 승인
+$approval : var(--approval, #61ea93);
+// 반려
+$return : var(--return, #fb7b6a);
+// 개별
+$each : var(--each, #ffd600);
+
+// 테마 지정
+$config: (
+    default: (
+    primx-color: $primx-color,
+    top-color: $top-color,
+    left-color: $left-color,
+    active-color: $active-color,
+    home-color: $home-color,
+    button-color: $button-color,
+    hover-color: $hover-color,
+    login-lang-color: $login-lang-color,
+    pop-bg-color: $pop-bg-color,
+    pop-head-color: $pop-head-color,
+    border-color: $border-color,
+    border-active-color: $border-active-color,
+    input-txt-bg-color: $input-txt-bg-color,
+    em-color: $em-color,
+    tab-color: $tab-color,
+    tab-active-color: $tab-active-color,
+    tooltip-color: $tooltip-color,
+    disable-bg-color: $disable-bg-color,
+    disable-font-color: $disable-font-color,
+    search-bg-color: $search-bg-color,
+    search-item-color: $search-item-color,
+    white-color: $white-color,
+    black-color: $black-color,
+    pager-select-color: $pager-select-color,
+    table-top-border: $table-top-border,
+    table-tr-td-border: $table-tr-td-border,
+    table-head-bg-color: $table-head-bg-color,
+    table-body-bg-color: $table-body-bg-color,
+    table-active-bg-color: $table-active-bg-color,
+    table-select-bg-color: $table-select-bg-color,
+    input-box-color : $input-box-color,
+    title-fir-color : $title-fir-color,
+    tree-select-bg-color : $tree-select-bg-color,
+    question-txt-color : $question-txt-color,
+    question-txt-bg-color : $question-txt-bg-color,
+    wait : $wait,
+    progress : $progress,
+    approval : $approval,
+    return : $return,
+    each : $each
+    ),
+    dark: (
+    primx-color: #92a7b7,
+    top-color: #3c4043,
+    left-color: #27282b,
+    active-color: #d2dde86c,
+    home-color: #17181a,
+    button-color: #92a7b7,
+    hover-color: #92a7b7cf,
+    login-lang-color: #262262,
+    pop-bg-color: #17181a,
+    pop-head-color: #3c4043,
+    border-color: #191919,
+    border-active-color: #121314,
+    input-txt-bg-color: #43444b,
+    em-color: #3c4043,
+    tab-color: #17181a,
+    tab-active-color: #2c2d2f,
+    tooltip-color: #92a7b794,
+    disable-bg-color: #3f3f41,
+    disable-font-color: #9c9c9c,
+    search-bg-color: #3c4043,
+    search-item-color: #92a7b756,
+    white-color: #000,
+    black-color: #dbdbdb,
+    pager-select-color: #92a7b7,
+    table-top-border: #262262,
+    table-tr-td-border: #262262,
+    table-head-bg-color: #3c4043,
+    table-body-bg-color: #2e2d2e,
+    table-active-bg-color: #7b848c,
+    table-select-bg-color: #585c5f,
+    input-box-color : #333439,
+    title-fir-color : #c1c1c1,
+    tree-select-bg-color : #D2DDE8,
+    question-txt-color : #ffffff,
+    question-txt-bg-color : #92a7b76d,
+    wait : #9c9c9c,
+    progress : #3b7bb8,
+    approval : #3aab64,
+    return : #c54736,
+    each : #d78e03
+    )
+);
+
+@function setColor($map, $object, $style) {
+    @if map-has-key($map, $object) {
+        @return map-get(map-get($map, $object), $style);
+    }
+    @warn "The key ´#{$object} is not available in the map.";
+    @return null;
+}
+
+@mixin setTheme($key){
+    --primx-color: #{setColor($config, $key, primx-color)};
+    --top-color: #{setColor($config, $key, top-color)};
+    --left-color: #{setColor($config, $key, left-color)};
+    --active-color: #{setColor($config, $key, active-color)};
+    --home-color: #{setColor($config, $key, home-color)};
+    --button-color: #{setColor($config, $key, button-color)};
+    --hover-color: #{setColor($config, $key, hover-color)};
+    --login-lang-color: #{setColor($config, $key, login-lang-color)};
+    --pop-bg-color: #{setColor($config, $key, pop-bg-color)};
+    --pop-head-color: #{setColor($config, $key, pop-head-color)};
+    --border-color: #{setColor($config, $key, border-color)};
+    --border-active-color: #{setColor($config, $key, border-active-color)};
+    --input-txt-bg-color: #{setColor($config, $key, input-txt-bg-color)};
+    --em-color: #{setColor($config, $key, em-color)};
+    --tab-color: #{setColor($config, $key, tab-color)};
+    --tab-active-color: #{setColor($config, $key, tab-active-color)};
+    --tooltip-color: #{setColor($config, $key, tooltip-color)};
+    --disable-bg-color: #{setColor($config, $key, disable-bg-color)};
+    --disable-font-color: #{setColor($config, $key, disable-font-color)};
+    --search-bg-color: #{setColor($config, $key, search-bg-color)};
+    --search-item-color: #{setColor($config, $key, search-item-color)};
+    --white-color: #{setColor($config, $key, white-color)};
+    --black-color: #{setColor($config, $key, black-color)};
+    --pager-select-color: #{setColor($config, $key, pager-select-color)};
+    --table-top-border: #{setColor($config, $key, table-top-border)};
+    --table-tr-td-border: #{setColor($config, $key, table-tr-td-border)};
+    --table-head-bg-color: #{setColor($config, $key, table-head-bg-color)};
+    --table-body-bg-color: #{setColor($config, $key, table-body-bg-color)};
+    --table-active-bg-color: #{setColor($config, $key, table-active-bg-color)};
+    --table-select-bg-color: #{setColor($config, $key, table-select-bg-color)};
+    --input-box-color: #{setColor($config, $key, input-box-color)};
+    --title-fir-color: #{setColor($config, $key, title-fir-color)};
+    --tree-select-bg-color: #{setColor($config, $key, tree-select-bg-color)};
+    --question-txt-color: #{setColor($config, $key, question-txt-color)};
+    --question-txt-bg-color: #{setColor($config, $key, question-txt-bg-color)};
+    --wait: #{setColor($config, $key, wait)};
+    --progress: #{setColor($config, $key, progress)};
+    --approval: #{setColor($config, $key, approval)};
+    --return: #{setColor($config, $key, return)};
+    --each: #{setColor($config, $key, each)};
+}
+
+// html에 class="dark-theme" addClass
+@each $theme in default, dark{
+    html.#{$theme}-theme{
+        @include setTheme($theme);
+    }
+}

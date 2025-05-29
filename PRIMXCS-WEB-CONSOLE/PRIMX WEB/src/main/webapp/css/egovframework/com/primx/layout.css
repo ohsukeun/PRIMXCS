@@ -1,0 +1,2383 @@
+@charset "UTF-8";
+html.default-theme {
+  --primx-color: var(--primx-color, #262262);
+  --top-color: var(--top-color, #262262);
+  --left-color: var(--left-color, #e1e4e9);
+  --active-color: var(--active-color, rgba(255, 255, 255, 0.3803921569));
+  --home-color: var(--home-color, #f5f5f5);
+  --button-color: var(--button-color, #899bcf);
+  --hover-color: var(--hover-color, #9dafe5);
+  --login-lang-color: var(--login-lang-color, #d2dae8);
+  --pop-bg-color: var(--pop-bg-color, #f5f5f5);
+  --pop-head-color: var(--pop-head-color, #d2dae8);
+  --border-color: var(--border-color, #cbcbcb);
+  --border-active-color: var(--border-active-color, #bbb);
+  --input-txt-bg-color: var(--input-txt-bg-color, #f3f5f9);
+  --em-color: var(--em-color, #d2dae8);
+  --tab-color: var(--tab-color, #d8d8d8);
+  --tab-active-color: var(--tab-active-color, #f0f0f0);
+  --tooltip-color: var(--tooltip-color, rgba(53, 47, 101, 0.2588235294));
+  --disable-bg-color: var(--disable-bg-color, #dedede);
+  --disable-font-color: var(--disable-font-color, #949494);
+  --search-bg-color: var(--search-bg-color, rgba(210, 218, 232, 0.5019607843));
+  --search-item-color: var(--search-item-color, rgba(255, 255, 255, 0.6196078431));
+  --white-color: var(--white-color, #fff);
+  --black-color: var(--black-color, #000);
+  --pager-select-color: var(--pager-select-color, #262262);
+  --table-top-border: var(--table-top-border, #979797);
+  --table-tr-td-border: var(--table-tr-td-border, #858585);
+  --table-head-bg-color: var(--table-head-bg-color, #d2dae8);
+  --table-body-bg-color: var(--table-body-bg-color, #ffffff);
+  --table-active-bg-color: var(--table-active-bg-color, #F8F9FC);
+  --table-select-bg-color: var(--table-select-bg-color, rgba(225, 230, 241, 0.6));
+  --input-box-color: var(--input-box-color, #ffffff);
+  --title-fir-color: var(--title-fir-color, #666);
+  --tree-select-bg-color: var(--tree-select-bg-color, #d2dae8);
+  --question-txt-color: var(--question-txt-color, #1e2f67);
+  --question-txt-bg-color: var(--question-txt-bg-color, rgba(95, 114, 167, 0.1764705882));
+  --wait: var(--wait, #d3d3d3);
+  --progress: var(--progress, #93c9fb);
+  --approval: var(--approval, #61ea93);
+  --return: var(--return, #fb7b6a);
+  --each: var(--each, #ffd600);
+}
+
+html.dark-theme {
+  --primx-color: #92a7b7;
+  --top-color: #3c4043;
+  --left-color: #27282b;
+  --active-color: rgba(210, 221, 232, 0.4235294118);
+  --home-color: #17181a;
+  --button-color: #92a7b7;
+  --hover-color: rgba(146, 167, 183, 0.8117647059);
+  --login-lang-color: #262262;
+  --pop-bg-color: #17181a;
+  --pop-head-color: #3c4043;
+  --border-color: #191919;
+  --border-active-color: #121314;
+  --input-txt-bg-color: #43444b;
+  --em-color: #3c4043;
+  --tab-color: #17181a;
+  --tab-active-color: #2c2d2f;
+  --tooltip-color: rgba(146, 167, 183, 0.5803921569);
+  --disable-bg-color: #3f3f41;
+  --disable-font-color: #9c9c9c;
+  --search-bg-color: #3c4043;
+  --search-item-color: rgba(146, 167, 183, 0.337254902);
+  --white-color: #000;
+  --black-color: #dbdbdb;
+  --pager-select-color: #92a7b7;
+  --table-top-border: #262262;
+  --table-tr-td-border: #262262;
+  --table-head-bg-color: #3c4043;
+  --table-body-bg-color: #2e2d2e;
+  --table-active-bg-color: #7b848c;
+  --table-select-bg-color: #585c5f;
+  --input-box-color: #333439;
+  --title-fir-color: #c1c1c1;
+  --tree-select-bg-color: #D2DDE8;
+  --question-txt-color: #ffffff;
+  --question-txt-bg-color: rgba(146, 167, 183, 0.4274509804);
+  --wait: #9c9c9c;
+  --progress: #3b7bb8;
+  --approval: #3aab64;
+  --return: #c54736;
+  --each: #d78e03;
+}
+
+/* ############### PUBLIC ############### */
+/* ############### PUBLIC ############### */
+/* ############### PUBLIC ############### */
+.mb00 {
+  margin-bottom: 0 !important;
+}
+
+.mb10 {
+  margin-bottom: 10px !important;
+}
+
+.mb15 {
+  margin-bottom: 15px !important;
+}
+
+.mb20 {
+  margin-bottom: 20px !important;
+}
+
+.mr00 {
+  margin-right: 0px !important;
+}
+
+.mr10 {
+  margin-right: 10px !important;
+}
+
+.mt15 {
+  margin-top: 15px !important;
+}
+
+.w100Per {
+  width: 100% !important;
+}
+
+.wAuto {
+  width: auto !important;
+}
+
+.w100Per_10 {
+  width: calc(100% - 10px) !important;
+}
+
+.w80 {
+  width: 80px !important;
+}
+
+.w100 {
+  width: 100px !important;
+}
+
+.w130 {
+  width: 130px !important;
+}
+
+.w150 {
+  width: 150px !important;
+}
+
+.w160 {
+  width: 160px !important;
+}
+
+.w200 {
+  width: 200px !important;
+}
+
+.w230 {
+  width: 230px !important;
+}
+
+.w300 {
+  width: 300px !important;
+}
+
+.w310 {
+  width: 310px !important;
+}
+
+.w330 {
+  width: 330px !important;
+}
+
+.ellipsisTxt {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  white-space: nowrap;
+}
+.ellipsisTxt > p {
+  display: table-cell;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.redColor {
+  color: #f15a24 !important;
+}
+
+.yellowColor {
+  color: #ffb32c !important;
+}
+
+.questionMark {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  background: url(../../../../images/egovframework/com/primx/question.svg) no-repeat center/21px;
+  margin-left: 10px;
+  position: relative;
+  cursor: help;
+}
+.questionMark:hover .questionTxt {
+  opacity: 1;
+  visibility: visible;
+}
+.questionMark .questionTxt {
+  position: absolute;
+  left: 30px;
+  z-index: 10;
+  display: block;
+  background-color: var(--question-txt-bg-color, rgba(95, 114, 167, 0.1764705882));
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 5px 8px;
+  border-radius: 10px;
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+  border: 1px solid var(--border-color, #cbcbcb);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+  color: var(--question-txt-color, #1e2f67);
+}
+
+/*********** 공통 로딩 화면 ***********/
+.loadingPopup {
+  z-index: 999999999999999;
+}
+.loadingPopup .loader {
+  margin: 0 0 2em;
+  text-align: center;
+  padding: 1em;
+  margin: 0 auto 1em;
+  display: inline-block;
+  vertical-align: top;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1.5);
+}
+.loadingPopup .circular {
+  animation: rotate 2s linear infinite;
+  height: 100px;
+  position: relative;
+  width: 100px;
+}
+.loadingPopup .path {
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  stroke: var(--primx-color, #262262);
+  animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+  stroke-linecap: round;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124;
+  }
+}
+/*********** 대시보드 ***********/
+.dashboard .refreshBtn {
+  width: 26px;
+  height: 26px;
+  background: url(../../../../images/egovframework/com/primx/refresh.svg) no-repeat center/cover !important;
+  margin-left: 12px;
+  display: block;
+}
+.dashboard .stickyWrap {
+  background-color: transparent !important;
+}
+.dashboard .dashDivision {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  width: 100%;
+  height: calc(100vh - 175px);
+  gap: 20px;
+}
+.dashboard .dashDivision .dashItem {
+  min-width: 500px;
+  box-shadow: 0px 0px 13px rgba(0, 0, 0, 0.1098039216);
+  border-radius: 10px;
+  padding: 30px;
+  background-color: var(--white-color, #fff);
+  height: calc((100vh - 175px - 20px) / 2);
+}
+.dashboard .dashDivision .dashItem * {
+  font-family: "NanumSquareNeoHeavy", sans-serif;
+}
+.dashboard .dashDivision .dashItem .dashTitle {
+  font-size: 32px;
+  font-weight: 800;
+  color: #262262;
+  margin-bottom: 14px;
+  font-family: "NanumSquareNeoHeavy", sans-serif;
+}
+.dashboard .dashDivision .dashItem .tableWrap {
+  height: calc(100% - 45px);
+}
+.dashboard .dropMenu_dashboard .selectMenu {
+  background: none !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+.dashboard .dropMenu_dashboard > ul {
+  display: grid;
+  z-index: 999;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.dashboard .dropMenu_dashboard > ul li {
+  display: flex;
+  align-items: center;
+  padding: 0 10px 0 10px !important;
+  width: -moz-max-content;
+  width: max-content;
+}
+.dashboard .dropMenu_dashboard > ul li input {
+  margin-right: 5px;
+}
+.dashboard .dropMenu_dashboard > ul li label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--title-fir-color, #666);
+}
+.dashboard .dropMenu_dashboard .hamberger {
+  width: 38px;
+  height: 19px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.dashboard .dropMenu_dashboard .hamberger span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: #262262;
+}
+.dashboard .dashTableWrap table thead tr {
+  background-color: #cce4ff !important;
+}
+.dashboard .dashTableWrap table tbody tr {
+  background-color: #d4d9df;
+  border-bottom: 1px solid #fff;
+}
+
+/*********** 섹션 구분 ***********/
+.division {
+  display: grid;
+  grid-template-columns: 255px auto;
+  grid-template-rows: 60px auto;
+  height: 100vh;
+  width: 100vw;
+  background: var(--white-color, #fff);
+}
+.division > .top {
+  grid-column: 1/3;
+  grid-row: 1/2; /* background-color: $primx-color; */
+  background-color: var(--top-color, #262262);
+}
+.division > .left {
+  grid-column: 1/2;
+  grid-row: 2/3;
+  background-color: var(--left-color, #e1e4e9);
+}
+.division > .content {
+  grid-column: 2/3;
+  grid-row: 2/3;
+  background-color: var(--home-color, #f5f5f5);
+}
+.division.closeMenu {
+  grid-template-columns: 70px;
+}
+.division.closeMenu .left {
+  overflow-y: unset;
+}
+.division.closeMenu .left .firstDepthMenu {
+  position: relative;
+}
+.division.closeMenu .left .firstDepthMenu a {
+  height: 100% !important;
+}
+.division.closeMenu .left .firstDepthMenu::before {
+  content: "";
+  width: 0px;
+  height: calc(100vh - 60px);
+  position: absolute;
+  left: 60px;
+  top: -20px;
+  z-index: 111;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background-color: rgba(225, 228, 233, 0.568627451);
+  transition: width 0.3s;
+  box-shadow: 6px 0 6px rgba(82, 82, 82, 0.1450980392);
+}
+.division.closeMenu .left .firstDepthMenu:hover::before {
+  width: 200px;
+}
+.division.closeMenu .left .firstDepthMenu > li {
+  position: relative;
+}
+.division.closeMenu .left .firstDepthMenu > li > p { /* padding: 44px 0 10px 0; */
+  padding: 0; /* background-position: center 10px; */
+  height: auto;
+  text-align: center;
+  width: 50px;
+  height: 50px;
+  background-position: center;
+  overflow: unset;
+}
+.division.closeMenu .left .firstDepthMenu > li > p::before {
+  display: none;
+}
+.division.closeMenu .left .firstDepthMenu > li .secondDepthMenu {
+  width: 150px;
+  position: absolute;
+  top: 0;
+  left: -200px;
+  z-index: 10;
+  transition: 0.3s;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.division.closeMenu .left .firstDepthMenu > li .secondDepthMenu > li {
+  padding: 0;
+  transition: 0.3s;
+  height: 100%;
+  opacity: 0;
+  margin-top: 10px;
+  visibility: hidden;
+}
+.division.closeMenu .left .firstDepthMenu > li .secondDepthMenu > li::before {
+  left: -15px;
+}
+.division.closeMenu .left .firstDepthMenu > li .secondDepthMenu > li a {
+  line-height: 1.8;
+  width: 150px;
+}
+.division.closeMenu .left .firstDepthMenu > li:hover {
+  width: 245px;
+  z-index: 1111;
+}
+.division.closeMenu .left .firstDepthMenu > li:hover .secondDepthMenu {
+  left: 90px;
+}
+.division.closeMenu .left .firstDepthMenu > li:hover .secondDepthMenu > li {
+  opacity: 1;
+  visibility: visible;
+}
+
+/*********** top / left / content 스타일 ***********/
+.division > .top {
+  width: 100%;
+  height: 100%;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.division > .top .top_left {
+  display: flex;
+  align-items: center;
+}
+.division > .top .top_left .hamberger {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+}
+.division > .top .top_left .hamberger img {
+  z-index: 1;
+  position: relative;
+  width: 100%;
+}
+.division > .top .top_left .hamberger::before {
+  content: "";
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 100%;
+  background: var(--active-color, rgba(255, 255, 255, 0.3803921569));
+  z-index: 0;
+  opacity: 0;
+  transition: 0.3s;
+}
+.division > .top .top_left .hamberger.active::before, .division > .top .top_left .hamberger:hover::before {
+  opacity: 1;
+}
+.division > .top .top_left h1.logo {
+  width: 85px;
+  height: 25px;
+  margin-left: 14px;
+}
+.division > .top .top_left h1.logo a {
+  width: 100%;
+}
+.division > .top .top_left h1.logo a img {
+  width: 100%;
+}
+.division > .top .top_right {
+  display: flex;
+  align-items: center;
+}
+.division > .top .top_right > li {
+  margin-left: 24px;
+  position: relative;
+  width: 27px;
+  height: 27px;
+}
+.division > .top .top_right > li a {
+  width: 100%;
+  height: 100%;
+}
+.division > .top .top_right > li img {
+  width: 100%;
+}
+.division > .top .top_right > li > button {
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+.division > .top .top_right > li > button .newNoti {
+  position: absolute;
+  right: -7px;
+  top: -6px;
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border-radius: 100%;
+  transition: 0.3s;
+  color: #fff;
+  font-weight: 500;
+  line-height: 20px;
+}
+.division > .top .top_right > li::before {
+  content: "";
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 100%;
+  background: var(--active-color, rgba(255, 255, 255, 0.3803921569));
+  z-index: 0;
+  transition: 0.3s;
+  opacity: 0;
+}
+.division > .top .top_right > li.active::before, .division > .top .top_right > li:hover::before {
+  opacity: 1;
+}
+.division > .top .top_right > li.xzedSmartContractSetting {
+  width: -moz-max-content;
+  width: max-content;
+  height: auto;
+}
+.division > .top .top_right > li.xzedSmartContractSetting button {
+  padding: 0;
+  height: 100%;
+  background-color: var(--button-color, #899bcf);
+  padding: 5px 15px;
+  border-radius: 50px;
+}
+.division > .top .top_right > li.xzedSmartContractSetting::before {
+  display: none;
+}
+.division > .top .top_right > li.timeOutArea {
+  color: #fff;
+  display: flex;
+  width: 174px;
+  height: auto;
+  background-color: rgba(255, 255, 255, 0.2588235294);
+  padding: 5px 22px 5px 0px;
+  border-radius: 50px;
+  justify-content: right;
+}
+.division > .top .top_right > li.timeOutArea span.ss {
+  margin-left: 5px;
+}
+.division > .top .top_right > li.timeOutArea::before {
+  display: none;
+}
+.division > .top .top_right > li .dropMenu {
+  width: auto;
+}
+.division > .top .top_right > li .dropMenu > ul {
+  top: 19px;
+  width: 110px;
+  visibility: hidden;
+}
+.division > .top .top_right > li .dropMenu.on ul {
+  opacity: 1;
+  visibility: visible;
+}
+.division > .top .top_right > li .dropMenu.on ul li {
+  height: 35px;
+}
+.division > .left {
+  padding: 0 10px 10px 10px;
+  overflow-y: auto;
+}
+.division > .left nav .firstDepthMenu a {
+  width: 100%;
+  height: auto !important;
+}
+.division > .left nav .firstDepthMenu > li {
+  margin-top: 20px;
+  position: relative;
+}
+.division > .left nav .firstDepthMenu > li > p {
+  padding: 12px 0px 12px 49px;
+  border-radius: 50px;
+  background-repeat: no-repeat;
+  background-position: 15px center;
+  position: relative;
+  transition: background-color 0.2s; /* height: 44px; */
+  height: auto;
+  overflow: hidden;
+  background-size: 24px;
+  font-size: 16px;
+  line-height: 1.2;
+  width: 100%;
+}
+.division > .left nav .firstDepthMenu > li > p.systemInfo {
+  background-image: url(../../../../images/egovframework/com/primx/pc.svg);
+}
+.division > .left nav .firstDepthMenu > li > p.systemInfo::before {
+  display: none;
+}
+.division > .left nav .firstDepthMenu > li > p.dashboard {
+  background-image: url(../../../../images/egovframework/com/primx/dashboard-dots.svg);
+}
+.division > .left nav .firstDepthMenu > li > p.dashboard::before {
+  display: none;
+}
+.division > .left nav .firstDepthMenu > li > p.approval {
+  background-image: url(../../../../images/egovframework/com/primx/tasklist.svg);
+}
+.division > .left nav .firstDepthMenu > li > p.current {
+  background-image: url(../../../../images/egovframework/com/primx/server.svg);
+}
+.division > .left nav .firstDepthMenu > li > p.history {
+  background-image: url(../../../../images/egovframework/com/primx/codescan-checkmark.svg);
+}
+.division > .left nav .firstDepthMenu > li > p.policy {
+  background-image: url(../../../../images/egovframework/com/primx/page-flip.svg);
+}
+.division > .left nav .firstDepthMenu > li > p.setting {
+  background-image: url(../../../../images/egovframework/com/primx/xray-view.svg);
+}
+.division > .left nav .firstDepthMenu > li > p::before {
+  content: "";
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  background: url(../../../../images/egovframework/com/primx/arr_d.svg) no-repeat center center/15px;
+}
+.division > .left nav .firstDepthMenu > li > p:hover {
+  background-color: var(--primx-color, #262262);
+}
+.division > .left nav .firstDepthMenu > li > p:hover::after {
+  bottom: -18px;
+}
+.division > .left nav .firstDepthMenu > li > p::after {
+  bottom: -18px;
+}
+.division > .left nav .firstDepthMenu > li.select > p, .division > .left nav .firstDepthMenu > li:hover > p {
+  background-color: var(--primx-color, #262262);
+  color: var(--white-color, #fff);
+}
+.division > .left nav .firstDepthMenu > li.select > p.systemInfo, .division > .left nav .firstDepthMenu > li:hover > p.systemInfo {
+  background-image: url(../../../../images/egovframework/com/primx/pc_.svg);
+}
+.division > .left nav .firstDepthMenu > li.select > p.dashboard, .division > .left nav .firstDepthMenu > li:hover > p.dashboard {
+  background-image: url(../../../../images/egovframework/com/primx/dashboard-dots_.svg);
+}
+.division > .left nav .firstDepthMenu > li.select > p.approval, .division > .left nav .firstDepthMenu > li:hover > p.approval {
+  background-image: url(../../../../images/egovframework/com/primx/tasklist_.svg);
+}
+.division > .left nav .firstDepthMenu > li.select > p.current, .division > .left nav .firstDepthMenu > li:hover > p.current {
+  background-image: url(../../../../images/egovframework/com/primx/server_.svg);
+}
+.division > .left nav .firstDepthMenu > li.select > p.history, .division > .left nav .firstDepthMenu > li:hover > p.history {
+  background-image: url(../../../../images/egovframework/com/primx/codescan-checkmark_.svg);
+}
+.division > .left nav .firstDepthMenu > li.select > p.policy, .division > .left nav .firstDepthMenu > li:hover > p.policy {
+  background-image: url(../../../../images/egovframework/com/primx/page-flip_.svg);
+}
+.division > .left nav .firstDepthMenu > li.select > p.setting, .division > .left nav .firstDepthMenu > li:hover > p.setting {
+  background-image: url(../../../../images/egovframework/com/primx/xray-view_.svg);
+}
+.division > .left nav .firstDepthMenu > li.select > p::before, .division > .left nav .firstDepthMenu > li:hover > p::before {
+  background: url(../../../../images/egovframework/com/primx/arr_d_.svg) no-repeat center center/15px;
+}
+.division > .left nav .firstDepthMenu > li.select.open > p::before {
+  background-image: url(../../../../images/egovframework/com/primx/arr_u_.svg);
+}
+.division > .left nav .firstDepthMenu > li:hover.open > p::before {
+  background-image: url(../../../../images/egovframework/com/primx/arr_u_.svg);
+}
+.division > .left nav .firstDepthMenu > li.open > p::before {
+  background-image: url(../../../../images/egovframework/com/primx/arr_u.svg);
+}
+.division > .left nav .firstDepthMenu > li.open .secondDepthMenu > li {
+  padding: 3px 0 3px 49px;
+  margin-top: 10px; /* height: 26px;  */
+  height: auto;
+  opacity: 1;
+}
+.division > .left nav .firstDepthMenu > li .secondDepthMenu > li {
+  position: relative;
+  height: 0;
+  opacity: 0; /* transition: height 0.3s; */
+}
+.division > .left nav .firstDepthMenu > li .secondDepthMenu > li::before {
+  content: "";
+  position: absolute;
+  left: 31px;
+  top: 6px;
+  width: 8px;
+  height: 14px;
+  border-radius: 50px;
+  background-color: var(--primx-color, #262262);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.division > .left nav .firstDepthMenu > li .secondDepthMenu > li.select::before, .division > .left nav .firstDepthMenu > li .secondDepthMenu > li:hover::before {
+  opacity: 1;
+}
+.division > .content {
+  position: relative; /* border-radius: 10px 0 0 0; */
+  padding: 0 24px 24px 24px;
+  overflow-y: auto;
+}
+.division > .content .titleWrap {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.division > .content .titleWrap h2.title {
+  font-size: 22px;
+  font-weight: 500;
+  padding-left: 20px;
+  position: relative;
+}
+.division > .content .titleWrap h2.title::before {
+  content: "";
+  width: 10px;
+  height: 17px;
+  background-color: var(--primx-color, #262262);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 50px;
+}
+.division > .content .titleWrap h2.depthTitle {
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 15px;
+}
+.division > .content .titleWrap h2.depthTitle .fir {
+  color: var(--title-fir-color, #666);
+  font-weight: 400;
+}
+.division > .content .stickyWrap {
+  position: sticky;
+  top: 0;
+  padding: 24px 0 15px 0;
+  background-color: var(--home-color, #f5f5f5);
+  z-index: 2;
+}
+.division > .content .stickyWrap .searchInnerWrap {
+  margin-bottom: 0;
+}
+
+/* content_title */
+h3.contTitle {
+  font-weight: 500;
+  font-size: 18px;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+h4.contSubTitle {
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 15px;
+  position: relative;
+}
+h4.contSubTitle::before {
+  content: "‧ ";
+}
+
+.contDiv {
+  padding-bottom: 20px;
+}
+.contDiv:last-child {
+  padding-bottom: 0;
+}
+
+/***** popup *****/
+/* 기본 설정값 */
+.popup {
+  background: rgba(41, 41, 41, 0.25);
+  position: fixed;
+  z-index: 10000;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+.popup .bgscreen {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+.popup .pop_wrap { /* background-color: $home-color; */
+  background-color: var(--pop-bg-color, #f5f5f5);
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px #000;
+  padding: 54px 0 0 0;
+  overflow-y: auto;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(-50% + 0.5px), calc(-50% + 0.5px));
+  max-height: 90vh;
+  max-width: 90vw;
+  overflow-y: hidden;
+}
+.popup .pop_wrap .pop_head {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; /* background-color: $white-color; */
+  background-color: var(--pop-head-color, #d2dae8);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding-left: 14px;
+  font-size: 16px;
+  font-weight: 500;
+}
+.popup .pop_wrap .bu_close_pop {
+  width: 24px;
+  height: 24px;
+  background: url(../../../../images/egovframework/com/primx/close.svg) no-repeat center/cover;
+  position: absolute;
+  right: 14px;
+  top: 9px;
+}
+.popup .pop_cont {
+  overflow-y: auto;
+  padding: 0 14px 14px 14px;
+  height: 651px;
+  max-height: 80vh; /* margin-bottom: 63px; */
+  /* >.bu_wrap{display: flex; justify-content: end; position: fixed; right: 0; bottom: 0; width: 100%; padding: 14px; background-color: $pop-bg-color;z-index: 10;
+      button{margin-left: 8px;}
+  } */
+}
+.popup .pop_cont > .bu_wrap {
+  display: flex;
+  justify-content: end;
+  width: 100%;
+  padding: 14px 0 0 0;
+  background-color: var(--pop-bg-color, #f5f5f5);
+  z-index: 10;
+}
+.popup .pop_cont > .bu_wrap button {
+  margin-left: 8px;
+}
+.popup .stickyWrap {
+  width: calc(100% - 28px);
+  position: sticky;
+  top: 0;
+  left: 14px;
+  padding: 0 0 15px 0 !important;
+  background-color: var(--home-color, #f5f5f5);
+  z-index: 2;
+}
+.popup button.absolBtn {
+  position: absolute;
+  left: 450px;
+  opacity: 0;
+}
+
+/*********** LOGIN ***********/
+.login {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--home-color, #f5f5f5);
+}
+.login .login_wrap {
+  background: var(--white-color, #fff);
+  border-radius: 10px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 60px 80px 70px;
+  box-shadow: 0px 0px 13px rgba(0, 0, 0, 0.1098039216);
+}
+.login .login_wrap .logo img {
+  width: 120px;
+}
+.login .login_wrap .langBox {
+  position: relative;
+  display: inline-block;
+  margin-top: 36px;
+}
+.login .login_wrap .langBox .currentLang {
+  padding: 10px 20px 10px 54px;
+  background: url(../../../../images/egovframework/com/primx/language.svg) no-repeat 20px center/22px var(--login-lang-color, #d2dae8);
+  border-radius: 50px;
+  font-size: 14px;
+  width: 123px;
+}
+.login .login_wrap .langBox > ul {
+  z-index: 1;
+  transition: 0.2s;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: var(--white-color, #fff);
+  box-shadow: 0px 0px 10px #eee;
+  width: auto;
+  position: absolute;
+  top: 45px;
+  left: 50%;
+  transform: translateX(-50%);
+  visibility: hidden;
+  opacity: 0;
+}
+.login .login_wrap .langBox > ul > li {
+  padding: 3px;
+  cursor: pointer;
+}
+.login .login_wrap .langBox > ul.on {
+  visibility: visible;
+  opacity: 1;
+}
+.login .login_wrap .loginBox {
+  width: 400px;
+}
+.login .login_wrap .loginBox li {
+  margin-top: 15px;
+  position: relative;
+}
+.login .login_wrap .loginBox li input {
+  width: 400px;
+  height: 53px;
+}
+.login .login_wrap .loginBox li.bu_wrap .bu_login {
+  width: 100%;
+  height: 53px;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-left: 0;
+}
+
+.pwInput.on ~ .pwViewBtn {
+  background: url(../../../../images/egovframework/com/primx/eye.svg) no-repeat center/cover;
+}
+
+.pwViewBtn {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: url(../../../../images/egovframework/com/primx/eye-off.svg) no-repeat center/cover;
+}
+
+/* ERROR */
+.error {
+  background-color: var(--home-color, #f5f5f5);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.error .error_wrap {
+  display: flex;
+  align-items: start;
+}
+.error .error_wrap img {
+  width: 140px;
+  margin-right: 40px;
+}
+.error .error_wrap .textBox {
+  font-size: 18px;
+}
+.error .error_wrap .textBox .error_title {
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 18px;
+}
+.error .error_wrap .textBox .txt {
+  font-size: 16px;
+}
+.error .error_wrap .textBox button {
+  margin-top: 15px;
+  padding: 0;
+}
+.error .error_wrap .textBox button a {
+  font-size: 16px;
+  font-weight: 500;
+}
+.error .error_wrap .textBox button a span {
+  transition: 0.3s;
+}
+.error .error_wrap .textBox button a:hover span {
+  margin-left: 10px;
+}
+
+/*********** 버튼, 입력,체크등의 기본 공통폼. 수정시 변경안되는 부분은 아래 해당페이지별 css 체크! ***********/
+/* content_form (input:text) */
+.txtBox {
+  border: 1px solid var(--border-color, #cbcbcb);
+  background-color: var(--input-box-color, #ffffff);
+  font-size: 14px;
+  font-weight: 400;
+  height: 37px;
+  padding-left: 10px;
+  border-radius: 10px; /*  transition: 0.3s; */
+  width: 200px;
+  margin-right: 10px;
+  position: relative;
+  caret-color: auto;
+}
+.txtBox.nowrite {
+  background-color: transparent;
+  padding-left: 0;
+  border: 0;
+}
+.txtBox.nowrite:hover {
+  border: 0;
+}
+.txtBox.nowrite:active, .txtBox.nowrite:focus {
+  border: 0;
+  background: transparent;
+}
+.txtBox:hover {
+  border: 1px solid var(--border-active-color, #bbb);
+}
+.txtBox:active, .txtBox:focus {
+  border: 1px solid var(--border-active-color, #bbb);
+  background: var(--input-txt-bg-color, #f3f5f9);
+}
+.txtBox.minInput {
+  width: 60px !important;
+  margin-right: 0;
+}
+.txtBox.minInput ~ .portDot {
+  margin: 0 2px 0 5px;
+  display: inline-block;
+}
+
+span.minTxt {
+  font-size: 14px;
+  display: inline-block;
+  padding-left: 7px;
+}
+
+/* content_form (select) */
+.selectBox {
+  display: inline-block;
+  height: 37px;
+  width: 200px;
+  margin-right: 10px;
+}
+.selectBox .drop {
+  cursor: pointer;
+  height: 100%;
+  width: 100%;
+  padding: 0 35px 0 10px;
+  background: url(../../../../images/egovframework/com/primx/arr_d.svg) no-repeat right 15px center/15px var(--input-box-color, #ffffff);
+  font-size: 14px;
+  border-radius: 10px; /* transition: 0.3s;  */
+  box-sizing: border-box;
+  border: 1px solid var(--border-color, #cbcbcb);
+}
+.selectBox .drop:hover {
+  border: 1px var(--border-active-color, #bbb) solid;
+}
+
+/* content_form (input:radio) */
+input[type=radio] {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  accent-color: var(--primx-color, #262262);
+}
+
+/* .radio[type="radio"]{display: none;}
+.radio[type=radio]:not(odd) + label {border: 2px solid $primx-color; height: 18px; width: 18px; border-radius: 50px;}
+.radio[type="radio"]:not(odd):checked + label{ 
+    &::after{content: ""; width: 10px; height: 10px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: $primx-color; border-radius: 50px;}
+}
+.radio_label{display: inline-block; font-size: 13px; font-weight: 400; position: relative;} */
+/* content_form (input:file) */
+/* input[type=file]::file-selector-button {
+    width: 100px;
+    height: 30px;
+    background: var(--main-color);
+    border-radius: 50px;
+    transition: 0.3s;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: 600;
+    color: $white-color;
+    margin-right: 10px;
+    &:hover {
+        background: var(--main-color);
+    }
+} */
+/* content_form (input:checkbox) */
+input[type=checkbox] {
+  width: 16px !important;
+  height: 16px !important;
+  display: block;
+  accent-color: var(--primx-color, #262262) !important;
+  margin-right: 7px;
+}
+
+/* content_form (button) */
+.bu_wrap {
+  display: flex;
+  justify-content: end;
+}
+.bu_wrap button {
+  background: var(--button-color, #899bcf);
+  border-radius: 10px;
+  transition: 0.3s;
+  padding: 7px 15px;
+  font-weight: 500;
+  background-repeat: no-repeat;
+  font-size: 14px;
+  margin-left: 3px;
+  color: var(--white-color, #fff);
+}
+.bu_wrap button:hover {
+  background-color: var(--hover-color, #9dafe5);
+}
+.bu_wrap button.disable {
+  background-color: var(--disable-bg-color, #dedede);
+  color: var(--disable-font-color, #949494);
+}
+.bu_wrap button.lineBtn { /* background-image: url(../../../../images/egovframework/com/primx/save.svg); padding-left: 34px; background-size: 18px; background-position: center left 10px; */
+  background-color: var(--white-color, #fff);
+  border: 1px solid var(--button-color, #899bcf);
+  color: var(--button-color, #899bcf);
+}
+.bu_wrap button.searchOpen {
+  height: 30px;
+  line-height: 1.3;
+  margin-right: 7px;
+}
+.bu_wrap button.xzedSmartBtn, .bu_wrap button.smartOptionBtn {
+  margin-left: 10px;
+  background-color: var(--primx-color, #262262);
+  color: var(--white-color, #fff);
+}
+
+/* 툴팁 */
+.tooltip {
+  position: relative;
+  cursor: pointer;
+}
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: -23px;
+  font-weight: 400;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--tooltip-color, rgba(53, 47, 101, 0.2588235294));
+  color: var(--black-color, #000);
+  padding: 1px 3px;
+  border-radius: 5px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  transition-delay: 0.15s;
+  font-size: 12px;
+}
+.tooltip:hover::after {
+  opacity: 1;
+}
+
+/* 기본 툴팁 스타일 */
+.ui-tooltip {
+  background: #9c4343;
+  color: #fff;
+  border: 1px solid #555;
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+/* 탭메뉴 */
+.systabWrap, .moveFileTabWrap, .settabWrap, .edittabWrap, .addtabWrap, .copytabWrap, .fileZoneTabWrap {
+  width: 100%;
+  border-radius: 10px;
+  background-color: var(--input-box-color, #ffffff);
+  overflow: hidden;
+  background-color: var(--tab-color, #d8d8d8);
+  border: 1px solid var(--border-color, #cbcbcb);
+}
+.systabWrap .tabTitle, .moveFileTabWrap .tabTitle, .settabWrap .tabTitle, .edittabWrap .tabTitle, .addtabWrap .tabTitle, .copytabWrap .tabTitle, .fileZoneTabWrap .tabTitle {
+  width: 100%;
+  display: flex;
+}
+.systabWrap .tabTitle li, .moveFileTabWrap .tabTitle li, .settabWrap .tabTitle li, .edittabWrap .tabTitle li, .addtabWrap .tabTitle li, .copytabWrap .tabTitle li, .fileZoneTabWrap .tabTitle li {
+  width: 20%;
+  text-align: center;
+  background-color: var(--tab-color, #d8d8d8);
+  height: 40px;
+  line-height: 40px;
+  cursor: pointer;
+}
+.systabWrap .tabTitle li.on, .moveFileTabWrap .tabTitle li.on, .settabWrap .tabTitle li.on, .edittabWrap .tabTitle li.on, .addtabWrap .tabTitle li.on, .copytabWrap .tabTitle li.on, .fileZoneTabWrap .tabTitle li.on {
+  background-color: var(--tab-active-color, #f0f0f0);
+  border-radius: 10px 10px 0 0;
+}
+.systabWrap .tabCont, .moveFileTabWrap .tabCont, .settabWrap .tabCont, .edittabWrap .tabCont, .addtabWrap .tabCont, .copytabWrap .tabCont, .fileZoneTabWrap .tabCont {
+  background-color: var(--tab-active-color, #f0f0f0);
+  position: relative;
+  width: 100%; /* height: 481px; */
+  height: auto;
+  overflow: auto;
+}
+.systabWrap .tabCont > li, .moveFileTabWrap .tabCont > li, .settabWrap .tabCont > li, .edittabWrap .tabCont > li, .addtabWrap .tabCont > li, .copytabWrap .tabCont > li, .fileZoneTabWrap .tabCont > li {
+  display: none;
+  padding: 15px;
+}
+.systabWrap .tabCont > li.on, .moveFileTabWrap .tabCont > li.on, .settabWrap .tabCont > li.on, .edittabWrap .tabCont > li.on, .addtabWrap .tabCont > li.on, .copytabWrap .tabCont > li.on, .fileZoneTabWrap .tabCont > li.on {
+  display: block;
+}
+
+.checkWrap, .radioWrap {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100% !important;
+  padding: 7px 10px !important;
+  align-items: center;
+}
+.checkWrap > div, .radioWrap > div {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  flex-wrap: nowrap;
+  width: 33.3333333333%;
+}
+.checkWrap > div label, .radioWrap > div label {
+  display: block;
+  margin-right: 10px;
+}
+
+/* 페이지 검색섹션 */
+/* 이너영역 */
+.searchInnerWrap, .searchInnerWrap_p, .searchInnerWrap_onlySc {
+  padding: 7px 10px;
+  background-color: var(--search-bg-color, rgba(210, 218, 232, 0.5019607843));
+  display: flex;
+  justify-content: space-between;
+  border-radius: 10px; /* margin-bottom: 15px; */
+}
+.searchInnerWrap .searchBox, .searchInnerWrap_p .searchBox, .searchInnerWrap_onlySc .searchBox {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.searchInnerWrap .searchBox input.searchInput, .searchInnerWrap .searchBox input.searchInput2, .searchInnerWrap_p .searchBox input.searchInput, .searchInnerWrap_p .searchBox input.searchInput2, .searchInnerWrap_onlySc .searchBox input.searchInput, .searchInnerWrap_onlySc .searchBox input.searchInput2 {
+  background-image: url(../../../../images/egovframework/com/primx/search.svg);
+  background-repeat: no-repeat;
+  background-position: center right 10px;
+  cursor: pointer;
+  background-size: 20px;
+}
+.searchInnerWrap .searchBox .filterItem, .searchInnerWrap_p .searchBox .filterItem, .searchInnerWrap_onlySc .searchBox .filterItem {
+  height: 37px;
+  line-height: 37px;
+  padding: 0 35px 0 15px;
+  border-radius: 50px;
+  background-color: var(--search-item-color, rgba(255, 255, 255, 0.6196078431));
+  position: relative;
+  margin-right: 7px;
+  display: flex;
+}
+.searchInnerWrap .searchBox .filterItem .delBtn, .searchInnerWrap_p .searchBox .filterItem .delBtn, .searchInnerWrap_onlySc .searchBox .filterItem .delBtn {
+  background: url(../../../../images/egovframework/com/primx/close.svg) no-repeat center/18px;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+/* 팝업영역 */
+.searchAreaPopup .pop_cont, .searchArea_p_Popup .pop_cont {
+  height: auto;
+}
+.searchAreaPopup .search_wrap, .searchArea_p_Popup .search_wrap {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border-color, #cbcbcb); /* margin-bottom: 15px; */
+}
+.searchAreaPopup .search_wrap .checkWrap, .searchArea_p_Popup .search_wrap .checkWrap {
+  display: flex;
+  align-items: center;
+}
+.searchAreaPopup .search_wrap .line, .searchArea_p_Popup .search_wrap .line {
+  display: flex;
+  min-height: 48px;
+}
+.searchAreaPopup .search_wrap .line:not(:last-child), .searchArea_p_Popup .search_wrap .line:not(:last-child) {
+  border-bottom: 1px solid var(--border-color, #cbcbcb);
+}
+.searchAreaPopup .search_wrap .line .item, .searchArea_p_Popup .search_wrap .line .item {
+  display: flex;
+  align-items: center;
+  background-color: var(--table-body-bg-color, #ffffff);
+  width: 100%;
+}
+.searchAreaPopup .search_wrap .line .item > label, .searchArea_p_Popup .search_wrap .line .item > label { /* width: 140px; */
+  width: 210px;
+  background-color: var(--em-color, #d2dae8);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 13px;
+}
+.searchAreaPopup .search_wrap .line .item > div, .searchArea_p_Popup .search_wrap .line .item > div { /* width: calc(100% - 140px); */
+  width: calc(100% - 210px);
+  background-color: var(--table-body-bg-color, #ffffff);
+  padding: 0 7px;
+  font-size: 14px;
+}
+.searchAreaPopup .search_wrap .line .item .selectBox, .searchArea_p_Popup .search_wrap .line .item .selectBox {
+  margin: 0; /* width: 200px; */
+  width: 288px;
+}
+.searchAreaPopup .search_wrap .line .item input:last-child, .searchArea_p_Popup .search_wrap .line .item input:last-child {
+  margin-right: 0;
+}
+.searchAreaPopup .search_wrap label, .searchArea_p_Popup .search_wrap label {
+  width: 130px;
+  display: inline-block;
+}
+
+/* 입력 섹션 */
+.setWrap {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border-color, #cbcbcb);
+  margin-bottom: 20px;
+}
+.setWrap .line {
+  display: flex;
+  min-height: 51px;
+}
+.setWrap .line:not(:last-child) {
+  border-bottom: 1px solid var(--border-color, #cbcbcb);
+}
+.setWrap .line .item {
+  display: flex;
+  align-items: center;
+  background-color: var(--table-body-bg-color, #ffffff);
+  width: 100%;
+}
+.setWrap .line .item em {
+  width: 140px;
+  background-color: var(--em-color, #d2dae8);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.setWrap .line .item > div {
+  width: calc(100% - 140px);
+  background-color: var(--table-body-bg-color, #ffffff);
+  padding: 7px 7px;
+  font-size: 14px;
+}
+.setWrap .line .item > div input[type=text] {
+  width: 100%;
+}
+.setWrap .line .item > div ul.itemDivision {
+  width: 100%;
+  display: flex;
+}
+.setWrap .line .item > div ul.itemDivision li { /* width: calc(100%/4); */
+  display: flex;
+  align-items: center;
+  margin-right: 80px;
+}
+.setWrap .line .item .em100Per {
+  width: 100%;
+}
+.setWrap .line.w2 {
+  justify-content: space-between;
+}
+.setWrap .line.w2 .item {
+  width: 50%;
+}
+
+/* 커스텀 드롭메뉴 */
+.dropMenu, .dropMenu_dashboard { /* width: 82px;  */
+  width: auto;
+  position: relative;
+  display: flex;
+  justify-content: end;
+}
+.dropMenu .selectMenu, .dropMenu_dashboard .selectMenu {
+  width: 100%;
+  border: 1px solid var(--border-color, #cbcbcb);
+  padding: 0 35px 0 15px;
+  background: url(../../../../images/egovframework/com/primx/arr_solid_d.svg) no-repeat right 15px center/13px var(--input-box-color, #ffffff);
+  height: 37px;
+  line-height: 34px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.dropMenu .selectMenu.on, .dropMenu_dashboard .selectMenu.on {
+  background-image: url(../../../../images/egovframework/com/primx/arr_solid_u.svg);
+}
+.dropMenu .selectMenu.on ~ ul, .dropMenu_dashboard .selectMenu.on ~ ul {
+  opacity: 1;
+  visibility: visible;
+}
+.dropMenu .selectMenu.on ~ ul li, .dropMenu_dashboard .selectMenu.on ~ ul li {
+  height: 35px;
+}
+.dropMenu > ul, .dropMenu_dashboard > ul { /* width: 140px; */
+  width: -moz-max-content;
+  width: max-content;
+  position: absolute;
+  top: 39px;
+  overflow: hidden;
+  background-color: var(--input-box-color, #ffffff);
+  border-radius: 10px;
+  border: 1px solid var(--border-color, #cbcbcb);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 10;
+  visibility: hidden;
+}
+.dropMenu > ul li, .dropMenu_dashboard > ul li {
+  background-repeat: no-repeat;
+  background-position: left 7px center;
+  background-size: 21px;
+}
+.dropMenu > ul li button, .dropMenu_dashboard > ul li button {
+  padding: 0 10px 0 32px;
+  line-height: 35px;
+  cursor: pointer;
+  height: 0;
+  transition: opacity 0.3s;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  font-size: 14px;
+}
+.dropMenu > ul li.borbot, .dropMenu_dashboard > ul li.borbot {
+  border-bottom: 1px solid var(--border-color, #cbcbcb);
+}
+.dropMenu > ul li.csv, .dropMenu_dashboard > ul li.csv {
+  background-image: url(../../../../images/egovframework/com/primx/file-down.svg);
+}
+.dropMenu > ul li.registration, .dropMenu_dashboard > ul li.registration {
+  background-image: url(../../../../images/egovframework/com/primx/file-plus.svg);
+}
+.dropMenu > ul li.lang, .dropMenu_dashboard > ul li.lang {
+  background-image: url(../../../../images/egovframework/com/primx/language.svg);
+}
+.dropMenu > ul li.logOut, .dropMenu_dashboard > ul li.logOut {
+  background-image: url(../../../../images/egovframework/com/primx/log-out.svg);
+}
+.dropMenu > ul li.profile, .dropMenu_dashboard > ul li.profile {
+  background-image: url(../../../../images/egovframework/com/primx/profile.svg);
+}
+.dropMenu > ul li.disable, .dropMenu_dashboard > ul li.disable {
+  opacity: 0.3;
+}
+
+/* 단순 박스 */
+.txtWrap {
+  margin-bottom: 20px;
+}
+.txtWrap .title {
+  margin-bottom: 10px;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+textarea {
+  border-radius: 10px;
+  border: 1px solid var(--border-color, #cbcbcb);
+  padding: 5px 7px;
+  font-size: 14px;
+  height: 80px;
+  margin: 0;
+  display: block;
+  background-color: var(--table-body-bg-color, #ffffff);
+  transition: 0.3s;
+}
+textarea.disable {
+  background-color: var(--disable-bg-color, #dedede);
+  color: var(--disable-font-color, #949494);
+}
+textarea:focus {
+  border: 1px solid var(--border-active-color, #bbb);
+  background: var(--input-txt-bg-color, #f3f5f9);
+}
+
+/* flex */
+.flexWrap {
+  display: flex;
+  justify-content: space-between;
+}
+.flexWrap.sbStart {
+  justify-content: start;
+}
+.flexWrap.alignCenter {
+  align-items: center;
+}
+
+/* input file */
+input[type=file] {
+  display: block;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.inputFileWrap {
+  display: flex;
+  align-items: center;
+}
+
+.upFileList > div {
+  display: inline-block;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  padding: 5px 15px;
+  border: 1px solid var(--border-color, #cbcbcb);
+  border-radius: 50px;
+  background-color: var(--table-body-bg-color, #ffffff);
+  position: relative;
+  cursor: default;
+}
+.upFileList > div .moveFileList {
+  position: absolute;
+  width: auto;
+  background-color: var(--table-body-bg-color, #ffffff);
+  left: 0;
+  top: 35px;
+  z-index: 99;
+  border-radius: 10px;
+  border: 1px solid var(--border-color, #cbcbcb);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s ease;
+  overflow: hidden;
+  min-width: 150px;
+}
+.upFileList > div .moveFileList li {
+  padding: 5px 15px 5px 20px;
+  position: relative;
+}
+.upFileList > div .moveFileList li.tit {
+  padding: 5px 15px;
+  text-align: center;
+  background-color: var(--em-color, #d2dae8);
+}
+.upFileList > div .moveFileList li.tit::after {
+  display: none;
+}
+.upFileList > div .moveFileList li:not(:last-child) {
+  border-bottom: 1px solid var(--border-color, #cbcbcb);
+}
+.upFileList > div .moveFileList li::after {
+  content: "-";
+  position: absolute;
+  left: 10px;
+}
+.upFileList > div:hover .moveFileList {
+  opacity: 1;
+  visibility: visible;
+}
+
+.labelFile {
+  width: 100px;
+  height: 37px;
+  line-height: 30px;
+  background: var(--button-color, #899bcf);
+  border-radius: 10px;
+  color: var(--white-color, #fff);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.spanFile {
+  padding: 0 5px 0 7px;
+  margin-right: 5px;
+  display: block;
+  width: 100%;
+  min-height: 37px;
+  border: 1px solid var(--border-color, #cbcbcb);
+  border-radius: 10px;
+  line-height: 37px;
+  color: #616161; /* overflow: hidden; text-overflow: ellipsis; white-space: nowrap;  */
+  box-sizing: border-box;
+  background-color: var(--input-box-color, #ffffff);
+}
+
+/* datepicker */
+.datepicker {
+  cursor: pointer;
+  width: 160px;
+  padding: 0 35px 0 10px;
+  position: relative;
+  background: url(../../../../images/egovframework/com/primx/cal.svg) no-repeat right 15px center/16px var(--input-box-color, #ffffff);
+}
+.datepicker:hover {
+  background: url(../../../../images/egovframework/com/primx/cal.svg) no-repeat right 15px center/16px var(--input-box-color, #ffffff);
+}
+.datepicker:focus, .datepicker:active {
+  background: url(../../../../images/egovframework/com/primx/cal.svg) no-repeat right 15px center/16px var(--input-txt-bg-color, #f3f5f9);
+}
+.datepicker:disabled {
+  background-image: url(../../../../images/egovframework/com/primx/cal.svg);
+  background-color: var(--disable-bg-color, #dedede);
+  background-repeat: no-repeat;
+  background-size: 16px;
+  background-position: right 15px center;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+  border: 1px solid #cbcbcb !important;
+  background: #d2dae8 !important;
+  color: #fff !important;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+  border: 1px solid #cbcbcb !important;
+  background: #899bcf !important;
+  color: #fff !important;
+}
+
+/* page info */
+/* .pageInfoWrap{display: flex; align-items: center; position: absolute; bottom: 0; z-index: 10;
+    .rowPage{font-size: 14px; display: flex; align-items: center;
+        .selectBox{height: 30px; width: 73px; margin-left: 5px;}
+    }
+    .totalPage{
+        span{display: inline-block; font-size: 14px;}
+    }
+} */
+/* table & dataTable */
+div.dt-processing > div:last-child > div {
+  background-color: var(--primx-color, #262262) !important;
+}
+
+div.dt-processing > div:last-child > div:nth-child(4) {
+  opacity: 0.4;
+}
+
+.dt-length {
+  display: inline-block;
+  height: 37px;
+  width: 200px;
+  margin-right: 10px;
+}
+.dt-length .dt-input {
+  cursor: pointer;
+  height: 100%;
+  width: 75px;
+  padding: 0 35px 0 10px !important;
+  background: url(../../../../images/egovframework/com/primx/arr_d.svg) no-repeat right 15px center/15px var(--input-box-color, #ffffff) !important;
+  font-size: 14px !important;
+  border-radius: 10px !important;
+  transition: 0.3s;
+  box-sizing: border-box;
+  border: 1px solid var(--border-color, #cbcbcb) !important;
+}
+.dt-length .dt-input:hover {
+  border: 1px var(--border-active-color, #bbb) solid !important;
+}
+.dt-length label {
+  font-size: 14px;
+  margin-left: 7px;
+}
+
+table.dataTable > tbody > tr.selected > * {
+  box-shadow: inset 0 0 0 9999px var(--table-select-bg-color, rgba(225, 230, 241, 0.6)) !important;
+  color: var(--black-color, #000);
+}
+
+table.dataTable input.dt-select-checkbox {
+  -webkit-appearance: auto;
+     -moz-appearance: auto;
+          appearance: auto;
+  margin-top: 0;
+}
+
+table.dataTable input.dt-select-checkbox:checked:after {
+  display: none;
+}
+
+table.dataTable input.dt-select-checkbox:indeterminate:after {
+  display: none;
+}
+
+table.dataTable > tbody > tr > th, table.dataTable > tbody > tr > td {
+  padding: 0;
+}
+
+table.dataTable > thead > tr > th, table.dataTable > thead > tr > td {
+  padding: 0;
+}
+
+div.dt-container div.dt-layout-row {
+  margin-top: 0 !important;
+}
+
+.tableWrap {
+  position: relative;
+  overflow: auto;
+}
+.tableWrap .tableBtnPosAbsolute {
+  position: absolute;
+  top: -40px;
+  right: 0;
+}
+.tableWrap table, .tableWrap .dataTable {
+  width: 100%;
+  font-size: 14px;
+  text-align: left;
+}
+.tableWrap table th, .tableWrap table td, .tableWrap .dataTable th, .tableWrap .dataTable td {
+  padding-left: 10px;
+  text-align: left !important;
+}
+.tableWrap table th.center, .tableWrap table td.center, .tableWrap .dataTable th.center, .tableWrap .dataTable td.center {
+  text-align: center !important;
+}
+.tableWrap table .center, .tableWrap .dataTable .center {
+  text-align: center;
+}
+.tableWrap table thead, .tableWrap .dataTable thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.tableWrap table thead tr, .tableWrap .dataTable thead tr {
+  width: 100%;
+  height: 48px;
+  background-color: var(--table-head-bg-color, #d2dae8);
+}
+.tableWrap table thead tr th, .tableWrap .dataTable thead tr th {
+  border-right: 1px solid var(--white-color, #fff);
+}
+.tableWrap table tbody, .tableWrap .dataTable tbody {
+  border-bottom: 1px solid var(--table-top-border, #979797);
+}
+.tableWrap table tbody tr, .tableWrap .dataTable tbody tr {
+  background-color: var(--table-body-bg-color, #ffffff);
+  box-sizing: border-box;
+  height: 48px;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-color, #cbcbcb);
+}
+.tableWrap table tbody tr.disTr, .tableWrap .dataTable tbody tr.disTr {
+  background-color: var(--disable-bg-color, #dedede);
+  color: var(--disable-font-color, #949494);
+  pointer-events: none;
+}
+.tableWrap table tbody tr.disTr td span, .tableWrap .dataTable tbody tr.disTr td span {
+  opacity: 0.3;
+}
+.tableWrap table tbody tr:hover, .tableWrap .dataTable tbody tr:hover {
+  background-color: var(--table-active-bg-color, #F8F9FC);
+}
+.tableWrap table tbody tr.checked, .tableWrap .dataTable tbody tr.checked {
+  background-color: var(--table-active-bg-color, #F8F9FC);
+}
+.tableWrap table tbody tr td, .tableWrap .dataTable tbody tr td {
+  font-weight: 400;
+  word-break: break-word;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  overflow: hidden; /* 넘치는 텍스트 숨김 */
+  text-overflow: ellipsis; /* 넘친 텍스트를 '...'으로 표시 */
+  max-width: 200px; /* 각 열의 최대 너비를 설정 (필요에 따라 조정) */
+  /* 노 데이터 */
+  /* 결재상태 */
+}
+.tableWrap table tbody tr td img, .tableWrap .dataTable tbody tr td img {
+  margin: 0 auto;
+  display: inline-block;
+}
+.tableWrap table tbody tr td img.checkIco, .tableWrap .dataTable tbody tr td img.checkIco {
+  width: 24px;
+}
+.tableWrap table tbody tr td.dt-empty, .tableWrap .dataTable tbody tr td.dt-empty {
+  text-align: center !important;
+  height: 100px !important;
+  line-height: 100px !important;
+}
+.tableWrap table tbody tr td.nodata, .tableWrap .dataTable tbody tr td.nodata {
+  height: 120px;
+  padding-left: 0;
+  text-align: center;
+}
+.tableWrap table tbody tr td.result > span, .tableWrap .dataTable tbody tr td.result > span {
+  padding: 4px 13px;
+  border-radius: 50px;
+}
+.tableWrap table tbody tr td.result > span.wait, .tableWrap .dataTable tbody tr td.result > span.wait {
+  background-color: var(--wait, #d3d3d3);
+}
+.tableWrap table tbody tr td.result > span.progress, .tableWrap .dataTable tbody tr td.result > span.progress {
+  background-color: var(--progress, #93c9fb);
+}
+.tableWrap table tbody tr td.result > span.approval, .tableWrap .dataTable tbody tr td.result > span.approval {
+  background-color: var(--approval, #61ea93);
+}
+.tableWrap table tbody tr td.result > span.return, .tableWrap .dataTable tbody tr td.result > span.return {
+  background-color: var(--return, #fb7b6a);
+}
+.tableWrap table tbody tr td.result > span.defaultPol, .tableWrap .dataTable tbody tr td.result > span.defaultPol {
+  background: url(../../../../images/egovframework/com/primx/poli.svg) no-repeat center left 8px/20px var(--approval, #61ea93);
+  padding-left: 32px;
+}
+.tableWrap table tbody tr td.result > span.eachPol, .tableWrap .dataTable tbody tr td.result > span.eachPol {
+  background: url(../../../../images/egovframework/com/primx/poli.svg) no-repeat center left 8px/20px var(--each, #ffd600);
+  padding-left: 32px;
+}
+.tableWrap table tbody tr td.system-type span, .tableWrap .dataTable tbody tr td.system-type span {
+  width: 24px;
+  height: 24px;
+  color: transparent !important;
+}
+.tableWrap table tbody tr td.system-type span.common, .tableWrap .dataTable tbody tr td.system-type span.common {
+  background: url(../../../../images/egovframework/com/primx/sysDesk.svg) no-repeat center left 8px/20px;
+  padding-left: 32px;
+}
+.tableWrap table tbody tr td.system-type span.user, .tableWrap .dataTable tbody tr td.system-type span.user {
+  background: url(../../../../images/egovframework/com/primx/sysUser.svg) no-repeat center left 8px/20px;
+  padding-left: 32px;
+}
+.tableWrap table tbody tr td span.checkIco, .tableWrap .dataTable tbody tr td span.checkIco {
+  background: url(../../../../images/egovframework/com/primx/check.svg) no-repeat center/cover;
+  width: 24px;
+  height: 24px;
+  color: transparent !important;
+}
+.tableWrap table tbody tr td span.link, .tableWrap .dataTable tbody tr td span.link {
+  background: url(../../../../images/egovframework/com/primx/link.svg) no-repeat center/cover;
+  width: 24px;
+  height: 24px;
+  color: transparent !important;
+}
+.tableWrap table tbody tr td span.link a, .tableWrap .dataTable tbody tr td span.link a {
+  width: 100%;
+  height: 100%;
+}
+.tableWrap.leftTable table {
+  border-radius: 10px;
+  border: 1px solid var(--border-color, #cbcbcb);
+}
+.tableWrap.leftTable table tr th {
+  background-color: var(--table-head-bg-color, #d2dae8);
+}
+.tableWrap.doubleTable table tr th.firstTh {
+  border-right: 1px solid var(--border-color, #cbcbcb);
+}
+
+/* pager */
+div.dt-container .dt-paging .dt-paging-button {
+  min-width: 32px !important;
+  height: 32px !important;
+  padding: unset !important;
+  border-radius: 100% !important;
+  margin-left: 6px !important;
+  font-size: 14px;
+  line-height: 32px;
+}
+
+div.dt-container .dt-paging .dt-paging-button.current, div.dt-container .dt-paging .dt-paging-button.current:hover {
+  background-color: var(--hover-color, #9dafe5) !important;
+  color: var(--white-color, #fff) !important;
+  font-weight: 500 !important;
+  background: linear-gradient(45deg, var(--hover-color, #9dafe5), var(--hover-color, #9dafe5));
+}
+
+div.dt-container .dt-paging .dt-paging-button:active {
+  box-shadow: none;
+}
+
+div.dt-container .dt-paging .dt-paging-button:hover {
+  background-color: var(--hover-color, #9dafe5) !important;
+  background: linear-gradient(45deg, var(--white-color, #fff), var(--white-color, #fff));
+  border: 1px solid var(--border-color, #cbcbcb);
+  color: var(--black-color, #000) !important;
+}
+
+div.dt-container .dt-paging .dt-paging-button.first, div.dt-container .dt-paging .dt-paging-button.previous, div.dt-container .dt-paging .dt-paging-button.next, div.dt-container .dt-paging .dt-paging-button.last {
+  font-size: 22px !important;
+}
+div.dt-container .dt-paging .dt-paging-button.first:hover, div.dt-container .dt-paging .dt-paging-button.previous:hover, div.dt-container .dt-paging .dt-paging-button.next:hover, div.dt-container .dt-paging .dt-paging-button.last:hover {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* .list_bot{width: 100%; display: flex; justify-content: center;
+    .page{ padding-top: 15px; display: flex;
+        span{width: 30px; height: 30px; cursor: pointer; transition: 0.3s; text-indent: -1000px; background-repeat: no-repeat; background-position: center; background-size: 18px;
+            &.first{background-image: url(../../../../images/egovframework/com/primx/pager_first.svg);}
+            &.before{ background-image: url(../../../../images/egovframework/com/primx/pager_prev.svg);}
+            &.next{ background-image: url(../../../../images/egovframework/com/primx/pager_next.svg);}
+            &.end{ background-image: url(../../../../images/egovframework/com/primx/pager_last.svg);}
+        }
+        ul{display: flex;
+            li{ font-size: 16px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; margin: 0 3px; cursor: pointer; border-radius: 50px; transition: .3s;
+                &.select{background-color:$pager-select-color; font-weight: bold; color: $white-color;}
+                &:hover{background-color:$hover-color;}
+            }
+        }
+    }
+} */
+/* treeMap */
+.tree-children {
+  list-style: none;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.tree-node {
+  margin: 8px 0;
+}
+
+.tree-content {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.toggle-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  background: url(../../../../images/egovframework/com/primx/arr_r.svg) no-repeat center/cover;
+}
+.toggle-btn.expanded {
+  background-image: url(../../../../images/egovframework/com/primx/arr_d.svg);
+}
+
+.toggle-btn-placeholder {
+  width: 16px;
+}
+
+.tree-label {
+  padding: 4px 5px 4px 27px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.tree-label::after {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 22px;
+  top: 50%;
+  transform: translateY(-50%); /*  border-radius: 100%; */
+  background: url(../../../../images/egovframework/com/primx/folder.svg) no-repeat center/cover;
+}
+.tree-label.hrn::after {
+  background-image: url(../../../../images/egovframework/com/primx/folder_.svg);
+}
+.tree-label:hover {
+  background-color: var(--tree-select-bg-color, #d2dae8);
+  color: #000;
+}
+.tree-label.selected {
+  background-color: var(--tree-select-bg-color, #d2dae8);
+  color: #000;
+}
+
+select:disabled {
+  background-color: var(--disable-bg-color, #dedede) !important;
+  color: var(--disable-font-color, #949494) !important;
+}
+
+/***** 팀_카테고리 *****/
+.category_box {
+  padding: 17px 5px;
+  overflow: hidden;
+}
+
+.category_box > ul {
+  background: #fff;
+}
+
+.category_box > ul > li a {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: #242424;
+  cursor: pointer;
+}
+
+.category_box > ul > li > ul > li > ul {
+  display: none;
+}
+
+.category_box > ul > li > ul > .open > ul {
+  display: block;
+}
+
+.category_box > ul > li > ul > li a:hover {
+  text-decoration: underline;
+  color: #090FAA;
+}
+
+.category_box > ul > li > ul a.select {
+  color: #090FAA;
+  font-weight: 500;
+}
+
+.category_box > ul > li .g1 {
+  background: url(../images/icon_g11.png) no-repeat 0 center;
+  padding-left: 42px;
+}
+
+.category_box > ul > li .g2 {
+  padding-left: 61px;
+}
+
+.category_box > ul > li .g2.g21 {
+  background: url(../images/icon_g21.png) no-repeat 0 center;
+}
+
+.category_box > ul .open .g2.g21 {
+  background: url(../images/icon_g21_.png) no-repeat 0 center;
+}
+
+.category_box > ul > li .g2.g23 {
+  background: url(../images/icon_g23.png) no-repeat 0 center;
+}
+
+.category_box > ul > li .g2.g24 {
+  background: url(../images/icon_g24.png) no-repeat 0 center;
+}
+
+.category_box li > ul > li:last-child .g21 {
+  background: url(../images/icon_g22.png) no-repeat 0 center;
+}
+
+.category_box li > ul > li:last-child.open .g21 {
+  background: url(../images/icon_g22_.png) no-repeat 0 center;
+}
+
+.category_box li > ul > li:last-child .g23 {
+  background: url(../images/icon_g24.png) no-repeat 0 center;
+}
+
+.category_box > ul > li .g3 {
+  padding-left: 75px;
+}
+
+.category_box > ul > li .g31 {
+  background: url(../images/icon_g31.png) no-repeat 0 center;
+}
+
+.category_box li li > ul > li:last-child .g31 {
+  background: url(../images/icon_g32.png) no-repeat 0 center;
+}
+
+.category_box li li:last-child > ul > li .g31 {
+  background: url(../images/icon_g33.png) no-repeat 0 center;
+}
+
+.category_box li li:last-child > ul > li:last-child .g31 {
+  background: url(../images/icon_g34.png) no-repeat 0 center;
+}
+
+/* 다크모드 이미지 url */
+html.dark-theme {
+  /* pager */
+}
+html.dark-theme *::-webkit-scrollbar {
+  width: 12px;
+}
+html.dark-theme *::-webkit-scrollbar-thumb {
+  background-color: var(--primx-color, #262262);
+}
+html.dark-theme *::-webkit-scrollbar-track {
+  background-color: rgb(74, 74, 74);
+  box-shadow: inset 0px 0px 5px rgb(0, 0, 0);
+}
+html.dark-theme .dashboard .refreshBtn {
+  background-image: url(../../../../images/egovframework/com/primx/refresh_.svg) !important;
+}
+html.dark-theme .dashboard .dashDivision .dashItem {
+  background-color: rgba(255, 255, 255, 0.2784313725) !important;
+}
+html.dark-theme .dashboard .dashDivision .dashItem .dashTableWrap * {
+  color: #000;
+}
+html.dark-theme .dashboard .dashDivision .dashTitle {
+  color: #fff;
+}
+html.dark-theme .dashboard .dropMenu_dashboard .hamberger span {
+  background-color: #fff;
+}
+html.dark-theme .questionMark {
+  background-image: url(../../../../images/egovframework/com/primx/question_.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li > p.systemInfo {
+  background-image: url(../../../../images/egovframework/com/primx/pc_.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li > p.dashboard {
+  background-image: url(../../../../images/egovframework/com/primx/dashboard-dots_.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li > p.approval {
+  background-image: url(../../../../images/egovframework/com/primx/tasklist_.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li > p.current {
+  background-image: url(../../../../images/egovframework/com/primx/server_.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li > p.history {
+  background-image: url(../../../../images/egovframework/com/primx/codescan-checkmark_.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li > p.policy {
+  background-image: url(../../../../images/egovframework/com/primx/page-flip_.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li > p.setting {
+  background-image: url(../../../../images/egovframework/com/primx/xray-view_.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li > p::before {
+  background-image: url(../../../../images/egovframework/com/primx/arr_d_.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li.select > p.systemInfo, html.dark-theme .division > .left nav .firstDepthMenu > li:hover > p.systemInfo {
+  background-image: url(../../../../images/egovframework/com/primx/pc.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li.select > p.dashboard, html.dark-theme .division > .left nav .firstDepthMenu > li:hover > p.dashboard {
+  background-image: url(../../../../images/egovframework/com/primx/dashboard-dots.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li.select > p.approval, html.dark-theme .division > .left nav .firstDepthMenu > li:hover > p.approval {
+  background-image: url(../../../../images/egovframework/com/primx/tasklist.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li.select > p.current, html.dark-theme .division > .left nav .firstDepthMenu > li:hover > p.current {
+  background-image: url(../../../../images/egovframework/com/primx/server.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li.select > p.history, html.dark-theme .division > .left nav .firstDepthMenu > li:hover > p.history {
+  background-image: url(../../../../images/egovframework/com/primx/codescan-checkmark.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li.select > p.policy, html.dark-theme .division > .left nav .firstDepthMenu > li:hover > p.policy {
+  background-image: url(../../../../images/egovframework/com/primx/page-flip.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li.select > p.setting, html.dark-theme .division > .left nav .firstDepthMenu > li:hover > p.setting {
+  background-image: url(../../../../images/egovframework/com/primx/xray-view.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li.select > p::before, html.dark-theme .division > .left nav .firstDepthMenu > li:hover > p::before {
+  background-image: url(../../../../images/egovframework/com/primx/arr_d.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li.select.open > a::before {
+  background-image: url(../../../../images/egovframework/com/primx/arr_u.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li:hover.open > a::before {
+  background-image: url(../../../../images/egovframework/com/primx/arr_u.svg);
+}
+html.dark-theme .division > .left nav .firstDepthMenu > li.open > a::before {
+  background-image: url(../../../../images/egovframework/com/primx/arr_u_.svg);
+}
+html.dark-theme .division.closeMenu .left .firstDepthMenu::before {
+  background-color: rgba(39, 40, 43, 0.5411764706);
+  box-shadow: 6px 0 6px rgba(0, 0, 0, 0.1450980392);
+}
+html.dark-theme .popup .pop_wrap .bu_close_pop {
+  background-image: url(../../../../images/egovframework/com/primx/close_.svg);
+}
+html.dark-theme .login .login_wrap .langBox .currentLang {
+  background-image: url(../../../../images/egovframework/com/primx/language_.svg);
+}
+html.dark-theme .login .login_wrap .loginBox li .pwInput.on ~ .pwViewBtn {
+  background-image: url(../../../../images/egovframework/com/primx/eye_.svg);
+}
+html.dark-theme .login .login_wrap .loginBox li .pwViewBtn {
+  background-image: url(../../../../images/egovframework/com/primx/eye-off_.svg);
+}
+html.dark-theme .selectBox .drop {
+  background-image: url(../../../../images/egovframework/com/primx/arr_d_.svg);
+}
+html.dark-theme .dt-length .dt-input {
+  background-image: url(../../../../images/egovframework/com/primx/arr_d_.svg) !important;
+}
+html.dark-theme div.dt-container .dt-paging .dt-paging-button.disabled, html.dark-theme div.dt-container .dt-paging .dt-paging-button.disabled:hover, html.dark-theme div.dt-container .dt-paging .dt-paging-button.disabled:active {
+  color: rgba(167, 167, 167, 0.5) !important;
+}
+html.dark-theme .searchInnerWrap .searchBox input.searchInput, html.dark-theme .searchInnerWrap .searchBox input.searchInput2, html.dark-theme .searchInnerWrap_p .searchBox input.searchInput, html.dark-theme .searchInnerWrap_p .searchBox input.searchInput2, html.dark-theme .searchInnerWrap_onlySc .searchBox input.searchInput, html.dark-theme .searchInnerWrap_onlySc .searchBox input.searchInput2 {
+  background-image: url(../../../../images/egovframework/com/primx/search_.svg);
+}
+html.dark-theme .searchInnerWrap .searchBox .filterItem .delBtn, html.dark-theme .searchInnerWrap_p .searchBox .filterItem .delBtn, html.dark-theme .searchInnerWrap_onlySc .searchBox .filterItem .delBtn {
+  background-image: url(../../../../images/egovframework/com/primx/close_.svg);
+}
+html.dark-theme .dropMenu .selectMenu {
+  background-image: url(../../../../images/egovframework/com/primx/arr_solid_d_.svg);
+}
+html.dark-theme .dropMenu .selectMenu.on {
+  background-image: url(../../../../images/egovframework/com/primx/arr_solid_u_.svg);
+}
+html.dark-theme .dropMenu > ul li.csv {
+  background-image: url(../../../../images/egovframework/com/primx/file-down_.svg);
+}
+html.dark-theme .dropMenu > ul li.registration {
+  background-image: url(../../../../images/egovframework/com/primx/file-plus_.svg);
+}
+html.dark-theme .dropMenu > ul li.lang {
+  background-image: url(../../../../images/egovframework/com/primx/language_.svg);
+}
+html.dark-theme .dropMenu > ul li.logOut {
+  background-image: url(../../../../images/egovframework/com/primx/log-out_.svg);
+}
+html.dark-theme .dropMenu > ul li.profile {
+  background-image: url(../../../../images/egovframework/com/primx/profile_.svg);
+}
+html.dark-theme .list_bot .page span.first {
+  background-image: url(../../../../images/egovframework/com/primx/pager_first_.svg);
+}
+html.dark-theme .list_bot .page span.before {
+  background-image: url(../../../../images/egovframework/com/primx/pager_prev_.svg);
+}
+html.dark-theme .list_bot .page span.next {
+  background-image: url(../../../../images/egovframework/com/primx/pager_next_.svg);
+}
+html.dark-theme .list_bot .page span.end {
+  background-image: url(../../../../images/egovframework/com/primx/pager_last_.svg);
+}
+html.dark-theme .datepicker {
+  background-image: url(../../../../images/egovframework/com/primx/cal_.svg);
+}
+html.dark-theme .datepicker:hover {
+  background-image: url(../../../../images/egovframework/com/primx/cal_.svg);
+}
+html.dark-theme .datepicker:focus, html.dark-theme .datepicker:active {
+  background-image: url(../../../../images/egovframework/com/primx/cal_.svg);
+}
+html.dark-theme .datepicker:disabled {
+  background-image: url(../../../../images/egovframework/com/primx/cal_.svg);
+  background-color: var(--disable-bg-color, #dedede);
+  background-repeat: no-repeat;
+  background-size: 16px;
+  background-position: right 15px center;
+}
+html.dark-theme .toggle-btn {
+  background-image: url(../../../../images/egovframework/com/primx/arr_r_.svg);
+}
+html.dark-theme .toggle-btn.expanded {
+  background-image: url(../../../../images/egovframework/com/primx/arr_d_.svg);
+}
+html.dark-theme .ui-widget-content {
+  background-color: #3c4043;
+  color: #fff;
+}
+html.dark-theme .ui-widget.ui-widget-content {
+  border: 1px solid var(--border-color, #cbcbcb);
+}
+html.dark-theme .ui-widget-header {
+  background-color: #2e2d2e;
+  border: 1px solid var(--border-color, #cbcbcb);
+  color: #fff;
+}
+html.dark-theme .ui-state-default {
+  background-color: #333439;
+  border: 1px solid var(--border-color, #cbcbcb);
+  color: #fff;
+}
+html.dark-theme .ui-state-highlight {
+  border: 1px solid var(--border-color, #cbcbcb) !important;
+  background-color: #879199 !important;
+}
+html.dark-theme .ui-state-active {
+  border: 1px solid var(--border-color, #cbcbcb);
+  background-color: #85abc7 !important;
+}
+html.dark-theme .pwInput.on ~ .pwViewBtn {
+  background-image: url(../../../../images/egovframework/com/primx/eye_.svg);
+}
+html.dark-theme .pwViewBtn {
+  background-image: url(../../../../images/egovframework/com/primx/eye-off_.svg);
+}
+html.dark-theme .otherDiv .delBtn {
+  background-image: url(../../../../images/egovframework/com/primx/trash_.svg) !important;
+}
+html.dark-theme .tableWrap {
+  position: relative;
+}
+html.dark-theme .tableWrap table, html.dark-theme .tableWrap .dataTable {
+  width: 100%;
+  font-size: 14px;
+  text-align: left;
+}
+html.dark-theme .tableWrap table tbody tr td, html.dark-theme .tableWrap .dataTable tbody tr td {
+  /* 결재상태 */
+}
+html.dark-theme .tableWrap table tbody tr td.result > span.defaultPol, html.dark-theme .tableWrap .dataTable tbody tr td.result > span.defaultPol {
+  background-image: url(../../../../images/egovframework/com/primx/poli_.svg);
+}
+html.dark-theme .tableWrap table tbody tr td.result > span.eachPol, html.dark-theme .tableWrap .dataTable tbody tr td.result > span.eachPol {
+  background-image: url(../../../../images/egovframework/com/primx/poli_.svg);
+}
+html.dark-theme .tableWrap table tbody tr td.system-type span.common, html.dark-theme .tableWrap .dataTable tbody tr td.system-type span.common {
+  background-image: url(../../../../images/egovframework/com/primx/sysDesk_.svg);
+}
+html.dark-theme .tableWrap table tbody tr td.system-type span.user, html.dark-theme .tableWrap .dataTable tbody tr td.system-type span.user {
+  background-image: url(../../../../images/egovframework/com/primx/sysUser_.svg);
+}
+html.dark-theme .tableWrap table tbody tr td span.checkIco, html.dark-theme .tableWrap .dataTable tbody tr td span.checkIco {
+  background-image: url(../../../../images/egovframework/com/primx/check_.svg);
+}
+html.dark-theme .tableWrap table tbody tr td span.link, html.dark-theme .tableWrap .dataTable tbody tr td span.link {
+  background-image: url(../../../../images/egovframework/com/primx/link_.svg);
+}
+html.dark-theme .topAlarmPopup .pop_cont .alarmWrap li .typeCir.history {
+  background-image: url(../../../../images/egovframework/com/primx/codescan-checkmark_.svg);
+}
+html.dark-theme .topAlarmPopup .pop_cont .alarmWrap li .typeCir.approval {
+  background-image: url(../../../../images/egovframework/com/primx/tasklist_.svg);
+}
+html.dark-theme .topAlarmPopup .pop_cont .alarmWrap li .typeCir.sys {
+  background-image: url(../../../../images/egovframework/com/primx/pc_.svg);
+}
+html.dark-theme .topAlarmPopup .pop_cont .alarmWrap li .typeCir.profile {
+  background-image: url(../../../../images/egovframework/com/primx/people_.svg);
+}
+html.dark-theme .topAlarmPopup .moreBtnWrap {
+  position: absolute;
+}
+html.dark-theme .topAlarmPopup .moreBtnWrap button {
+  background-color: rgba(255, 255, 255, 0.1529411765) !important;
+}/*# sourceMappingURL=layout.css.map */

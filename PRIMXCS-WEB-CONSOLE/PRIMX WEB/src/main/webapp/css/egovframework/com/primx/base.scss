@@ -1,0 +1,76 @@
+@charset "utf-8";
+@import 'var';
+
+*{-webkit-box-sizing:border-box; box-sizing:border-box; -moz-box-sizing:border-box;}
+/* 디폴트 */
+/* html{font-size: 0.05208333178113vw} */
+/*  */
+//html{font-size: 0.04208333178113vw;}
+
+/* @media (max-width:1920px) {
+    html{font-size: 0.05208333178113vw}
+} */
+
+body{margin:0; color: $black-color; background-color: #fff; font-size: 14px; font-weight: 400; font-family: 'Noto Sans KR', sans-serif; }
+
+//*::-webkit-scrollbar {width: 6px; height: 6px;}
+// *::-webkit-scrollbar-thumb { background-color: #ccc;}
+// *::-webkit-scrollbar-track { background-color: #A1ADB4;}
+
+// /* 스크롤바 막대 설정*/
+// *::-webkit-scrollbar {width: 10px; height: 10px;}
+// *::-webkit-scrollbar-thumb{
+//     background-color: rgba(255,255,255,1);
+//     /* 스크롤바 둥글게 설정    */
+//     border-radius: 10px; 
+//     border: 7px solid $primx-color;
+// }
+// /* 스크롤바 뒷 배경 설정*/
+// *::-webkit-scrollbar-track{
+//     background-color: rgba(0,0,0,0);
+// }
+
+*::-webkit-scrollbar {
+    width: 12px; height: 12px;
+}
+*::-webkit-scrollbar-thumb {
+    background-color: $primx-color;
+    border-radius: 10px;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+}
+*::-webkit-scrollbar-track {
+    background-color: rgb(209, 209, 209);
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+}
+
+a{display: inline-block;/*  width: 100%; */ height: 100%;}
+a:visited{color: inherit; text-decoration:none;}
+a:link{color: inherit; text-decoration:none;}
+a:active{color: inherit; text-decoration:none;}
+a:hover{color: inherit; text-decoration:none;}
+
+img{display:block; border:0; position: relative;}
+p,ul,ol,dl,li,dd,form{margin:0; padding:0;}
+ul,ol,dl{list-style:none;}
+p,span,div{word-break:keep-all;}
+table{margin:0; padding:0; border-collapse:collapse;}
+caption{display:none;}
+div{position:relative;}
+hr{margin:0; border:0;}
+h1,h2,h3,figure{margin:0; padding:0;}
+input{margin:0; padding:0; border:0; outline: none; color: inherit;}
+input:disabled {background: $disable-bg-color; color: $disable-font-color;}
+input:disabled ~ label{ color: $disable-font-color;}
+em{display:inline-block; font-style:normal;}
+span, strong{display:inline-block;}
+section, article{position:relative;}
+button{cursor:pointer; border: 0; background-color: transparent; color: inherit;}
+select{border: none; -webkit-appearance: none; -moz-appearance: none; appearance: none; color: inherit; }
+textarea{resize: none; border: 0; width: 100%; color: inherit;}
+textarea:focus, select:focus{outline: none;}
+th{font-weight: 500;}
+
+.hide{display:none !important;}
+.hidden{visibility:hidden;}

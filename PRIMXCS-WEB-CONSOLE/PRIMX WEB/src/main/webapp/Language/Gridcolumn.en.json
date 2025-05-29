@@ -1,0 +1,38 @@
+{
+  "grid": {
+    "requestlist":
+    {"requestno": "Request No", "status": "Status", "result": "Result", "username": "User Name", "requesttitle": "Request Title", "requestdate": "Request Date", "approvaldate": "Approval Date"},
+    "approvallist":
+    {"requestno": "Request No", "status": "Status", "result": "Result", "username": "User Name", "requesttitle": "Request Title", "requestdate": "Request Date", "approvaldate": "Approval Date"},
+    "approval":
+    {"no": "No.", "status": "Status", "approvaldate": "Approval Date", "username": "User Name", "department": "Department"},
+    "systemlist":
+    {"no": "No.", "type": "Type", "zc": "ZC", "oz": "OZ", "cy": "CY", "systemid": "System ID", "systemname": "System Name", "username": "User Name", "department": "Department", 
+    "winversion": "Windows Version", "agentversion": "Agent Version", "agentpolicy": "Agent Policy", "insertdate": "Insart Date", "lastdatetime": "Last Datetime"},
+    "productlist":
+    {"no": "No.", "type": "Type", "product": "Product", "policyid": "Policy ID", "policyname": "Policy Name", "apply": "Apply", 
+    "insertuser": "Insart User", "insertdate": "Insart Date", "updatedate": "Update Datet"},
+    "agentlist":
+    {"no": "No.", "type": "Type", "policyid": "Policy ID", "policyname": "Policy Name", "apply": "Apply", 
+    "insertuser": "Insart User", "insertdate": "Insart Date", "updatedate": "Update Datet"},
+    "movefilelist":
+    {"no": "No.", "status": "Status", "fileid": "File ID", "filename": "File Name", "size": "Size", "sourcefile": "Source File", 
+    "expireddate": "Expired Date", "remaining": "Remaining", "systemname": "System Name", "username": "User Name", "insertdate": "Insart Date"},
+    "productloglist":
+    {"no": "No.", "date": "Date", "time": "Time", "product": "Product", "type": "Type", "level": "Level", 
+    "contents": "Contents", "systemname": "System Name", "username": "User Name", "insertuser": "Insart User"},
+    "manageloglist":
+    {"no": "No.", "date": "Date", "time": "Time", "class": "Class", "type": "Type",  
+    "contents": "Contents", "systemname": "System Name", "username": "User Name", "insertuser": "Insart User"},
+    "managerlist":
+    {"no": "No.", "status": "Status", "level": "Level", "managerid": "Manager ID", "managername": "Manager Name",  "email": "EMail", "period": "Period"},
+    "departmentlist":
+    {"departmentid": "Department ID", "departmentname": "Department Name", "type": "Type", "parentdeptid": "Parent ID"},
+    "userlist":
+    {"no": "No.", "type": "Type", "password": "Password", "userid": "User ID", "username": "User Name",  "department": "Department", "email": "EMail", "insertdate": "Insert Date"},
+    "manageriplist":
+    {"permitip": "Permit IP", "actions": "Actions"},
+    "productpolicylist":
+    {"valuename": "Value Name", "value": "Value","actions": "Actions"}
+  }
+}

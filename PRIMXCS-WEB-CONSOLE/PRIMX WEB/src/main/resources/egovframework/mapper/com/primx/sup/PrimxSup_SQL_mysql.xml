@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  수정일                   수정자            수정내용
+  =========     =======    =================================================
+  2011.08.26   	서준식            SSO 로그인을 위한 쿼리 추가
+  2011.09.27    서준식            컬럼 변경 SUB_DN 을  CRTFC_DN_VALUE 로 변경
+  2011.09.28    서준식            컬럼 변경 entrprsmber_id 을  ENTRPRS_MBER_ID 로 변경
+  2020.07.06    신용호            비밀번호 만료여부 조회
+  2021.05.30    정진오            디지털원패스 로그인을 위한 쿼리 추가
+-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="extAuthDAO">
+
+	<!-- 스마트 컨트랙트 설정 등록 -->
+	<insert id="applyXZEDSmartContractSetting" parameterType="egovframework.com.primx.fun.sup.service.SmartContractDTO">
+        INSERT INTO T_SMART_CONTRACT_SETTING (
+            SC_FILE_NAME, 
+            SC_AGENT_ID, 
+            SC_EMPLYR_ID,
+            SC_CREATED_DATE
+        ) 
+        VALUES (
+            #{fileName}, 
+            #{agentId}, 
+            #{emplyrId},
+            UTC_TIMESTAMP()
+        )
+	</insert>
+
+	<!-- 스마트 컨트랙트 설정 조회 -->
+	<select id="checkSmartContractSetting" parameterType="egovframework.com.primx.fun.sup.service.SmartContractDTO" resultType="egovframework.com.primx.fun.sup.service.SmartContractDTO">
+        SELECT 
+            SC_SEQ_NO as seqNo,
+            SC_FILE_NAME as fileName,
+            SC_AGENT_ID as agentId,
+            SC_EMPLYR_ID as emplyrId,
+            SC_CREATED_DATE as createdDate
+        FROM T_SMART_CONTRACT_SETTING 
+        WHERE SC_FILE_NAME = #{fileName} 
+        AND SC_AGENT_ID = #{agentId} 
+        AND SC_EMPLYR_ID = #{emplyrId}
+        LIMIT 1
+	</select>
+
+
+</mapper>

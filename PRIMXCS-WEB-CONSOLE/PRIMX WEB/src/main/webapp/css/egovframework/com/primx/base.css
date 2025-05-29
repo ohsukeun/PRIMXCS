@@ -1,0 +1,260 @@
+@charset "UTF-8";
+html.default-theme {
+  --primx-color: var(--primx-color, #262262);
+  --top-color: var(--top-color, #262262);
+  --left-color: var(--left-color, #e1e4e9);
+  --active-color: var(--active-color, rgba(255, 255, 255, 0.3803921569));
+  --home-color: var(--home-color, #f5f5f5);
+  --button-color: var(--button-color, #899bcf);
+  --hover-color: var(--hover-color, #9dafe5);
+  --login-lang-color: var(--login-lang-color, #d2dae8);
+  --pop-bg-color: var(--pop-bg-color, #f5f5f5);
+  --pop-head-color: var(--pop-head-color, #d2dae8);
+  --border-color: var(--border-color, #cbcbcb);
+  --border-active-color: var(--border-active-color, #bbb);
+  --input-txt-bg-color: var(--input-txt-bg-color, #f3f5f9);
+  --em-color: var(--em-color, #d2dae8);
+  --tab-color: var(--tab-color, #d8d8d8);
+  --tab-active-color: var(--tab-active-color, #f0f0f0);
+  --tooltip-color: var(--tooltip-color, rgba(53, 47, 101, 0.2588235294));
+  --disable-bg-color: var(--disable-bg-color, #dedede);
+  --disable-font-color: var(--disable-font-color, #949494);
+  --search-bg-color: var(--search-bg-color, rgba(210, 218, 232, 0.5019607843));
+  --search-item-color: var(--search-item-color, rgba(255, 255, 255, 0.6196078431));
+  --white-color: var(--white-color, #fff);
+  --black-color: var(--black-color, #000);
+  --pager-select-color: var(--pager-select-color, #262262);
+  --table-top-border: var(--table-top-border, #979797);
+  --table-tr-td-border: var(--table-tr-td-border, #858585);
+  --table-head-bg-color: var(--table-head-bg-color, #d2dae8);
+  --table-body-bg-color: var(--table-body-bg-color, #ffffff);
+  --table-active-bg-color: var(--table-active-bg-color, #F8F9FC);
+  --table-select-bg-color: var(--table-select-bg-color, rgba(225, 230, 241, 0.6));
+  --input-box-color: var(--input-box-color, #ffffff);
+  --title-fir-color: var(--title-fir-color, #666);
+  --tree-select-bg-color: var(--tree-select-bg-color, #d2dae8);
+  --question-txt-color: var(--question-txt-color, #1e2f67);
+  --question-txt-bg-color: var(--question-txt-bg-color, rgba(95, 114, 167, 0.1764705882));
+  --wait: var(--wait, #d3d3d3);
+  --progress: var(--progress, #93c9fb);
+  --approval: var(--approval, #61ea93);
+  --return: var(--return, #fb7b6a);
+  --each: var(--each, #ffd600);
+}
+
+html.dark-theme {
+  --primx-color: #92a7b7;
+  --top-color: #3c4043;
+  --left-color: #27282b;
+  --active-color: rgba(210, 221, 232, 0.4235294118);
+  --home-color: #17181a;
+  --button-color: #92a7b7;
+  --hover-color: rgba(146, 167, 183, 0.8117647059);
+  --login-lang-color: #262262;
+  --pop-bg-color: #17181a;
+  --pop-head-color: #3c4043;
+  --border-color: #191919;
+  --border-active-color: #121314;
+  --input-txt-bg-color: #43444b;
+  --em-color: #3c4043;
+  --tab-color: #17181a;
+  --tab-active-color: #2c2d2f;
+  --tooltip-color: rgba(146, 167, 183, 0.5803921569);
+  --disable-bg-color: #3f3f41;
+  --disable-font-color: #9c9c9c;
+  --search-bg-color: #3c4043;
+  --search-item-color: rgba(146, 167, 183, 0.337254902);
+  --white-color: #000;
+  --black-color: #dbdbdb;
+  --pager-select-color: #92a7b7;
+  --table-top-border: #262262;
+  --table-tr-td-border: #262262;
+  --table-head-bg-color: #3c4043;
+  --table-body-bg-color: #2e2d2e;
+  --table-active-bg-color: #7b848c;
+  --table-select-bg-color: #585c5f;
+  --input-box-color: #333439;
+  --title-fir-color: #c1c1c1;
+  --tree-select-bg-color: #D2DDE8;
+  --question-txt-color: #ffffff;
+  --question-txt-bg-color: rgba(146, 167, 183, 0.4274509804);
+  --wait: #9c9c9c;
+  --progress: #3b7bb8;
+  --approval: #3aab64;
+  --return: #c54736;
+  --each: #d78e03;
+}
+
+* {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+/* 디폴트 */
+/* html{font-size: 0.05208333178113vw} */
+/*  */
+/* @media (max-width:1920px) {
+    html{font-size: 0.05208333178113vw}
+} */
+body {
+  margin: 0;
+  color: var(--black-color, #000);
+  background-color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--primx-color, #262262);
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: rgb(209, 209, 209);
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 5px white;
+}
+
+a {
+  display: inline-block; /*  width: 100%; */
+  height: 100%;
+}
+
+a:visited {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:link {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:active {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  border: 0;
+  position: relative;
+}
+
+p, ul, ol, dl, li, dd, form {
+  margin: 0;
+  padding: 0;
+}
+
+ul, ol, dl {
+  list-style: none;
+}
+
+p, span, div {
+  word-break: keep-all;
+}
+
+table {
+  margin: 0;
+  padding: 0;
+  border-collapse: collapse;
+}
+
+caption {
+  display: none;
+}
+
+div {
+  position: relative;
+}
+
+hr {
+  margin: 0;
+  border: 0;
+}
+
+h1, h2, h3, figure {
+  margin: 0;
+  padding: 0;
+}
+
+input {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  color: inherit;
+}
+
+input:disabled {
+  background: var(--disable-bg-color, #dedede);
+  color: var(--disable-font-color, #949494);
+}
+
+input:disabled ~ label {
+  color: var(--disable-font-color, #949494);
+}
+
+em {
+  display: inline-block;
+  font-style: normal;
+}
+
+span, strong {
+  display: inline-block;
+}
+
+section, article {
+  position: relative;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background-color: transparent;
+  color: inherit;
+}
+
+select {
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  color: inherit;
+}
+
+textarea {
+  resize: none;
+  border: 0;
+  width: 100%;
+  color: inherit;
+}
+
+textarea:focus, select:focus {
+  outline: none;
+}
+
+th {
+  font-weight: 500;
+}
+
+.hide {
+  display: none !important;
+}
+
+.hidden {
+  visibility: hidden;
+}/*# sourceMappingURL=base.css.map */

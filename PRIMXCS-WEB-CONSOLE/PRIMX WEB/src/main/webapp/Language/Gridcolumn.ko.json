@@ -1,0 +1,38 @@
+{
+  "grid": {
+    "requestlist":
+    {"requestno": "신청 번호", "status": "상태", "result": "결과", "username": "신청자", "requesttitle": "신청 제목", "requestdate": "신청일시", "approvaldate": "결재일시"},
+    "approvallist":
+    {"requestno": "신청 번호", "status": "상태", "result": "결과", "username": "신청자", "requesttitle": "신청 제목", "requestdate": "신청일시", "approvaldate": "결재일시"},
+    "approval":
+    {"no": "No.", "status": "상태", "approvaldate": "결재일", "username": "결재자", "department": "부서"},
+    "systemlist":
+    {"no": "No.", "type": "타입", "zc": "ZC", "oz": "OZ", "cy": "CY", "systemid": "시스템 ID", "systemname": "시스템명", "username": "사용자", "department": "부서", 
+    "winversion": "Windows Version", "agentversion": "Agent Version", "agentpolicy": "Agent 정책", "insertdate": "등록일", "lastdatetime": "최종접속일시"},
+    "productlist":
+    {"no": "No.", "type": "타입", "product": "제품", "policyid": "정책 ID", "policyname": "정책명", "apply": "적용", 
+    "insertuser": "등록자", "insertdate": "등록일", "updatedate": "수정일"},
+    "agentlist":
+    {"no": "No.", "type": "타입", "policyid": "정책 ID", "policyname": "정책명", "apply": "적용", 
+    "insertuser": "등록자", "insertdate": "등록일", "updatedate": "수정일"},
+    "movefilelist":
+    {"no": "No.", "status": "상태", "fileid": "파일 ID", "filename": "파일명", "size": "사이즈", "sourcefile": "원본 파일", 
+    "expireddate": "만료일", "remaining": "잔여회수", "systemname": "시스템명", "username": "사용자명", "insertdate": "등록일"},
+    "productloglist":
+    {"no": "No.", "date": "일자", "time": "시간", "product": "제품", "type": "종류", "level": "레벨", 
+    "contents": "내용", "systemname": "시스템명", "username": "사용자명", "insertuser": "등록자"},
+    "manageloglist":
+    {"no": "No.", "date": "일자", "time": "시간", "class": "분류", "type": "종류",  
+    "contents": "내용", "systemname": "시스템명", "username": "사용자명", "insertuser": "등록자"},
+    "managerlist":
+    {"no": "No.", "status": "상태", "level": "수준", "managerid": "관리자 ID", "managername": "관리자명",  "email": "이메일", "period": "사용기간"},
+    "departmentlist":
+    {"departmentid": "부서 ID", "departmentname": "부서명", "type": "종류", "parentdeptid": "상위부서 ID"},
+    "userlist":
+    {"no": "No.", "type": "종류", "password": "패스워드", "userid": "사용자 ID", "username": "사용자명",  "department": "부서", "email": "이메일", "insertdate": "등록일"},
+    "manageriplist":
+    {"permitip": "허용 IP", "actions": "동작"},
+    "productpolicylist":
+    {"valuename": "값 이름", "value": "값","actions": "동작"}
+  }
+}

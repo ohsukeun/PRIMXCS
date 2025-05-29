@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fileDAO">
+
+    <!-- 파일 조회 -->
+    <select id="selectByFileGrpIdAndIsDeleted" parameterType="egovMap" resultType="egovframework.com.primx.fun.file.service.FileVO">
+		SELECT
+			tf.file_id AS fileId
+			, tf.file_grp_id AS fileGrpId
+  			, tf.file_nm AS fileNm
+  			, tf.file_original_nm AS fileOriginalNm
+  			, tf.file_ext AS fileExt
+  			, tf.file_size AS fileSize
+			, tf.down_cnt AS downCnt
+  			, tf.stored_nm AS storedNm
+  			, tf.stored_path AS storedPath
+  			, tf.url AS url
+  			, tf.download_url AS downloadUrl
+  			, tf.delete_url AS deleteUrl
+  			, tf.is_deleted AS isDeleted
+  			, tf.created_date AS createdDate
+		FROM
+		    T_FILE tf
+	    WHERE
+	        1=1
+	        <if test="fileGrpId != null and fileGrpId != ''">
+	        AND tf.file_grp_id = #{fileGrpId }
+	        </if>
+	        <if test="isDeleted != null and isDeleted != ''">
+	        AND tf.is_deleted = #{isDeleted }
+	        </if>
+    </select>
+
+    <insert id="insertUploadedFile" parameterType="egovframework.com.primx.fun.file.service.FileVO">
+        INSERT INTO T_FILE (
+			<if test="fileGrpId != null and fileGrpId != ''">	
+			file_grp_id,
+			</if>
+			file_nm, file_ext, file_size, stored_nm, stored_path, file_original_nm, url, download_url, delete_url, created_date)
+        VALUES (
+			<if test="fileGrpId != null and fileGrpId != ''">
+			#{fileGrpId},
+			</if>
+			#{fileNm}, #{fileExt}, #{fileSize}, #{storedNm}, #{storedPath}, #{fileOriginalNm}, #{url}, #{downloadUrl}, #{deleteUrl}, UTC_TIMESTAMP() )
+    </insert>
+
+	<select id="selectLastFileId" resultType="int">
+		SELECT LAST_INSERT_ID()
+	</select>
+
+    <insert id="insertFileGrp">
+        INSERT INTO T_FILE_GROUP (created_date)
+        VALUES (UTC_TIMESTAMP())
+    </insert>
+
+    <select id="selectLastFileGrpId" resultType="int">
+        SELECT LAST_INSERT_ID()
+    </select>
+
+    <select id="selectByFileGrpId" parameterType="int" resultType="egovframework.com.primx.fun.file.service.FileVO">
+        SELECT 
+			file_id AS fileId
+			, file_grp_id AS fileGrpId
+			, file_nm AS fileNm
+			, file_original_nm AS fileOriginalNm
+			, file_ext AS fileExt
+			, file_size AS fileSize
+			, down_cnt AS downCnt
+			, stored_nm AS storedNm
+			, stored_path AS storedPath
+			, url AS url
+			, download_url AS downloadUrl
+			, delete_url AS deleteUrl
+			, is_deleted AS isDeleted
+			, created_date AS createdDate
+		FROM T_FILE WHERE file_grp_id = #{fileGroupId}
+    </select>
+	
+	<select id="selectMoveFileList" parameterType="map" resultType="egovframework.com.primx.fun.file.service.MoveFileInfoDTO">
+		SELECT 
+			tefai.C_FILE_KEY AS fileKey, 
+			tefai.C_FILE_NAME AS fileName, 
+			tefai.C_FILE_SIZE AS fileSize, 
+			tefai.C_DECRYPT_CNT AS decryptCnt, 
+			tsm.C_COMPUTER_NAME AS computerName, 
+			c.USER_NM AS userNm, 
+			tefai.C_INSERT_DATE AS insertDate, 
+			tefai.C_EXPIRE_DATE AS expireDate, 
+			IFNULL(COUNT(tefai.C_FILE_KEY ), 0) AS fileMapCount
+		FROM T_EX_FILE_AUTH_INFO tefai join COMTNEMPLYRINFO c on tefai.C_USER_ID = c.EMPLYR_ID 
+		join T_SYSTEM_MASTER tsm on tefai.C_AGENT_ID = tsm.C_AGENT_ID 
+		join T_EX_ARCHIVED_FILE_INFO teafi on tefai.C_FILE_KEY = teafi.C_FILE_KEY
+		<where>
+			<if test="searchDTO.dateSelect != null and searchDTO.dateSelect != ''">
+				AND tefai.C_EXPIRE_DATE &gt;= #{searchDTO.startDt} AND tefai.C_EXPIRE_DATE &lt;= #{searchDTO.endDt}
+			</if>
+			<if test="searchDTO.status != null and searchDTO.status != ''">
+			<choose>
+				<when test="searchDTO.status == 'USE'">
+				AND tefai.C_EXPIRE_DATE &gt;= UTC_TIMESTAMP()
+				</when>
+				<when test="searchDTO.status == 'END'">
+				AND tefai.C_EXPIRE_DATE &lt; UTC_TIMESTAMP()
+				</when>
+			</choose>
+			</if>
+			<if test="searchDTO.searchKeyword != null and searchDTO.searchKeyword != ''">
+				<choose>
+					<when test="searchDTO.condition == 'all'">
+					AND (tefai.C_FILE_NAME LIKE CONCAT('%', #{searchDTO.searchKeyword}, '%') OR
+					tsm.C_COMPUTER_NAME LIKE CONCAT('%', #{searchDTO.searchKeyword}, '%') OR
+					c.USER_NM LIKE CONCAT('%', #{searchDTO.searchKeyword}, '%'))
+					</when>
+					<when test="searchDTO.condition == 'fileName'">
+					AND tefai.C_FILE_NAME LIKE CONCAT('%', #{searchDTO.searchKeyword}, '%')
+					</when>
+					<when test="searchDTO.condition == 'computer'">
+					AND tsm.C_COMPUTER_NAME LIKE CONCAT('%', #{searchDTO.searchKeyword}, '%')
+					</when>
+					<when test="searchDTO.condition == 'user'">
+					AND c.USER_NM LIKE CONCAT('%', #{searchDTO.searchKeyword}, '%')
+					</when>
+				</choose>
+			</if>
+			<if test="auth != null and auth.contains('ADMIN') == false">
+			AND c.EMPLYR_ID = #{userId }
+			</if>
+		</where>
+		GROUP BY tefai.C_FILE_KEY
+		ORDER BY tefai.C_INSERT_DATE DESC
+		LIMIT #{searchDTO.start}, #{searchDTO.recordCountPerPage}
+	</select>
+
+	<select id="selectMoveFileListCnt" parameterType="map" resultType="int">
+		SELECT COUNT(*) AS total_files
+		FROM (
+			SELECT 
+				count(*)
+			FROM T_EX_FILE_AUTH_INFO tefai join COMTNEMPLYRINFO c on tefai.C_USER_ID = c.EMPLYR_ID 
+			join T_SYSTEM_MASTER tsm on tefai.C_AGENT_ID = tsm.C_AGENT_ID 
+			join T_EX_ARCHIVED_FILE_INFO teafi on tefai.C_FILE_KEY = teafi.C_FILE_KEY
+			<where>
+				<if test="searchDTO.dateSelect != null and searchDTO.dateSelect != ''">
+					AND tefai.C_EXPIRE_DATE &gt;= #{searchDTO.startDt} AND tefai.C_EXPIRE_DATE &lt;= #{searchDTO.endDt}
+				</if>
+				<if test="searchDTO.status != null and searchDTO.status != ''">
+				<choose>
+					<when test="searchDTO.status == 'USE'">
+					AND tefai.C_EXPIRE_DATE &gt;= UTC_TIMESTAMP()
+					</when>
+					<when test="searchDTO.status == 'END'">
+					AND tefai.C_EXPIRE_DATE &lt; UTC_TIMESTAMP()
+					</when>
+				</choose>
+				</if>
+				<if test="searchDTO.searchKeyword != null and searchDTO.searchKeyword != ''">
+					<choose>
+						<when test="searchDTO.condition == 'all'">
+						AND (tefai.C_FILE_NAME LIKE CONCAT('%', #{searchDTO.searchKeyword}, '%') OR
+						tsm.C_COMPUTER_NAME LIKE CONCAT('%', #{searchDTO.searchKeyword}, '%') OR
+						c.USER_NM LIKE CONCAT('%', #{searchDTO.searchKeyword}, '%'))
+						</when>
+						<when test="searchDTO.condition == 'FILE_NAME'">
+						AND tefai.C_FILE_NAME LIKE CONCAT('%', #{searchDTO.searchKeyword}, '%')
+						</when>
+						<when test="searchDTO.condition == 'SYSTEM_NAME'">
+						AND tsm.C_COMPUTER_NAME LIKE CONCAT('%', #{searchDTO.searchKeyword}, '%')
+						</when>
+						<when test="searchDTO.condition == 'USER_NAME'">
+						AND c.USER_NM LIKE CONCAT('%', #{searchDTO.searchKeyword}, '%')
+						</when>
+					</choose>
+				</if>
+				<if test="auth != null and auth.contains('ADMIN') == false">
+				AND c.EMPLYR_ID = #{userId }
+				</if>
+			</where>
+			GROUP BY tefai.C_FILE_KEY
+		) AS total_files
+	</select>
+
+	<select id="selectOriginalFileInfo" parameterType="string" resultType="egovframework.com.primx.fun.file.service.MoveFileInfoDTO">
+		SELECT 
+			teafi.C_FILE_KEY AS fileKey, 
+			teafi.C_FILE_NAME AS fileName, 
+			teafi.C_FILE_SIZE AS fileSize
+		FROM T_EX_ARCHIVED_FILE_INFO teafi
+		WHERE teafi.C_FILE_KEY = #{fileKey}
+		ORDER BY teafi.C_INSERT_DATE DESC
+	</select>
+
+	<!--
+CREATE TABLE `T_EX_FILE_AUTH_LOG` (
+  `C_SEQ_NO` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '번호',
+  `C_LOG_TIME` datetime NOT NULL COMMENT '로그 발생 시각',
+  `C_FILE_KEY` varchar(50) NOT NULL COMMENT '파일 고유키',
+  `C_RESULT_CODE` varchar(10) DEFAULT NULL COMMENT '결과 코드 (성공(SUCCESS)/실패. 실패코드는 별도 정의)',
+  `C_USER_ID` varchar(50) DEFAULT NULL COMMENT '이동파일 생성 사용자 ID',
+  `C_USER_NAME` varchar(50) DEFAULT NULL COMMENT '이동파일 생성 사용자 이름',
+  `C_AGENT_ID` varchar(50) DEFAULT NULL COMMENT 'Agent ID',
+  `C_REQUEST_IP` varchar(15) DEFAULT NULL COMMENT '이동파일 인증 요청 PC IP 주소',
+  `C_REQUEST_MAC` varchar(30) DEFAULT NULL COMMENT '이동파일 인증 요청 PC MAC 주소',
+  `C_FILE_NAME` varchar(200) DEFAULT NULL COMMENT '이동파일 이름',
+  `C_FILE_SIZE` bigint(20) DEFAULT 0 COMMENT '이동파일 크기',
+  `C_FILE_HASH` varchar(200) DEFAULT NULL COMMENT '이동파일 해시',
+  `C_DECRYPT_CNT` tinyint(4) DEFAULT 0 COMMENT '복호화 남은 횟수',
+  `C_EXPIRE_DATE` datetime DEFAULT NULL COMMENT '복호화 만료일',
+  `C_COMMENT` varchar(2048) DEFAULT NULL COMMENT '상세설명',
+  PRIMARY KEY (`C_SEQ_NO`),
+  KEY `idx_t_ex_file_auth_log` (`C_FILE_KEY`,`C_RESULT_CODE`,`C_USER_ID`,`C_AGENT_ID`,`C_LOG_TIME`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='이동파일 인증 로그';
+	-->
+	<select id="selectMoveFileUsageHistory" parameterType="string" resultType="egovframework.com.primx.fun.file.service.ExFileAuthLogVO">
+		SELECT DISTINCT
+		    A.C_SEQ_NO AS seqNo,
+		    A.C_LOG_TIME AS logTime,
+		    A.C_FILE_KEY AS fileKey,
+		    A.C_RESULT_CODE AS resultCode,
+		    A.C_USER_ID AS userId,
+		    D.USER_NM AS userName, -- 조인된 사용자 이름
+		    A.C_AGENT_ID AS agentId,
+		    A.C_REQUEST_IP AS requestIp,
+		    A.C_REQUEST_MAC AS requestMac,
+		    A.C_FILE_NAME AS fileName,
+		    A.C_FILE_SIZE AS fileSize,
+		    A.C_FILE_HASH AS fileHash,
+		    A.C_DECRYPT_CNT AS decryptCnt,
+		    A.C_EXPIRE_DATE AS expireDate,
+		    A.C_COMMENT AS comment
+		FROM 
+		    T_EX_FILE_AUTH_LOG A
+		LEFT JOIN 
+		    T_NIC_INFO B 
+		    ON A.C_REQUEST_IP = B.C_IP
+		LEFT JOIN 
+		    T_USER_SYSTEM_MATCH C 
+		    ON B.C_AGENT_ID = C.C_AGENT_ID
+		LEFT JOIN 
+		    COMTNEMPLYRINFO D 
+		    ON C.C_USER_ID = D.EMPLYR_ID
+		WHERE 
+		    A.C_FILE_KEY = #{fileKey}
+		ORDER BY C_LOG_TIME DESC
+	</select>
+
+	<select id="selectExArchivedFileInfoByFileGrpId" parameterType="long" resultType="egovframework.com.primx.fun.file.service.ExArchivedFileInfoVO">
+		
+		SELECT 
+			teafi.C_SEQ_NO AS seqNo,
+			teafi.C_FILE_KEY AS fileKey,
+			teafi.C_FILE_NAME AS fileName,
+			teafi.C_FILE_SIZE AS fileSize,
+			teafi.C_INSERT_DATE AS insertDate,
+			teafi.C_UPDATE_DATE AS updateDate
+		FROM T_EX_FILE_AUTH_INFO tefai JOIN T_EX_ARCHIVED_FILE_INFO teafi ON tefai.C_FILE_KEY = teafi.C_FILE_KEY
+		WHERE tefai.C_SEQ_NO = #{fileGroupId}
+	</select>
+
+	<select id="selectMoveFileStatus" resultType="egovframework.com.primx.fun.file.service.MoveFileInfoDTO">
+		SELECT 
+			tefai.C_FILE_KEY AS fileKey, 
+			tefai.C_FILE_NAME AS fileName, 
+			tefai.C_FILE_SIZE AS fileSize, 
+			tefai.C_DECRYPT_CNT AS decryptCnt, 
+			tsm.C_COMPUTER_NAME AS computerName, 
+			c.USER_NM AS userNm, 
+			tefai.C_INSERT_DATE AS insertDate, 
+			tefai.C_EXPIRE_DATE AS expireDate, 
+			IFNULL(COUNT(tefai.C_FILE_KEY ), 0) AS fileMapCount
+		FROM T_EX_FILE_AUTH_INFO tefai 
+		JOIN COMTNEMPLYRINFO c ON tefai.C_USER_ID = c.EMPLYR_ID 
+		JOIN T_SYSTEM_MASTER tsm ON tefai.C_AGENT_ID = tsm.C_AGENT_ID 
+		JOIN T_EX_ARCHIVED_FILE_INFO teafi ON tefai.C_FILE_KEY = teafi.C_FILE_KEY
+		WHERE tefai.C_INSERT_DATE BETWEEN 
+			DATE_SUB(CONVERT_TZ(NOW(), '+09:00', '+00:00'), INTERVAL 30 DAY)
+			AND CONVERT_TZ(NOW(), '+09:00', '+00:00')
+		GROUP BY tefai.C_FILE_KEY
+		ORDER BY tefai.C_INSERT_DATE DESC
+	</select>
+
+</mapper>

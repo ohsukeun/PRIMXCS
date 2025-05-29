@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="logDAO">
+
+    <!-- all 조회 -->
+    <select id="selectListAgentProductsLog" parameterType="egovframework.com.primx.fun.log.service.AgentProductsSearchVO" 
+            resultType="egovframework.com.primx.fun.log.service.AgentProductLogDTO">
+        SELECT
+            tapl.C_SEQ_NO as seqNo
+            , DATE_FORMAT(tapl.C_LOG_TIME, '%Y-%m-%d') as logDate 
+            , DATE_FORMAT(tapl.C_LOG_TIME, '%H:%i:%s') as logTime 
+            , pd.product_name as productName
+            , trpl.C_LOG_NAME as logName
+            , tapl.C_LOG_LEVEL as logLevel
+            , tapl.C_LOG_TEXT as logText
+            , tsm.C_COMPUTER_NAME as computerName
+            , cei.USER_NM as userName
+            , cdm.DEPT_NAME as deptName
+            , tapl.C_WORKER_NAME as workerName
+        from T_AGENT_PRODUCTS_LOG tapl 
+        join T_USER_SYSTEM_MATCH tusm on tusm.C_AGENT_ID = tapl.C_AGENT_ID 
+        join COMTNEMPLYRINFO cei on cei.EMPLYR_ID = tusm.C_USER_ID 
+        join COMTNDEPTINFOMGR cdm on cei.ORGNZT_ID = cdm.DEPT_ID 
+        join T_SYSTEM_MASTER tsm on tsm.C_AGENT_ID = tapl.C_AGENT_ID 
+        join T_RESOURCE_PRODUCT_LOG trpl on trpl.C_LOG_CODE = tapl.C_LOG_CODE
+        join T_PRODUCTS pd on pd.id = tapl.C_PRODUCT_TYPE 
+        <where>
+        
+            <!-- 기간 검색 -->
+            <if test="searchDateType != null and searchDateType != ''">
+                <choose>
+                    <when test="searchDateType == 'today'">
+                        AND DATE(tapl.C_LOG_TIME) = CURDATE()
+                    </when>
+                    <when test="searchDateType == 'this-week'">
+                        AND YEARWEEK(tapl.C_LOG_TIME) = YEARWEEK(UTC_TIMESTAMP())
+                    </when>
+                    <when test="searchDateType == 'this-month'">
+                        AND YEAR(tapl.C_LOG_TIME) = YEAR(UTC_TIMESTAMP()) 
+                        AND MONTH(tapl.C_LOG_TIME) = MONTH(UTC_TIMESTAMP())
+                    </when>
+                    <when test="searchDateType == 'custom'">
+                        <if test="searchStartDate != null and searchStartDate != ''">
+                            AND DATE(tapl.C_LOG_TIME) &gt;= #{searchStartDate}
+                        </if>
+                        <if test="searchEndDate != null and searchEndDate != ''">
+                            AND DATE(tapl.C_LOG_TIME) &lt;= #{searchEndDate}
+                        </if>
+                    </when>
+                </choose>
+            </if>
+            
+            <!-- 레벨 검색 -->
+            <if test="searchLevel != null and searchLevel != ''">
+                AND tapl.C_LOG_LEVEL = #{searchLevel}
+            </if>
+            
+            <!-- 제품 검색 -->
+            <if test="searchProduct != null and searchProduct != ''">
+                AND pd.product_name = #{searchProduct}
+            </if>
+            
+            <!-- 종류 검색 -->
+            <if test="searchType != null and searchType != ''">
+                AND trpl.C_LOG_NAME = #{searchType}
+            </if>
+            
+            <!-- 조건 검색 -->
+            <if test="searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchCondition == 'all'">
+                        AND (tsm.C_COMPUTER_NAME LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                        cei.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                        cdm.DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%'))
+                    </when>
+                    <when test="searchCondition == 'computerName'">
+                        AND tsm.C_COMPUTER_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchCondition == 'userName'">
+                        AND cei.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchCondition == 'deptName'">
+                        AND cdm.DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+        
+        ORDER BY tapl.C_LOG_TIME DESC
+        LIMIT #{start}, #{recordCountPerPage}
+    </select>
+
+    <!-- all 건수 조회 -->
+    <select id="selectListAgentProductsLogCnt" parameterType="egovframework.com.primx.fun.log.service.AgentProductsSearchVO" 
+            resultType="int">
+        SELECT COUNT(*) 
+        from T_AGENT_PRODUCTS_LOG tapl 
+        join T_USER_SYSTEM_MATCH tusm on tusm.C_AGENT_ID = tapl.C_AGENT_ID 
+        join COMTNEMPLYRINFO cei on cei.EMPLYR_ID = tusm.C_USER_ID 
+        join COMTNDEPTINFOMGR cdm on cei.ORGNZT_ID = cdm.DEPT_ID 
+        join T_SYSTEM_MASTER tsm on tsm.C_AGENT_ID = tapl.C_AGENT_ID 
+        join T_RESOURCE_PRODUCT_LOG trpl on trpl.C_LOG_CODE = tapl.C_LOG_CODE
+        join T_PRODUCTS pd on pd.id = tapl.C_PRODUCT_TYPE 
+        <where>
+            
+            <!-- 기간 검색 -->
+            <if test="searchDateType != null and searchDateType != ''">
+                <choose>
+                    <when test="searchDateType == 'today'">
+                        AND DATE(tapl.C_LOG_TIME) = CURDATE()
+                    </when>
+                    <when test="searchDateType == 'this-week'">
+                        AND YEARWEEK(tapl.C_LOG_TIME) = YEARWEEK(UTC_TIMESTAMP())
+                    </when>
+                    <when test="searchDateType == 'this-month'">
+                        AND YEAR(tapl.C_LOG_TIME) = YEAR(UTC_TIMESTAMP()) 
+                        AND MONTH(tapl.C_LOG_TIME) = MONTH(UTC_TIMESTAMP())
+                    </when>
+                    <when test="searchDateType == 'custom'">
+                        <if test="searchStartDate != null and searchStartDate != ''">
+                            AND DATE(tapl.C_LOG_TIME) &gt;= #{searchStartDate}
+                        </if>
+                        <if test="searchEndDate != null and searchEndDate != ''">
+                            AND DATE(tapl.C_LOG_TIME) &lt;= #{searchEndDate}
+                        </if>
+                    </when>
+                </choose>
+            </if>
+            
+            <!-- 레벨 검색 -->
+            <if test="searchLevel != null and searchLevel != ''">
+                AND tapl.C_LOG_LEVEL = #{searchLevel}
+            </if>
+            
+            <!-- 제품 검색 -->
+            <if test="searchProduct != null and searchProduct != ''">
+                AND pd.product_name = #{searchProduct}
+            </if>
+            
+            <!-- 종류 검색 -->
+            <if test="searchType != null and searchType != ''">
+                AND trpl.C_LOG_NAME = #{searchType}
+            </if>
+            
+            <!-- 조건 검색 -->
+            <if test="searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchCondition == 'all'">
+                        AND (tsm.C_COMPUTER_NAME LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                        cei.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                        cdm.DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%'))
+                    </when>
+                    <when test="searchCondition == 'computerName'">
+                        AND tsm.C_COMPUTER_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchCondition == 'userName'">
+                        AND cei.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchCondition == 'deptName'">
+                        AND cdm.DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+    <!-- all 조회 -->
+    <select id="selectListManageLog" parameterType="egovframework.com.primx.fun.log.service.ManageLogSearchVO" resultType="egovframework.com.primx.fun.log.service.ManageLogEntityDTO">
+        SELECT 
+		    tml.C_USER_ID as userId
+            , tml.C_USER_IP as userIp
+            , tml.C_AGENT_ID as agentId
+            , tml.C_AGENT_IP as agentIp
+            , tml.C_PRODUCT_POLICY_ID as productPolicyId
+            , tml.C_PRODUCT_POLICY_NAME as productPolicyName
+            , tml.C_AGENT_POLICY_ID as agentPolicyId
+            , tml.C_AGENT_POLICY_NAME as agentPolicyName
+            , tml.C_RESERVED1 as reserved1
+            , tml.C_RESERVED2 as reserved2
+            , tml.C_RESERVED3 as reserved3
+            , tml.C_RESERVED4 as reserved4
+            , tml.C_RESERVED5 as reserved5
+            , tml.C_RESERVED6 as reserved6
+            , tml.C_SEQ_NO as seqNo
+            , trlt.C_LOG_TYPE_NAME as logTypeName
+            , trml.C_LOG_NAME as logName
+            , trml.C_MESSAGE as message
+			, trml.C_COLUMN_GUIDE as columnGuide
+            , tml.C_COMPUTER_NAME as computerName
+            , cei.USER_NM as userName
+            , cdm.DEPT_NAME as deptName
+            , (select USER_NM from COMTNEMPLYRINFO c where tml.C_WORKER_NAME = c.EMPLYR_ID) as manageName
+            , DATE_FORMAT(tml.C_LOG_TIME, '%Y-%m-%d') as logDate
+            , DATE_FORMAT(tml.C_LOG_TIME, '%H:%i:%s') as logTime
+        FROM T_MANAGE_LOG tml
+		LEFT join COMTNEMPLYRINFO cei on cei.EMPLYR_ID = tml.C_USER_ID 
+        LEFT join COMTNDEPTINFOMGR cdm on cei.ORGNZT_ID = cdm.DEPT_ID 
+		LEFT join T_RESOURCE_MANAGE_LOG trml on  trml.C_LOG_CODE = tml.C_LOG_CODE
+		LEFT join T_RESOURCE_LOG_TYPE trlt on  trlt.C_LOG_TYPE_CODE = trml.C_LOG_TYPE_CODE 
+        <where>
+            <if test="searchDateType != null and searchDateType != ''">
+                <choose>
+                    <when test="searchDateType == 'today'">
+                        AND DATE(tml.C_LOG_TIME) = CURDATE()
+                    </when>
+                    <when test="searchDateType == 'this-week'">
+                        AND YEARWEEK(tml.C_LOG_TIME) = YEARWEEK(UTC_TIMESTAMP())
+                    </when>
+                    <when test="searchDateType == 'this-month'">
+                        AND DATE_FORMAT(tml.C_LOG_TIME, '%Y-%m') = DATE_FORMAT(UTC_TIMESTAMP(), '%Y-%m')
+                    </when>
+                    <when test="searchDateType == 'custom'">
+                        AND DATE(tml.C_LOG_TIME) BETWEEN #{searchStartDate} AND #{searchEndDate}
+                    </when>
+                </choose>
+            </if>
+            <if test="searchCategory != null and searchCategory != ''">
+                AND trlt.C_LOG_TYPE_NAME = #{searchCategory}
+            </if>
+            <if test="searchType != null and searchType != ''">
+                AND trml.C_LOG_NAME = #{searchType}
+            </if>
+            <if test="searchCondition != null and searchCondition != '' and searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchCondition == 'all'">
+                        AND (tml.C_COMPUTER_NAME LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                        cei.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                        cdm.DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%'))
+                    </when>
+                    <when test="searchCondition == 'computerName'">
+                        AND tml.C_COMPUTER_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchCondition == 'userName'">
+                        AND cei.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchCondition == 'deptName'">
+                        AND cdm.DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+        ORDER BY tml.C_LOG_TIME DESC
+        LIMIT #{start}, #{length}
+    </select>
+
+    <!-- all 조회 -->
+    <select id="selectListManageLogCnt" parameterType="egovframework.com.primx.fun.log.service.ManageLogSearchVO" resultType="int">
+        SELECT COUNT(*)
+		from T_MANAGE_LOG tml 
+		LEFT join COMTNEMPLYRINFO cei on cei.EMPLYR_ID = tml.C_USER_ID 
+		LEFT join COMTNDEPTINFOMGR cdm on cei.ORGNZT_ID = cdm.DEPT_ID 
+		LEFT join T_RESOURCE_MANAGE_LOG trml on  trml.C_LOG_CODE = tml.C_LOG_CODE 
+		LEFT join T_RESOURCE_LOG_TYPE trlt on  trlt.C_LOG_TYPE_CODE = trml.C_LOG_TYPE_CODE 
+        <where>
+            <if test="searchDateType != null and searchDateType != ''">
+                <choose>
+                    <when test="searchDateType == 'today'">
+                        AND DATE(tml.C_LOG_TIME) = CURDATE()
+                    </when>
+                    <when test="searchDateType == 'this-week'">
+                        AND YEARWEEK(tml.C_LOG_TIME) = YEARWEEK(UTC_TIMESTAMP())
+                    </when>
+                    <when test="searchDateType == 'this-month'">
+                        AND DATE_FORMAT(tml.C_LOG_TIME, '%Y-%m') = DATE_FORMAT(UTC_TIMESTAMP(), '%Y-%m')
+                    </when>
+                    <when test="searchDateType == 'custom'">
+                        AND DATE(tml.C_LOG_TIME) BETWEEN #{searchStartDate} AND #{searchEndDate}
+                    </when>
+                </choose>
+            </if>
+            <if test="searchCategory != null and searchCategory != ''">
+                AND trlt.C_LOG_TYPE_NAME = #{searchCategory}
+            </if>
+            <if test="searchType != null and searchType != ''">
+                AND trml.C_LOG_NAME = #{searchType}
+            </if>
+            <if test="searchCondition != null and searchCondition != '' and searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchCondition == 'all'">
+                        AND (tml.C_COMPUTER_NAME LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                        cei.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                        cdm.DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%'))
+                    </when>
+                    <when test="searchCondition == 'computerName'">
+                        AND tml.C_COMPUTER_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchCondition == 'userName'">
+                        AND cei.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchCondition == 'deptName'">
+                        AND cdm.DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+    <!-- 제품 로그 조회 -->
+    <select id="selectListProductLog" parameterType="String" resultType="egovframework.com.primx.fun.log.service.AgentProductLogDTO">
+        SELECT
+            DATE_FORMAT(log_date, '%Y-%m-%d') as logDate
+            , DATE_FORMAT(log_date, '%H:%i:%s') as logTime
+            , log_name as logName
+            , logLevel as logLevel
+            , userName as userName
+        FROM V_PRODUCT_LOG_ALL
+        WHERE
+            logLevel IN ("ERROR", "WARNING")
+            AND log_code IN (SELECT LOG_CODE FROM T_LOG_FILTER WHERE USER_ID = #{userId})
+        ORDER BY log_date DESC
+        limit 5;
+    </select>
+    
+</mapper>

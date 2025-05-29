@@ -1,0 +1,853 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="policyDAO">
+
+<!-- 
+
+CREATE TABLE `T_AGENT_POLICY_MASTER` (
+  `C_POLICY_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '정책 ID',
+  `C_POLICY_NAME` varchar(255) NOT NULL COMMENT '정책 이름',
+  `C_INSERT_BY` varchar(50) DEFAULT NULL,
+  `C_AGENT_POLICY_CODE` varchar(50) NOT NULL COMMENT 'Agent 정책 Code',
+  `C_DEFAULT_POLICY_YN` char(1) DEFAULT 'N' COMMENT '기본 정책 여부 (‘Y’: 기본정책, ‘N’: 기본정책 아님(Default))',
+  `C_EXPORT_FILE_AUTH` int(11) DEFAULT 0 COMMENT '반출 파일 생성 권한. 0: 권한 없음, 1: 권한 있음',
+  `C_WEB_MANAGER_AUTH` int(11) DEFAULT 0 COMMENT '반출 신청 결재 권한. 0: 권한 없음, 1: 권한 있음',
+  `C_NOT_ENCRYPTION_PATH_AUTH` int(11) DEFAULT 0 COMMENT '비암호화 영역 설정 권한. 0: 권한 없음, 1: 권한 있음',
+  `C_PRODUCT_MENU_ENABLE` int(11) DEFAULT 0 COMMENT 'PRIMX 제품의 빠른 메뉴 표시 여부. 0: 권한 없음, 1: 권한 있음',
+  `C_WEB_MANAGER_CONSOLE_MENU_ENABLE` int(11) DEFAULT 0 COMMENT '사용자 콘솔 메뉴 표시 여부. 0: 권한 없음, 1: 권한 있음',
+  `C_EXPORT_FILE_MENU_ENABLE` int(11) DEFAULT 0 COMMENT '이동파일 생성 메뉴 표시 여부. 0: 권한 없음, 1: 권한 있음',
+  `C_INSERT_DATE` datetime DEFAULT NULL COMMENT '생성 일자',
+  `C_UPDATE_DATE` datetime DEFAULT NULL COMMENT '수정 일자',
+  `C_ZTRY_MENU_ENABLE` int(11) DEFAULT 0 COMMENT 'Display ZONECENTRAL menu. 0: No permission, 1: Has permission',
+  `C_ZOPEN_AREA` int(11) DEFAULT 0 COMMENT 'Display ZONECENTRAL open area. 0: No permission, 1: Has permission',
+  `C_ZPERSONAL_ACCESS` int(11) DEFAULT 0 COMMENT 'Display ZONECENTRAL personal access. 0: No permission, 1: Has permission',
+  `C_ZOPTION_DISPLAY` int(11) DEFAULT 0 COMMENT 'Display ZONECENTRAL options. 0: No permission, 1: Has permission',
+  `C_ZSAFETY_ZONE` int(11) DEFAULT 0 COMMENT 'Display ZONECENTRAL SafetyZone. 0: No permission, 1: Has permission',
+  `C_ZAREA_CLOSE` int(11) DEFAULT 0 COMMENT 'Display ZONECENTRAL close all areas. 0: No permission, 1: Has permission',
+  `C_ZENC` int(11) DEFAULT 0 COMMENT 'Display ZONECENTRAL encryption status. 0: No permission, 1: Has permission',
+  PRIMARY KEY (`C_POLICY_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='Agent 정책 테이블';
+
+-->
+    <select id="selectAgentPolicyList" parameterType="egovframework.com.primx.fun.pol.service.AgentPolicySearchDTO" resultType="egovframework.com.primx.fun.pol.service.AgentPolicyMasterVO">
+        SELECT 
+            tapm.C_POLICY_ID AS policyId,
+            tapm.C_DEFAULT_POLICY_YN AS defaultPolicyYn,
+            tapm.C_AGENT_POLICY_CODE AS agentPolicyCode,
+            tapm.C_POLICY_NAME AS policyName,
+            tapm.C_EXPORT_FILE_AUTH AS exportFileAuth,
+            tapm.C_WEB_MANAGER_AUTH AS webManagerAuth,
+            tapm.C_NOT_ENCRYPTION_PATH_AUTH AS notEncryptionPathAuth,
+            tapm.C_PRODUCT_MENU_ENABLE AS productMenuEnable,
+            tapm.C_WEB_MANAGER_CONSOLE_MENU_ENABLE AS webManagerConsoleMenuEnable, 
+            tapm.C_EXPORT_FILE_MENU_ENABLE AS exportFileMenuEnable,
+            tapm.C_ZTRY_MENU_ENABLE AS ztryMenuEnable,
+            tapm.C_ZOPEN_AREA AS zopenArea,
+            tapm.C_ZPERSONAL_ACCESS AS zpersonalAccess,
+            tapm.C_ZOPTION_DISPLAY AS zoptionDisplay,
+            tapm.C_ZSAFETY_ZONE AS zsafetyZone,
+            tapm.C_ZAREA_CLOSE AS zareaClose,
+            tapm.C_ZENC AS zenc,
+            c.USER_NM AS insertedBy,
+            tapm.C_INSERT_DATE AS insertDate,
+            tapm.C_UPDATE_DATE AS updateDate, 
+            IFNULL(COUNT(tapsm.C_SEQ_NO), 0) AS systemMapCount 
+        FROM T_AGENT_POLICY_MASTER tapm
+        LEFT JOIN T_AGENT_POLICY_SYSTEM_MATCH tapsm ON tapm.C_AGENT_POLICY_CODE = tapsm.C_AGENT_POLICY_CODE
+        LEFT JOIN COMTNEMPLYRINFO c ON tapm.C_INSERT_BY = c.EMPLYR_ID 
+        <where>
+            <if test="searchDateType != null and searchDateType != ''">
+                AND tapm.C_INSERT_DATE &gt;= #{searchStartDate} AND tapm.C_INSERT_DATE &lt;= #{searchEndDate}
+            </if>
+            <if test="searchPolicyType != null and searchPolicyType != ''">
+                AND tapm.C_DEFAULT_POLICY_YN = #{searchPolicyType}
+            </if>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchCondition == 'all'">
+                        AND (tapm.C_POLICY_NAME LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                        c.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%'))
+                    </when>
+                    <when test="searchCondition == 'policyName'">
+                        AND tapm.C_POLICY_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchCondition == 'insertBy'">
+                        AND c.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+        group by tapm.C_AGENT_POLICY_CODE
+        order by tapm.C_DEFAULT_POLICY_YN DESC, tapm.C_INSERT_DATE DESC
+        LIMIT #{start}, #{recordCountPerPage};
+    
+    </select>
+
+    <select id="selectAgentPolicyListCnt" parameterType="egovframework.com.primx.fun.pol.service.AgentPolicySearchDTO" resultType="int">
+        SELECT COUNT(DISTINCT tapm.C_POLICY_ID) AS totalCnt
+        FROM T_AGENT_POLICY_MASTER tapm
+        LEFT JOIN T_AGENT_POLICY_SYSTEM_MATCH tapsm ON tapm.C_AGENT_POLICY_CODE = tapsm.C_AGENT_POLICY_CODE
+        LEFT JOIN COMTNEMPLYRINFO c ON tapm.C_INSERT_BY = c.EMPLYR_ID 
+        <where>
+            <if test="searchDateType != null and searchDateType != ''">
+                AND tapm.C_INSERT_DATE &gt;= #{searchStartDate} AND tapm.C_INSERT_DATE &lt;= #{searchEndDate}
+            </if>
+            <if test="searchPolicyType != null and searchPolicyType != ''">
+                AND tapm.C_DEFAULT_POLICY_YN = #{searchPolicyType}
+            </if>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchCondition == 'all'">
+                        AND (tapm.C_POLICY_NAME LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                        c.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%'))
+                    </when>
+                    <when test="searchCondition == 'policyName'">
+                        AND tapm.C_POLICY_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchCondition == 'insertBy'">
+                        AND c.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+<!-- 
+CREATE TABLE `T_POLICY_SYSTEM_MAP` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '자동 생성',
+  `policy_code` varchar(50) NOT NULL COMMENT '시스템에 적용된 정책 ID',
+  `C_AGENT_ID` varchar(50) NOT NULL COMMENT '정책을 적용한 시스템 ID',
+  `modified_date` datetime DEFAULT NULL COMMENT '수정일',
+  PRIMARY KEY (`id`),
+  KEY `idx_policy_system_map` (`policy_code`,`C_AGENT_ID`),
+  KEY `policy_system_map_policy_id_fk` (`policy_code`),
+  CONSTRAINT `policy_system_map_policy_id_fk` FOREIGN KEY (`policy_code`) REFERENCES `T_POLICY` (`policy_code`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='시스템에 정책 적용 테이블';
+-->
+    <select id="selectPolicySystemMapListByAgentId" parameterType="String" resultType="egovframework.com.primx.fun.pol.service.PolicySystemMapVO">
+        SELECT 
+            id as seqNo,
+            policy_code as policyCode,
+            C_AGENT_ID as agentId,
+            modified_date as modifiedDate
+        FROM T_POLICY_SYSTEM_MAP
+        WHERE C_AGENT_ID = #{agentId}
+    </select>
+
+    <delete id="deletePolicySystemMap" parameterType="int">
+        DELETE FROM T_POLICY_SYSTEM_MAP WHERE id = #{seqNo}
+    </delete>
+
+<!-- 
+CREATE TABLE `T_AGENT_POLICY_SYSTEM_MATCH` (
+  `C_SEQ_NO` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '번호',
+  `C_AGENT_POLICY_CODE` varchar(50) NOT NULL COMMENT 'Agent 정책 Code',
+  `C_AGENT_ID` varchar(50) NOT NULL COMMENT 'Agent ID',
+  `C_POLICY_TIMESTAMP` datetime DEFAULT NULL COMMENT '정책 적용 시각',
+  `C_INSERT_DATE` datetime DEFAULT NULL COMMENT '생성 일자',
+  `C_UPDATE_DATE` datetime DEFAULT NULL COMMENT '수정 일자',
+  PRIMARY KEY (`C_SEQ_NO`),
+  UNIQUE KEY `uidx_t_agent_policy_system_match` (`C_AGENT_ID`),
+  KEY `idx_t_agent_policy_system_match` (`C_AGENT_POLICY_CODE`,`C_AGENT_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='Agent 정책 시스템 매칭 테이블';
+-->
+    <select id="selectAgentPolicySystemMatchList" parameterType="String" resultType="egovframework.com.primx.fun.pol.service.AgentPolicySystemMatchVO">
+        SELECT 
+            C_SEQ_NO as seqNo,
+            C_AGENT_POLICY_CODE as agentPolicyCode,
+            C_AGENT_ID as agentId,
+            C_POLICY_TIMESTAMP as policyTimestamp,
+            C_INSERT_DATE as insertDate,
+            C_UPDATE_DATE as updateDate
+        FROM T_AGENT_POLICY_SYSTEM_MATCH
+        WHERE C_AGENT_ID = #{agentId}
+    </select>
+
+    <delete id="deleteAgentPolicySystemMatch" parameterType="long">
+        DELETE FROM T_AGENT_POLICY_SYSTEM_MATCH WHERE C_SEQ_NO = #{seqNo}
+    </delete>
+    
+<!-- 
+CREATE TABLE `T_POLICY` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '자동 생성',
+  `policy_code` varchar(255) NOT NULL COMMENT '정책 코드. POL-date-ordernumber. POL-2023050500001식으로 생성 됨',
+  `policy_name` varchar(255) DEFAULT NULL COMMENT '정책명',
+  `policy_json` text DEFAULT NULL COMMENT '정책 json. Json 확장자로 저장이 됨',
+  `policy_xml` blob DEFAULT NULL COMMENT '정책 xml. Xml tag으로 저장 및 Xml 파일로 저장',
+  `product_id` int(11) DEFAULT NULL COMMENT '정책 id. 해당 제품 ID. 1:ZoneCentral, 2:Orizon, 3:CRYHOD',
+  `created_date` datetime DEFAULT NULL COMMENT '등록 날짜',
+  `created_by` int(11) DEFAULT NULL COMMENT '등록자',
+  `modified_date` datetime DEFAULT NULL COMMENT '수정일',
+  `modified_by` int(11) DEFAULT NULL COMMENT '수정자',
+  `is_deleted` varchar(2) NOT NULL DEFAULT 'N' COMMENT '삭제 여부. Y:Yes, N:No',
+  `use_yn` varchar(2) DEFAULT 'Y' COMMENT '사용 여부. Y:Yes, N:No',
+  `is_default` varchar(2) NOT NULL DEFAULT 'N' COMMENT '기본 여부. Y:Yes, N:No',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uidx_t_policy` (`policy_code`),
+  KEY `policy_products_id_fk` (`product_id`),
+  CONSTRAINT `policy_products_id_fk` FOREIGN KEY (`product_id`) REFERENCES `T_PRODUCTS` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='정책등록 (수정)';
+-->
+    <select id="selectPolicyInfo" parameterType="String" resultType="egovframework.com.primx.fun.pol.service.PolicyVO">
+        SELECT 
+            tpol.id as seqNo,
+            tpol.policy_code as policyCode,
+            tpol.policy_name as policyName,
+            tpol.policy_json as policyJson,
+            tpol.policy_xml as policyXml,
+            tpol.product_id as productId,
+            tpol.created_date as createdDate,
+            tpol.created_by as createdBy,
+            tpol.modified_date as modifiedDate,
+            tpol.modified_by as modifiedBy,
+            tpol.is_deleted as isDeleted,
+            tpol.use_yn as useYn,
+            tpol.is_default as isDefault,
+            tp.product_name as productName
+        FROM T_POLICY tpol
+        LEFT JOIN T_PRODUCTS tp ON tp.id = tpol.product_id
+        WHERE tpol.policy_code = #{policyCode}
+        ORDER BY tpol.id ASC
+        LIMIT 1
+    </select>
+
+    <select id="selectPolicyList" parameterType="egovframework.com.primx.fun.pol.service.ProductPolicySearchDTO" resultType="egovframework.com.primx.fun.pol.service.PolicyVO">
+        SELECT 
+            tpol.id as seqNo,
+            tpol.policy_code as policyCode,
+            tpol.policy_name as policyName,
+            tpol.policy_json as policyJson,
+            tpol.policy_xml as policyXml,
+            tpol.product_id as productId,
+            tpol.created_date as createdDate,
+            tpol.created_by as createdBy,
+            c.USER_NM as createdByNm,
+            tpol.modified_date as modifiedDate,
+            tpol.modified_by as modifiedBy,
+            tpol.is_deleted as isDeleted,
+            tpol.use_yn as useYn,
+            tpol.is_default as isDefault,
+            <!-- productName의 경우PolicyVO.product.productName의 값이다    -->
+            tp.product_name as productName,
+            IFNULL(COUNT(m.id), 0) AS systemMapCount
+        FROM T_POLICY tpol
+        LEFT JOIN T_PRODUCTS tp ON tp.id = tpol.product_id
+        LEFT JOIN T_POLICY_SYSTEM_MAP m ON tpol.policy_code = m.policy_code
+        LEFT JOIN COMTNEMPLYRINFO c ON tpol.created_by = c.EMPLYR_SEQ
+        WHERE tpol.is_deleted = 'N'
+        <if test="searchDateType != null and searchDateType != ''">
+            AND tpol.created_date &gt;= #{searchStartDate} AND tpol.created_date &lt;= #{searchEndDate}
+        </if>
+        <if test="searchPolicyType != null and searchPolicyType != ''">
+            AND tpol.is_default = #{searchPolicyType}
+        </if>
+        <if test="searchProduct != null and searchProduct != ''">
+            AND tp.product_name = #{searchProduct}
+        </if>
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <choose>
+                <when test="searchCondition == 'all'">
+                    AND (tpol.policy_name LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                    c.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%'))
+                </when>
+                <when test="searchCondition == 'policyName'">
+                    AND tpol.policy_name LIKE CONCAT('%', #{searchKeyword}, '%')
+                </when>
+                <when test="searchCondition == 'createdBy'">
+                    AND c.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+                </when>
+            </choose>
+        </if>
+        GROUP BY 
+            tpol.id,
+            tpol.policy_code,
+            tpol.policy_name,
+            tpol.policy_json,
+            tpol.policy_xml,
+            tpol.product_id,
+            tpol.created_date,
+            tpol.created_by,
+            tpol.modified_date,
+            tpol.modified_by,
+            tpol.is_deleted,
+            tpol.use_yn,
+            tp.product_name,
+            tpol.is_default
+        ORDER BY tpol.is_default DESC, tpol.created_date DESC
+        LIMIT #{start}, #{recordCountPerPage}
+    </select>
+
+    <select id="selectPolicyListCnt" parameterType="egovframework.com.primx.fun.pol.service.ProductPolicySearchDTO" resultType="int">
+        SELECT COUNT(DISTINCT tpol.id) AS totalCnt
+        FROM T_POLICY tpol
+        LEFT JOIN T_PRODUCTS tp ON tp.id = tpol.product_id
+        LEFT JOIN T_POLICY_SYSTEM_MAP m ON tpol.policy_code = m.policy_code
+        LEFT JOIN COMTNEMPLYRINFO c ON tpol.created_by = c.EMPLYR_SEQ
+        WHERE tpol.is_deleted = 'N'
+        <if test="searchDateType != null and searchDateType != ''">
+            AND tpol.created_date &gt;= #{searchStartDate} AND tpol.created_date &lt;= #{searchEndDate}
+        </if>
+        <if test="searchPolicyType != null and searchPolicyType != ''">
+            AND tpol.is_default = #{searchPolicyType}
+        </if>
+        <if test="searchProduct != null and searchProduct != ''">
+            AND tp.product_name = #{searchProduct}
+        </if>
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <choose>
+                <when test="searchCondition == 'all'">
+                    AND (tpol.policy_name LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                    c.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%'))
+                </when>
+                <when test="searchCondition == 'policyName'">
+                    AND tpol.policy_name LIKE CONCAT('%', #{searchKeyword}, '%')
+                </when>
+                <when test="searchCondition == 'createdBy'">
+                    AND c.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+                </when>
+            </choose>
+        </if>
+    </select>
+
+
+    <select id="selectAgentPolicyListByPolicyName" parameterType="String" resultType="egovframework.com.primx.fun.pol.service.AgentPolicyMasterVO">
+        SELECT 
+            apm.C_POLICY_ID AS policyId,
+            apm.C_POLICY_NAME AS policyName,
+            apm.C_INSERT_BY AS insertedBy,
+            apm.C_AGENT_POLICY_CODE AS agentPolicyCode,
+            apm.C_DEFAULT_POLICY_YN AS defaultPolicyYn,
+            apm.C_EXPORT_FILE_AUTH AS exportFileAuth,
+            apm.C_WEB_MANAGER_AUTH AS webManagerAuth,
+            apm.C_NOT_ENCRYPTION_PATH_AUTH AS notEncryptionPathAuth,
+            apm.C_PRODUCT_MENU_ENABLE AS productMenuEnable,
+            apm.C_WEB_MANAGER_CONSOLE_MENU_ENABLE AS webManagerConsoleMenuEnable,
+            apm.C_EXPORT_FILE_MENU_ENABLE AS exportFileMenuEnable,
+            apm.C_INSERT_DATE AS insertDate,
+            apm.C_UPDATE_DATE AS updateDate,
+            IFNULL(COUNT(m.C_SEQ_NO), 0) AS systemMapCount
+        FROM T_AGENT_POLICY_MASTER apm
+        LEFT JOIN T_AGENT_POLICY_SYSTEM_MATCH m ON apm.C_AGENT_POLICY_CODE = m.C_AGENT_POLICY_CODE
+        <where>
+            <if test="policyName != null and policyName != ''">
+                AND apm.C_POLICY_NAME LIKE CONCAT('%', #{policyName}, '%')
+            </if>
+        </where>
+        GROUP BY 
+            apm.C_POLICY_ID,
+            apm.C_POLICY_NAME,
+            apm.C_INSERT_BY,
+            apm.C_AGENT_POLICY_CODE,
+            apm.C_DEFAULT_POLICY_YN,
+            apm.C_EXPORT_FILE_AUTH,
+            apm.C_WEB_MANAGER_AUTH,
+            apm.C_NOT_ENCRYPTION_PATH_AUTH,
+            apm.C_PRODUCT_MENU_ENABLE,
+            apm.C_WEB_MANAGER_CONSOLE_MENU_ENABLE,
+            apm.C_EXPORT_FILE_MENU_ENABLE,
+            apm.C_INSERT_DATE,
+            apm.C_UPDATE_DATE
+        ORDER BY apm.C_POLICY_ID ASC;
+    </select>
+
+    <select id="selectProductPolicyList" parameterType="egovframework.com.primx.fun.pol.service.ProductPolicySearchDTO" resultType="egovframework.com.primx.fun.pol.service.PolicyVO">
+        select 
+            tp.id as id,
+            tp.policy_code as policyCode,
+            tp.policy_name as policyName,
+            tp.policy_json as policyJson,
+            tp.policy_xml as policyXml,
+            tp.product_id as productId,
+            tp2.product_name as productName,
+            tp.created_date as createdDate,
+            tp.created_by as createdBy,
+            tp.modified_date as modifiedDate,
+            tp.modified_by as modifiedBy,
+            tp.is_deleted as isDeleted,
+            tp.use_yn as useYn,
+            tp.is_default as isDefault,
+            IFNULL(COUNT(tpsm.id), 0) AS systemMapCount 
+        from T_POLICY tp 
+        join T_PRODUCTS tp2 on tp.product_id = tp2.id
+        join T_POLICY_SYSTEM_MAP tpsm on tp.policy_code = tpsm.policy_code
+        <where>
+            <if test="searchDateType != null and searchDateType != ''">
+                AND tp.created_date &gt;= #{searchStartDate} AND tp.created_date &lt;= #{searchEndDate}
+            </if>
+            <if test="searchPolicyType != null and searchPolicyType != ''">
+                AND tp.is_default = #{searchPolicyType}
+            </if>
+            <if test="searchProduct != null and searchProduct != ''">
+                AND tp2.product_name = #{searchProduct}
+            </if>
+            <if test="searchCondition != null and searchCondition != ''">
+                <choose>
+                    <when test="searchCondition == 'policyName'">
+                        AND tp.policy_name LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchCondition == 'user'">
+                        AND tp.created_by = #{searchKeyword}
+                    </when>
+                </choose>
+            </if>
+        </where>
+        group by tp.policy_code
+        order by tp.id ASC;
+    </select>
+
+    <select id="selectDefaultPolicyList" resultType="egovframework.com.primx.fun.pol.service.PolicyDetailInfoVO">
+        SELECT 
+            tpdi.pol_seq as polSeq,
+            tpdi.pol_code as polCode,
+            tpdi.pol_id as polId,
+            tpdi.pol_data as polData,
+            tpdi.created_date as createdDate,
+            tpdi.updated_date as updatedDate
+        FROM T_POLICY_DETAIL_INFO tpdi join T_POLICY tp ON tp.policy_code = tpdi.pol_code
+        WHERE tp.is_default = 'Y' AND tp.is_deleted = 'N'
+    </select>
+
+    <select id="selectMandatoryPolicyList" resultType="egovframework.com.primx.fun.pol.service.PolicyDetailInfoVO">
+        SELECT 
+            tpmi.pol_seq as polSeq,
+            tpmi.pol_code as polCode,
+            tpmi.pol_id as polId,
+            tpmi.pol_data as polData,
+            tpmi.created_date as createdDate,
+            tpmi.updated_date as updatedDate
+        FROM T_POLICY_MANDATORY_INFO tpmi 
+        WHERE tpmi.pol_use_yn = 'Y'
+    </select>
+
+    <update id="updateDefaultPolicy" parameterType="egovframework.com.primx.fun.pol.service.PolicyDetailInfoVO">
+        UPDATE T_POLICY_DETAIL_INFO SET pol_data = #{polData}, updated_date = UTC_TIMESTAMP() WHERE pol_seq = #{polSeq}
+    </update>
+
+    <select id="selectPolicyByCode" parameterType="String" resultType="egovframework.com.primx.fun.pol.service.PolicyVO">
+        SELECT 
+            id as seqNo,
+            policy_code as policyCode,
+            policy_name as policyName,
+            policy_json as policyJson,
+            policy_xml as policyXml,
+            product_id as productId,
+            created_date as createdDate,
+            created_by as createdBy,
+            modified_date as modifiedDate,
+            modified_by as modifiedBy,
+            is_deleted as isDeleted,
+            use_yn as useYn,
+            is_default as isDefault
+        FROM T_POLICY
+        WHERE policy_code = #{policyCode}
+    </select>
+
+    <select id="selectPolicyDetailList" parameterType="String" resultType="egovframework.com.primx.fun.pol.service.PolicyDetailInfoVO">
+        SELECT 
+            pol_seq as polSeq,
+            pol_code as polCode,
+            pol_id as polId,
+            pol_data as polData,
+            created_date as createdDate,
+            updated_date as updatedDate
+        FROM T_POLICY_DETAIL_INFO
+        WHERE pol_code = #{policyCode}
+    </select>
+
+    <select id="selectDefaultPolicy" resultType="egovframework.com.primx.fun.pol.service.PolicyVO">
+        SELECT 
+            id as seqNo,
+            policy_code as policyCode,
+            policy_name as policyName,
+            policy_json as policyJson,
+            policy_xml as policyXml,
+            product_id as productId,
+            created_date as createdDate,
+            created_by as createdBy,
+            modified_date as modifiedDate,
+            modified_by as modifiedBy,
+            is_deleted as isDeleted,
+            use_yn as useYn,
+            is_default as isDefault
+        FROM T_POLICY
+        WHERE is_default = 'Y' AND is_deleted = 'N'
+        ORDER BY id ASC
+        LIMIT 1
+    </select>
+
+<!--
+CREATE TABLE `T_POLICY` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '자동 생성',
+  `policy_code` varchar(255) NOT NULL COMMENT '정책 코드. POL-date-ordernumber. POL-2023050500001식으로 생성 됨',
+  `policy_name` varchar(255) DEFAULT NULL COMMENT '정책명',
+  `policy_json` text DEFAULT NULL COMMENT '정책 json. Json 확장자로 저장이 됨',
+  `policy_xml` blob DEFAULT NULL COMMENT '정책 xml. Xml tag으로 저장 및 Xml 파일로 저장',
+  `product_id` int(11) DEFAULT NULL COMMENT '정책 id. 해당 제품 ID. 1:ZoneCentral, 2:Orizon, 3:CRYHOD',
+  `created_date` datetime DEFAULT NULL COMMENT '등록 날짜',
+  `created_by` int(11) DEFAULT NULL COMMENT '등록자',
+  `modified_date` datetime DEFAULT NULL COMMENT '수정일',
+  `modified_by` int(11) DEFAULT NULL COMMENT '수정자',
+  `is_deleted` varchar(2) NOT NULL DEFAULT 'N' COMMENT '삭제 여부. Y:Yes, N:No',
+  `use_yn` varchar(2) DEFAULT 'Y' COMMENT '사용 여부. Y:Yes, N:No',
+  `is_default` varchar(2) NOT NULL DEFAULT 'N' COMMENT '기본 여부. Y:Yes, N:No',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uidx_t_policy` (`policy_code`),
+  KEY `policy_products_id_fk` (`product_id`),
+  CONSTRAINT `policy_products_id_fk` FOREIGN KEY (`product_id`) REFERENCES `T_PRODUCTS` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='정책등록 (수정)';
+-->
+    <insert id="insertPolicy" parameterType="egovframework.com.primx.fun.pol.service.PolicyVO">
+        INSERT INTO T_POLICY 
+        (policy_code, policy_name, policy_json, policy_xml, product_id, 
+        created_date, created_by, modified_date, modified_by, is_deleted, 
+        use_yn, is_default)
+        VALUES 
+        (#{policyCode}, #{policyName}, #{policyJson}, #{policyXml}, #{productId}, 
+        UTC_TIMESTAMP(), #{createdBy}, UTC_TIMESTAMP(), #{modifiedBy}, 'N', 
+        'Y', 'N')
+    </insert>
+
+    <update id="updatePolicy" parameterType="egovframework.com.primx.fun.pol.service.PolicyVO">
+        UPDATE T_POLICY SET policy_name = #{policyName}, policy_json = #{policyJson}, policy_xml = #{policyXml}, product_id = #{productId}, modified_date = UTC_TIMESTAMP(), modified_by = #{modifiedBy} WHERE policy_code = #{policyCode}
+    </update>
+    
+    <insert id="insertPolicyDetail" parameterType="egovframework.com.primx.fun.pol.service.PolicyDetailInfoVO">
+        INSERT INTO T_POLICY_DETAIL_INFO (pol_code, pol_id, pol_data, created_date)
+        VALUES (#{polCode}, #{polId}, #{polData}, UTC_TIMESTAMP())
+    </insert>
+ 
+     <insert id="updatePolicyDetail" parameterType="egovframework.com.primx.fun.pol.service.PolicyDetailInfoVO">
+        INSERT INTO T_POLICY_DETAIL_INFO (pol_code, pol_id, pol_data, created_date, updated_date)
+        VALUES (#{polCode}, #{polId}, #{polData}, #{createdDate}, UTC_TIMESTAMP())
+    </insert>
+
+    <select id="selectPolicyDetailByCodeAndId" parameterType="String" resultType="egovframework.com.primx.fun.pol.service.PolicyDetailInfoVO">
+        SELECT 
+            pol_seq as polSeq,
+            pol_code as polCode,
+            pol_id as polId,
+            pol_data as polData,
+            created_date as createdDate,
+            updated_date as updatedDate
+        FROM T_POLICY_DETAIL_INFO WHERE pol_code = #{polCode}
+        ORDER BY pol_id ASC
+        LIMIT 1
+    </select>
+
+    <delete id="deletePolicy" parameterType="String">
+        DELETE FROM T_POLICY WHERE policy_code = #{policyCode}
+    </delete>
+
+    <update id="updatePolicySystemMap" parameterType="map">
+        UPDATE T_POLICY_SYSTEM_MAP SET policy_code = #{defaultPolicyCode}, modified_date = null WHERE policy_code = #{policyCode}
+    </update>
+
+    <update id="updatePolicySystem" parameterType="map">
+        UPDATE T_POLICY_SYSTEM_MAP SET policy_code = #{policyCode}, modified_date = null WHERE C_AGENT_ID = #{agentId}
+    </update>
+
+
+    <delete id="deletePolicyDetail" parameterType="String">
+        DELETE FROM T_POLICY_DETAIL_INFO WHERE pol_code = #{policyCode}
+    </delete>
+
+    <update id="updateDefaultPolicyFlag" parameterType="map">
+        UPDATE T_POLICY SET is_default = #{isDefault}, modified_date = UTC_TIMESTAMP() WHERE policy_code = #{policyCode}
+    </update>
+
+    <delete id="deleteSystem" parameterType="String">
+        DELETE FROM T_POLICY_SYSTEM_MAP WHERE C_AGENT_ID = #{agentId}
+    </delete>
+
+    <update id="updateAgentPolicySystem" parameterType="map">
+        UPDATE T_AGENT_POLICY_SYSTEM_MATCH SET 
+            C_AGENT_POLICY_CODE = #{agentPolicyCode}, 
+            C_POLICY_TIMESTAMP = UTC_TIMESTAMP(), 
+            C_UPDATE_DATE = UTC_TIMESTAMP() 
+        WHERE C_AGENT_ID = #{agentId}
+    </update>
+
+    <delete id="deleteAgentSystem" parameterType="String">
+        DELETE FROM T_AGENT_POLICY_SYSTEM_MATCH WHERE C_AGENT_ID = #{agentId}
+    </delete>
+
+    <insert id="addSystem" parameterType="map">
+        INSERT INTO T_POLICY_SYSTEM_MAP (C_AGENT_ID, policy_code) VALUES (#{agentId}, #{policyCode})
+    </insert>
+
+    <insert id="addAgentSystem" parameterType="map">
+        INSERT INTO T_AGENT_POLICY_SYSTEM_MATCH (C_AGENT_ID, C_AGENT_POLICY_CODE, C_POLICY_TIMESTAMP, C_INSERT_DATE) VALUES (#{agentId}, #{agentPolicyCode}, UTC_TIMESTAMP(), UTC_TIMESTAMP())
+    </insert>
+
+    <insert id="insertAgentPolicy" parameterType="egovframework.com.primx.fun.pol.service.AgentPolicyMasterVO">
+        INSERT INTO T_AGENT_POLICY_MASTER (
+            C_POLICY_NAME, C_INSERT_BY, 
+            C_AGENT_POLICY_CODE, C_DEFAULT_POLICY_YN, C_EXPORT_FILE_AUTH, 
+            C_WEB_MANAGER_AUTH, C_NOT_ENCRYPTION_PATH_AUTH, C_PRODUCT_MENU_ENABLE, 
+            C_WEB_MANAGER_CONSOLE_MENU_ENABLE, C_EXPORT_FILE_MENU_ENABLE, 
+            C_ZTRY_MENU_ENABLE, C_ZOPEN_AREA, C_ZPERSONAL_ACCESS, 
+            C_ZOPTION_DISPLAY, C_ZSAFETY_ZONE, C_ZAREA_CLOSE, C_ZENC,
+            C_INSERT_DATE, C_UPDATE_DATE)
+        VALUES (#{policyName}, #{insertedBy}, 
+        #{agentPolicyCode}, #{defaultPolicyYn}, #{exportFileAuth}, 
+        #{webManagerAuth}, #{notEncryptionPathAuth}, #{productMenuEnable}, 
+        #{webManagerConsoleMenuEnable}, #{exportFileMenuEnable}, 
+        #{ztryMenuEnable}, #{zopenArea}, #{zpersonalAccess}, 
+        #{zoptionDisplay}, #{zsafetyZone}, #{zareaClose}, #{zenc},
+        UTC_TIMESTAMP(), UTC_TIMESTAMP())
+    </insert>
+
+    <update id="updateAgentPolicy" parameterType="egovframework.com.primx.fun.pol.service.AgentPolicyMasterVO">
+        UPDATE T_AGENT_POLICY_MASTER SET 
+            C_POLICY_NAME = #{policyName}, 
+            C_DEFAULT_POLICY_YN = #{defaultPolicyYn}, 
+            C_EXPORT_FILE_AUTH = #{exportFileAuth}, 
+            C_WEB_MANAGER_AUTH = #{webManagerAuth}, 
+            C_NOT_ENCRYPTION_PATH_AUTH = #{notEncryptionPathAuth}, 
+            C_PRODUCT_MENU_ENABLE = #{productMenuEnable}, 
+            C_WEB_MANAGER_CONSOLE_MENU_ENABLE = #{webManagerConsoleMenuEnable}, 
+            C_EXPORT_FILE_MENU_ENABLE = #{exportFileMenuEnable}, 
+            C_ZTRY_MENU_ENABLE = #{ztryMenuEnable},
+            C_ZOPEN_AREA = #{zopenArea},
+            C_ZPERSONAL_ACCESS = #{zpersonalAccess},
+            C_ZOPTION_DISPLAY = #{zoptionDisplay},
+            C_ZSAFETY_ZONE = #{zsafetyZone},
+            C_ZAREA_CLOSE = #{zareaClose},
+            C_ZENC = #{zenc},
+            C_UPDATE_DATE = UTC_TIMESTAMP() 
+        WHERE C_AGENT_POLICY_CODE = #{agentPolicyCode}
+    </update>
+
+    <select id="selectLastPolicyCodeByDate" parameterType="String" resultType="String">
+        SELECT C_AGENT_POLICY_CODE 
+        FROM T_AGENT_POLICY_MASTER 
+        WHERE C_AGENT_POLICY_CODE LIKE CONCAT(#{prefix}, '%')
+        ORDER BY C_AGENT_POLICY_CODE DESC 
+        LIMIT 1
+    </select>
+
+    <select id="selectAgentPolicyCode" parameterType="String" resultType="egovframework.com.primx.fun.pol.service.AgentPolicyMasterVO">
+        SELECT 
+            C_POLICY_ID AS policyId,
+            C_POLICY_NAME AS policyName,
+            C_INSERT_BY AS insertedBy,
+            C_AGENT_POLICY_CODE AS agentPolicyCode,
+            C_DEFAULT_POLICY_YN AS defaultPolicyYn,
+            C_EXPORT_FILE_AUTH AS exportFileAuth,
+            C_WEB_MANAGER_AUTH AS webManagerAuth,
+            C_NOT_ENCRYPTION_PATH_AUTH AS notEncryptionPathAuth,
+            C_PRODUCT_MENU_ENABLE AS productMenuEnable,
+            C_WEB_MANAGER_CONSOLE_MENU_ENABLE AS webManagerConsoleMenuEnable,
+            C_EXPORT_FILE_MENU_ENABLE AS exportFileMenuEnable,
+            C_INSERT_DATE AS insertDate,
+            C_UPDATE_DATE AS updateDate
+        FROM T_AGENT_POLICY_MASTER
+        WHERE C_AGENT_POLICY_CODE = #{agentPolicyCode}
+        LIMIT 1
+    </select>
+    
+    <insert id="insertFileZone" parameterType="map">
+        INSERT INTO T_ZONE_MAP (C_APID, C_ZONEID) VALUES (#{policyId}, #{zoneId})
+    </insert>
+
+    <select id="selectAgentDefaultPolicy" resultType="egovframework.com.primx.fun.pol.service.AgentPolicyMasterVO">
+        SELECT 
+            C_POLICY_ID AS policyId,
+            C_POLICY_NAME AS policyName,
+            C_INSERT_BY AS insertedBy,
+            C_AGENT_POLICY_CODE AS agentPolicyCode,
+            C_DEFAULT_POLICY_YN AS defaultPolicyYn,
+            C_EXPORT_FILE_AUTH AS exportFileAuth,
+            C_WEB_MANAGER_AUTH AS webManagerAuth,
+            C_NOT_ENCRYPTION_PATH_AUTH AS notEncryptionPathAuth,
+            C_PRODUCT_MENU_ENABLE AS productMenuEnable,
+            C_WEB_MANAGER_CONSOLE_MENU_ENABLE AS webManagerConsoleMenuEnable,
+            C_EXPORT_FILE_MENU_ENABLE AS exportFileMenuEnable,
+            C_INSERT_DATE AS insertDate,
+            C_UPDATE_DATE AS updateDate
+        FROM T_AGENT_POLICY_MASTER
+        WHERE C_DEFAULT_POLICY_YN = 'Y'
+        LIMIT 1
+    </select>
+    
+    <update id="updateAgentPolicySystemMatch" parameterType="map">
+        UPDATE T_AGENT_POLICY_SYSTEM_MATCH SET C_AGENT_POLICY_CODE = #{defaultPolicyCode}, C_UPDATE_DATE = UTC_TIMESTAMP() WHERE C_AGENT_POLICY_CODE = #{agentPolicyCode}
+    </update>
+
+    <delete id="deleteAgentPolicy" parameterType="map">
+        DELETE FROM T_AGENT_POLICY_MASTER WHERE C_POLICY_ID = #{policyId}
+    </delete>
+
+    <update id="updateAgentDefaultPolicyFlag" parameterType="map">
+        UPDATE T_AGENT_POLICY_MASTER SET C_DEFAULT_POLICY_YN = #{isDefault}, C_UPDATE_DATE = UTC_TIMESTAMP() WHERE C_AGENT_POLICY_CODE = #{agentPolicyCode}
+    </update>
+
+    <select id="selectDistributionPolicyByDeptId" parameterType="String" resultType="egovframework.com.primx.fun.pol.service.ReleasePolicyVO">
+        SELECT 
+            C_REG_ID AS regId
+            , C_DEPT_ID AS deptId
+            , C_DEPT_PATH AS deptPath
+            , C_BEGIN_DATE AS beginDate
+            , C_END_DATE AS endDate
+            , C_RELEASE_YN AS releaseYn
+        FROM T_RELEASE_POLICY
+        WHERE C_DEPT_ID = #{deptId}
+        LIMIT 1
+    </select>
+    
+    <select id="selectDistributionPolicyList" parameterType="map" resultType="egovframework.com.primx.fun.pol.service.ReleasePolicyVO">
+        SELECT 
+            trp.C_REG_ID AS regId
+            , trp.C_DEPT_ID AS deptId
+            , c2.DEPT_NAME AS deptName
+            , trp.C_DEPT_PATH AS deptPath
+            , trp.C_BEGIN_DATE AS beginDate
+            , trp.C_END_DATE AS endDate
+            , trp.C_RELEASE_YN AS releaseYn
+            , (select count(*) 
+                from COMTNEMPLYRINFO c LEFT JOIN T_USER_SYSTEM_MATCH tusm ON c.EMPLYR_ID = tusm.C_USER_ID
+                LEFT JOIN T_PRIMX_SETUP_INFO tpsi ON tusm.C_AGENT_ID = tpsi.C_AGENT_ID 
+                LEFT JOIN T_PRODUCTS tp ON tpsi.C_PRODUCT_TYPE = tp.id 
+		        LEFT JOIN T_UPDATE_INFO tui ON tui.C_PRODUCT_TYPE = tp.id
+                WHERE tusm.C_AGENT_ID is not null 
+                    AND c.ORGNZT_ID = trp.C_DEPT_ID 
+                    AND tp.product_name = #{searchDTO.searchProductName} 
+                    AND tui.C_PROCESSOR_ARCHITECTURE = #{searchDTO.searchProcessorArchitecture}
+            ) AS computerCnt
+            , (select count(*) 
+                from COMTNEMPLYRINFO c LEFT JOIN T_USER_SYSTEM_MATCH tusm ON c.EMPLYR_ID = tusm.C_USER_ID
+                LEFT JOIN T_PRIMX_SETUP_INFO tpsi ON tusm.C_AGENT_ID = tpsi.C_AGENT_ID 
+                LEFT JOIN T_PRODUCTS tp ON tpsi.C_PRODUCT_TYPE = tp.id 
+		        LEFT JOIN T_UPDATE_INFO tui ON tui.C_PRODUCT_TYPE = tp.id
+                WHERE tusm.C_AGENT_ID is not null 
+                    AND c.ORGNZT_ID = trp.C_DEPT_ID 
+                    AND tp.product_name = #{searchDTO.searchProductName} 
+                    AND tui.C_PRODUCT_VERSION = tpsi.C_PRODUCT_VERSION 
+                    AND tui.C_PROCESSOR_ARCHITECTURE = #{searchDTO.searchProcessorArchitecture}
+                    AND tpsi.C_UPDATE_DATE &gt;= tui.C_UPDATE_DATE 
+            ) AS latestUpdateCnt
+        FROM T_RELEASE_POLICY trp LEFT JOIN COMTNDEPTINFOMGR c2 ON trp.C_DEPT_ID = c2.DEPT_ID
+        <where>
+            <if test="searchDTO.searchDeploymentStatus != null and searchDTO.searchDeploymentStatus != ''">
+                <choose>
+                    <when test="searchDTO.searchDeploymentStatus == 'running'">
+                        AND trp.C_RELEASE_YN = 'Y'
+                        AND trp.C_END_DATE &gt;= UTC_TIMESTAMP()
+                    </when>
+                    <when test="searchDTO.searchDeploymentStatus == 'stop'">
+                        AND ( trp.C_RELEASE_YN = 'N' OR trp.C_END_DATE &lt;= UTC_TIMESTAMP()  )
+                    </when>
+                </choose>
+            </if>
+            <if test="searchDTO.searchDateType != null and searchDTO.searchDateType != ''">
+                AND trp.C_BEGIN_DATE &lt;= #{searchDTO.searchStartDate} AND trp.C_END_DATE &gt;= #{searchDTO.searchEndDate}
+            </if>
+            <if test="searchDTO.searchDeptName != null and searchDTO.searchDeptName != ''">
+                AND c2.DEPT_NAME LIKE CONCAT('%', #{searchDTO.searchDeptName}, '%')
+            </if>
+            <if test="deptIds != null and deptIds.size() > 0">
+                AND c2.DEPT_ID IN 
+                    <foreach item="deptId" collection="deptIds" open="(" separator="," close=")">
+                        #{deptId}
+                    </foreach>
+            </if>
+
+
+        </where>
+        ORDER BY trp.C_REG_ID ASC
+        LIMIT #{searchDTO.start}, #{searchDTO.recordCountPerPage}
+    </select>
+
+    <select id="selectDistributionPolicyListCnt" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM T_RELEASE_POLICY trp LEFT JOIN COMTNDEPTINFOMGR c2 ON trp.C_DEPT_ID = c2.DEPT_ID 
+        <where>
+        
+            <if test="searchDTO.searchDeploymentStatus != null and searchDTO.searchDeploymentStatus != ''">
+                <choose>
+                    <when test="searchDTO.searchDeploymentStatus == 'running'">
+                        AND trp.C_RELEASE_YN = 'Y'
+                        AND trp.C_END_DATE &gt;= UTC_TIMESTAMP()
+                    </when>
+                    <when test="searchDTO.searchDeploymentStatus == 'stop'">
+                        AND ( trp.C_RELEASE_YN = 'N' OR trp.C_END_DATE &lt;= UTC_TIMESTAMP()  )
+                    </when>
+                </choose>
+            </if>
+
+            <if test="searchDTO.searchDateType != null and searchDTO.searchDateType != ''">
+                <!-- 시작일과 종료일 사이에 있는 값을 조회  -->
+                AND trp.C_BEGIN_DATE &lt;= #{searchDTO.searchStartDate} AND trp.C_END_DATE &gt;= #{searchDTO.searchEndDate}
+            </if>
+            <if test="searchDTO.searchDeptName != null and searchDTO.searchDeptName != ''">
+                <!-- 부서 이름이 포함된 값을 조회  -->
+                AND c2.DEPT_NAME LIKE CONCAT('%', #{searchDTO.searchDeptName}, '%')
+            </if>
+            <if test="deptIds != null and deptIds.size() > 0">
+                AND c2.DEPT_ID IN 
+                    <foreach item="deptId" collection="deptIds" open="(" separator="," close=")">
+                        #{deptId}
+                    </foreach>
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertDistributionPolicy" parameterType="map">
+        INSERT INTO T_RELEASE_POLICY (
+            C_DEPT_ID, 
+            C_BEGIN_DATE, 
+            C_END_DATE, 
+            C_DEPT_PATH, 
+            C_RELEASE_YN) 
+        VALUES (
+            #{deptId}, 
+            <!-- beginDate가 없거나 null 인 경우 UTC_TIMESTAMP() -->
+            <if test="beginDate == null or beginDate == ''">
+                UTC_TIMESTAMP(), 
+            </if>
+            <if test="beginDate != null and beginDate != ''">
+                #{beginDate}, 
+            </if>
+            #{endDate}, 
+            #{deptPath},
+            #{releaseYn})
+    </insert>
+
+    <update id="updateDistributionPolicy" parameterType="map">
+        UPDATE T_RELEASE_POLICY SET 
+            <!-- beginDate가 없거나 null 인 경우 UTC_TIMESTAMP() -->
+            <if test="beginDate == null or beginDate == ''">
+                C_BEGIN_DATE = UTC_TIMESTAMP(), 
+            </if>
+            <if test="beginDate != null and beginDate != ''">
+                C_BEGIN_DATE = #{beginDate}, 
+            </if>
+            C_END_DATE = #{endDate}, 
+            C_RELEASE_YN = #{releaseYn}
+        WHERE C_REG_ID = #{regId}
+    </update>
+
+    <update id="updateDeptPathDistributionPolicy" parameterType="map">
+        UPDATE T_RELEASE_POLICY SET C_DEPT_PATH = #{deptPath} WHERE C_REG_ID = #{regId}
+    </update>
+
+    <delete id="deleteDistributionPolicy" parameterType="map">
+        DELETE FROM T_RELEASE_POLICY WHERE C_REG_ID = #{regId}
+    </delete>
+
+    <select id="selectIndividualPolicyList" resultType="egovframework.com.primx.fun.pol.service.PolicyVO">
+        SELECT 
+            tp.policy_code AS policyCode, 
+            tp.policy_name AS policyName,
+            IFNULL(COUNT(tpsm.policy_code), 0) AS systemMapCount,
+            IFNULL(SUM(CASE WHEN tpsm.modified_date IS NOT NULL THEN 1 ELSE 0 END), 0) AS usedSystemMapCount
+        FROM T_POLICY tp
+        LEFT JOIN T_POLICY_SYSTEM_MAP tpsm ON tp.policy_code = tpsm.policy_code
+        WHERE 
+            tp.is_deleted = 'N' 
+            AND tp.is_default = 'N'
+        GROUP BY 
+            tp.policy_code, tp.policy_name
+    </select>
+
+</mapper>

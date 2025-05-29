@@ -1,0 +1,552 @@
+@charset "UTF-8";
+/* 페이지별 css. 이부분부터는 수정시 해당페이지에서만 변경됩니다. */
+html.default-theme {
+  --primx-color: var(--primx-color, #29235C);
+  --top-color: var(--top-color, #29235C);
+  --left-color: var(--left-color, #ffffff);
+  --active-color: var(--active-color, rgba(255, 255, 255, 0.3803921569));
+  --home-color: var(--home-color, #f5f5f5);
+  --button-color: var(--button-color, #89abcf);
+  --hover-color: var(--hover-color, #a2bedf);
+  --login-lang-color: var(--login-lang-color, #D2DDE8);
+  --pop-bg-color: var(--pop-bg-color, #f5f5f5);
+  --pop-head-color: var(--pop-head-color, #D2DDE8);
+  --border-color: var(--border-color, #cbcbcb);
+  --border-active-color: var(--border-active-color, #bbb);
+  --input-txt-bg-color: var(--input-txt-bg-color, #ededed);
+  --em-color: var(--em-color, #D2DDE8);
+  --tab-color: var(--tab-color, #d8d8d8);
+  --tab-active-color: var(--tab-active-color, #f0f0f0);
+  --tooltip-color: var(--tooltip-color, #b5b5b5);
+  --disable-bg-color: var(--disable-bg-color, #dedede);
+  --disable-font-color: var(--disable-font-color, #949494);
+  --search-bg-color: var(--search-bg-color, #D2DDE8);
+  --search-item-color: var(--search-item-color, rgba(255, 255, 255, 0.6196078431));
+  --white-color: var(--white-color, #fff);
+  --black-color: var(--black-color, #000);
+  --pager-select-color: var(--pager-select-color, #29235C);
+  --table-top-border: var(--table-top-border, #979797);
+  --table-tr-td-border: var(--table-tr-td-border, #858585);
+  --table-head-bg-color: var(--table-head-bg-color, #D2DDE8);
+  --table-body-bg-color: var(--table-body-bg-color, #ffffff);
+  --table-active-bg-color: var(--table-active-bg-color, #F8F9FC);
+  --input-box-color: var(--input-box-color, #ffffff);
+  --title-fir-color: var(--title-fir-color, #666);
+  --wait: var(--wait, #e8e8e8);
+  --progress: var(--progress, #93c9fb);
+  --approval: var(--approval, #61ea93);
+  --return: var(--return, #fb7b6a);
+}
+
+html.dark-theme {
+  --primx-color: #92a7b7;
+  --top-color: #3c4043;
+  --left-color: #27282b;
+  --active-color: rgba(210, 221, 232, 0.4235294118);
+  --home-color: #17181a;
+  --button-color: #92a7b7;
+  --hover-color: rgba(146, 167, 183, 0.8117647059);
+  --login-lang-color: #29235C;
+  --pop-bg-color: #17181a;
+  --pop-head-color: #3c4043;
+  --border-color: #191919;
+  --border-active-color: #121314;
+  --input-txt-bg-color: #43444b;
+  --em-color: #3c4043;
+  --tab-color: #17181a;
+  --tab-active-color: #2c2d2f;
+  --tooltip-color: #29235C;
+  --disable-bg-color: #3f3f41;
+  --disable-font-color: #9c9c9c;
+  --search-bg-color: #3c4043;
+  --search-item-color: rgba(146, 167, 183, 0.337254902);
+  --white-color: #000;
+  --black-color: #fff;
+  --pager-select-color: #92a7b7;
+  --table-top-border: #29235C;
+  --table-tr-td-border: #29235C;
+  --table-head-bg-color: #3c4043;
+  --table-body-bg-color: #2e2d2e;
+  --table-active-bg-color: #7b848c;
+  --input-box-color: #333439;
+  --title-fir-color: #c1c1c1;
+  --wait: #9c9c9c;
+  --progress: #3b7bb8;
+  --approval: #48c074;
+  --return: #c54736;
+}
+
+/* page */
+/* 9.설정 > 관리자 설정 */
+.administratorSettings .search_wrap .search_condition ul li.line .item {
+  width: 100%;
+}
+.administratorSettings .search_wrap .search_condition ul li.line .item .txtBox {
+  width: calc(100% - 348rem);
+  margin-right: 0;
+}
+
+/* 10.설정 > 부서 및 사용자 설정 */
+.departmentUserSettings .departUserSection {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: calc(100vh - 170rem);
+}
+.departmentUserSettings .departUserSection .departmentArea {
+  width: calc(28% - 20rem);
+  border-radius: 10rem;
+}
+.departmentUserSettings .departUserSection .userArea {
+  width: 72%;
+  height: 100%;
+  border-radius: 10rem;
+}
+.departmentUserSettings .searchInnerWrap .searchBox input.searchInput {
+  width: 130rem;
+}
+
+.departTreeMap, .userBottom {
+  width: 100%;
+  height: calc(100vh - 235rem);
+  padding: 20rem;
+  background-color: rgba(181, 187, 197, 0.0784313725);
+  border-radius: 10rem;
+  border: 1rem solid var(--border-color, #cbcbcb);
+}
+
+.departTreeMap {
+  overflow: auto;
+}
+
+/* 10.설정 > 라이선스 */
+.license .flexWrap {
+  align-items: center;
+  margin-bottom: 10rem;
+}
+.license .flexWrap h3.contTitle {
+  margin-bottom: 0;
+}
+.license .flexWrap .bu_wrap button {
+  margin-left: 14rem;
+}
+
+/* 10.설정 > 인증 */
+.certified .setWrap .line .item > div .itemDivision li label {
+  width: 70rem;
+}
+
+/* 10.설정 > 운영 */
+.operation .setWrap .line .item em {
+  width: 170rem;
+}
+.operation .setWrap .line .item > div {
+  width: calc(100% - 170rem);
+}
+.operation .setWrap .line .item > div .itemDivision li {
+  width: 33.3333333333%;
+}
+.operation .setWrap .line .item > div .itemDivision li label {
+  width: 140rem;
+}
+.operation .setWrap .line .item > div .bu_wrap {
+  position: absolute;
+  right: 7rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.operation .setWrap .line .item > div .bu_wrap button {
+  margin-left: 7rem;
+}
+
+/* 10.설정 > 업데이트 */
+.update .inputFileWrap {
+  width: calc(100% - 7rem);
+}
+.update .tableWrap .bu_wrap {
+  justify-content: start;
+}
+.update .tableWrap .bu_wrap button {
+  width: 40rem;
+}
+
+/* popup */
+/* 0.공통 > 검색(popup) */
+.searchAreaPopup .pop_wrap, .searchArea_p_Popup .pop_wrap {
+  width: 709rem;
+}
+
+/* 1.신청 및 결재 > 신청(popup) */
+/* 2.신청 및 결재 > 결재(popup) */
+.createRequestPopup .pop_wrap, .createRequestViewPopup .pop_wrap {
+  width: 1401rem;
+  max-height: 91vh;
+}
+.createRequestPopup .pop_cont, .createRequestViewPopup .pop_cont {
+  height: auto;
+  /* .bu_wrap{position: absolute; top: 0; right: 14rem;} */
+}
+.createRequestPopup .pop_cont .lineWrap, .createRequestViewPopup .pop_cont .lineWrap {
+  width: 100%;
+  display: flex;
+  margin-bottom: 20rem;
+}
+.createRequestPopup .pop_cont .lineWrap li, .createRequestViewPopup .pop_cont .lineWrap li {
+  width: 120rem;
+  height: 100rem;
+  background: var(--white-color, #fff);
+  border: 1rem solid var(--border-color, #cbcbcb);
+  border-radius: 10rem;
+  padding: 5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-right: 8rem;
+}
+.createRequestPopup .pop_cont .lineWrap li.startLine, .createRequestViewPopup .pop_cont .lineWrap li.startLine {
+  width: 40rem;
+  justify-content: center;
+  background-color: var(--em-color, #D2DDE8);
+}
+.createRequestPopup .pop_cont .lineWrap li .tit, .createRequestViewPopup .pop_cont .lineWrap li .tit {
+  border-radius: 10rem;
+  background: var(--em-color, #D2DDE8);
+  display: block;
+  color: var(--black-color, #000);
+  font-size: 13rem;
+  font-weight: 500;
+  height: 20rem;
+}
+.createRequestPopup .pop_cont .lineWrap li .info, .createRequestViewPopup .pop_cont .lineWrap li .info {
+  height: 65rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.createRequestPopup .pop_cont .lineWrap li .info .result, .createRequestViewPopup .pop_cont .lineWrap li .info .result {
+  font-weight: 600;
+}
+.createRequestPopup .pop_cont .lineWrap li .info .date, .createRequestViewPopup .pop_cont .lineWrap li .info .date {
+  font-size: 13rem;
+  opacity: 0.7;
+}
+
+/* 2.신청 및 결재 > 결재 : 결재처리(popup) */
+.approvalProcessPopup .pop_wrap {
+  width: 601rem;
+}
+.approvalProcessPopup .pop_cont {
+  height: auto;
+}
+.approvalProcessPopup .pop_cont .setWrap {
+  margin-bottom: 0;
+}
+.approvalProcessPopup .pop_cont .setWrap .appSelect {
+  display: flex;
+}
+.approvalProcessPopup .pop_cont .setWrap .appSelect input[type=radio] {
+  width: auto;
+  margin: 0 15rem;
+}
+
+/* 3.현황 > 시스템 현황(popup) */
+.systemInformationPopup .pop_wrap {
+  width: 1201rem;
+}
+.systemInformationPopup .pop_cont {
+  height: 682rem;
+  padding: 0 14rem 14rem 14rem;
+}
+
+/* 3.현황 > 시스템 현황 : 시스템 종류(popup) */
+.changeSystemTypePopup .pop_wrap {
+  width: 501rem;
+}
+.changeSystemTypePopup .pop_cont {
+  height: auto;
+}
+.changeSystemTypePopup .pop_cont .setWrap {
+  margin-bottom: 0;
+}
+
+/* 3.현황 > 시스템 현황 : 시스템 삭제(popup) */
+.sysDelPopup .pop_wrap {
+  width: 401rem;
+}
+.sysDelPopup .pop_cont {
+  height: auto;
+}
+
+/* 3.현황 > 시스템 현황 : 제품 정책 변경(popup) */
+/* 3.현황 > 시스템 현황 : agent 정책 변경(popup) */
+/* 5.현황 > Agent정책 현황 : 시스템현황(popup) */
+/* 5.현황 > Agent정책 현황 : 시스템현황 > 시스템 추가(popup) */
+.policyChangePopup .pop_wrap, .agentChangePopup .pop_wrap, .agnSysStatusPopup .pop_wrap, .agnSysStatusAddPopup .pop_wrap {
+  width: 1401rem;
+}
+.policyChangePopup .pop_cont > .selectBox, .agentChangePopup .pop_cont > .selectBox, .agnSysStatusPopup .pop_cont > .selectBox, .agnSysStatusAddPopup .pop_cont > .selectBox {
+  width: 300rem;
+  margin-bottom: 20rem;
+}
+.policyChangePopup .searchInnerWrap_onlySc .searchBox, .agentChangePopup .searchInnerWrap_onlySc .searchBox, .agnSysStatusPopup .searchInnerWrap_onlySc .searchBox, .agnSysStatusAddPopup .searchInnerWrap_onlySc .searchBox {
+  width: 100%;
+}
+.policyChangePopup .searchInnerWrap_onlySc .searchBox .searchInput, .agentChangePopup .searchInnerWrap_onlySc .searchBox .searchInput, .agnSysStatusPopup .searchInnerWrap_onlySc .searchBox .searchInput, .agnSysStatusAddPopup .searchInnerWrap_onlySc .searchBox .searchInput {
+  width: 490rem;
+  cursor: auto;
+}
+
+/* 3.현황 > 시스템 현황 : 제품 이력 현황(popup) */
+/* 3.현황 > 시스템 현황 : 이동 파일 현황(popup) */
+.productHistoryPopup .pop_wrap, .moveFileHistoryPopup .pop_wrap {
+  width: 1701rem;
+}
+
+/* 3.현황 > 시스템 현황 : 이동 파일 현황 > 상세정보(popup) */
+.moveFileHistoryViewPopup .pop_wrap {
+  width: 1201rem;
+}
+.moveFileHistoryViewPopup .pop_cont {
+  padding: 0 14rem 14rem 14rem;
+  height: 801rem;
+}
+
+/* 5.현황 > Agent정책 현황(popup) */
+.agentStatusViewPopup .pop_wrap {
+  width: 901rem;
+}
+.agentStatusViewPopup .pop_cont {
+  height: 885rem;
+}
+.agentStatusViewPopup .pop_cont .systabWrap .tabCont {
+  height: 467rem;
+}
+
+/* 5.현황 > Agent정책 현황 : 등록(popup) */
+/* 5.현황 > Agent정책 현황 : 정책 복사(popup) */
+.agnAddPopup .pop_wrap, .agnCopyPopup .pop_wrap {
+  width: 901rem;
+}
+.agnAddPopup .pop_cont, .agnCopyPopup .pop_cont {
+  height: 805rem;
+}
+.agnAddPopup .pop_cont .systabWrap .tabCont, .agnCopyPopup .pop_cont .systabWrap .tabCont {
+  height: 467rem;
+}
+.agnAddPopup .pop_cont .systabWrap .tabCont .setWrap .line .item .em100Per, .agnCopyPopup .pop_cont .systabWrap .tabCont .setWrap .line .item .em100Per {
+  width: 100%;
+}
+
+/* 5.현황 > Agent정책 현황 : 삭제(popup) */
+.agnDelPopup .pop_wrap {
+  width: 401rem;
+}
+.agnDelPopup .pop_cont {
+  height: auto;
+}
+
+/* 5.현황 > Agent정책 현황 : 기본정책적용(popup) */
+.defaultChangePopup .pop_wrap {
+  width: 401rem;
+}
+.defaultChangePopup .pop_cont {
+  height: auto;
+}
+
+/* 5.현황 > Agent정책 현황 : 시스템현황(popup) */
+.agnSysStatusPopup .pop_wrap {
+  width: 1701rem;
+}
+
+/* 5.현황 > Agent정책 현황 : 시스템현황 > 시스템 추가(popup) */
+.agnSysStatusAddPopup .pop_wrap {
+  width: 1651rem;
+}
+
+/* 5.현황 > Agent정책 현황 : 시스템현황 > 시스템 제거(popup) */
+.agnSysDelPopup .pop_wrap {
+  width: 401rem;
+}
+.agnSysDelPopup .pop_cont {
+  height: auto;
+}
+
+/* 7.이력 > 제품이력(popup) */
+.productHistoryViewPopup .pop_wrap {
+  width: 901rem;
+}
+.productHistoryViewPopup .pop_cont {
+  height: auto;
+  padding: 0 14rem 14rem 14rem;
+}
+
+/* 8.이력 > 운영이력(popup) */
+.operationHistoryViewPopup .pop_wrap {
+  width: 901rem;
+}
+.operationHistoryViewPopup .pop_cont {
+  height: auto;
+  padding: 0 14rem 14rem 14rem;
+}
+
+/* 9.설정 > 관리자 설정(popup) */
+.administratorSettingsPopup .pop_wrap, .userAddPopup .pop_wrap, .userModifyPopup .pop_wrap, .departAddPopup .pop_wrap {
+  width: 735rem;
+}
+.administratorSettingsPopup .pop_cont, .userAddPopup .pop_cont, .userModifyPopup .pop_cont, .departAddPopup .pop_cont {
+  height: auto;
+}
+.administratorSettingsPopup .pop_cont .setWrap .line .item .idCheck, .userAddPopup .pop_cont .setWrap .line .item .idCheck, .userModifyPopup .pop_cont .setWrap .line .item .idCheck, .departAddPopup .pop_cont .setWrap .line .item .idCheck {
+  width: calc(100% - 140rem);
+  display: flex;
+}
+.administratorSettingsPopup .pop_cont .setWrap .line .item .idCheck .bu_wrap button, .userAddPopup .pop_cont .setWrap .line .item .idCheck .bu_wrap button, .userModifyPopup .pop_cont .setWrap .line .item .idCheck .bu_wrap button, .departAddPopup .pop_cont .setWrap .line .item .idCheck .bu_wrap button {
+  width: 100rem;
+  margin-left: 0;
+}
+.administratorSettingsPopup .pop_cont .setWrap .line .item .adminLevel .selectBox, .userAddPopup .pop_cont .setWrap .line .item .adminLevel .selectBox, .userModifyPopup .pop_cont .setWrap .line .item .adminLevel .selectBox, .departAddPopup .pop_cont .setWrap .line .item .adminLevel .selectBox {
+  width: 100%;
+}
+.administratorSettingsPopup .pop_cont .setWrap .line .item .useDate .txtBox, .userAddPopup .pop_cont .setWrap .line .item .useDate .txtBox, .userModifyPopup .pop_cont .setWrap .line .item .useDate .txtBox, .departAddPopup .pop_cont .setWrap .line .item .useDate .txtBox {
+  width: 160rem;
+}
+.administratorSettingsPopup .pop_cont .setWrap .line .item .useDate .txtBox:last-child, .userAddPopup .pop_cont .setWrap .line .item .useDate .txtBox:last-child, .userModifyPopup .pop_cont .setWrap .line .item .useDate .txtBox:last-child, .departAddPopup .pop_cont .setWrap .line .item .useDate .txtBox:last-child {
+  margin-right: 0;
+}
+.administratorSettingsPopup .pop_cont .addIp, .userAddPopup .pop_cont .addIp, .userModifyPopup .pop_cont .addIp, .departAddPopup .pop_cont .addIp {
+  margin-bottom: 10rem;
+  align-items: center;
+}
+.administratorSettingsPopup .pop_cont .addIp > div, .userAddPopup .pop_cont .addIp > div, .userModifyPopup .pop_cont .addIp > div, .departAddPopup .pop_cont .addIp > div {
+  display: flex;
+  align-items: center;
+}
+.administratorSettingsPopup .pop_cont .addIp > div input, .userAddPopup .pop_cont .addIp > div input, .userModifyPopup .pop_cont .addIp > div input, .departAddPopup .pop_cont .addIp > div input {
+  margin-right: 5rem;
+}
+.administratorSettingsPopup .pop_cont .addIp .bu_wrap, .userAddPopup .pop_cont .addIp .bu_wrap, .userModifyPopup .pop_cont .addIp .bu_wrap, .departAddPopup .pop_cont .addIp .bu_wrap {
+  height: 30rem;
+}
+.administratorSettingsPopup .pop_cont .addIp .bu_wrap button, .userAddPopup .pop_cont .addIp .bu_wrap button, .userModifyPopup .pop_cont .addIp .bu_wrap button, .departAddPopup .pop_cont .addIp .bu_wrap button {
+  width: 50rem;
+  margin-left: 6rem;
+}
+.administratorSettingsPopup .pop_cont .tableWrap .flexWrap, .userAddPopup .pop_cont .tableWrap .flexWrap, .userModifyPopup .pop_cont .tableWrap .flexWrap, .departAddPopup .pop_cont .tableWrap .flexWrap {
+  justify-content: space-between;
+}
+
+/* 9.설정 > 관리자 설정 : 관리자 삭제(popup) */
+.adminDeletePopup .pop_wrap {
+  width: 401rem;
+}
+.adminDeletePopup .pop_cont {
+  height: auto;
+}
+
+/* 9.설정 > 관리자 설정 : 패스워드 초기화(popup) */
+.passwordResetPopup .pop_wrap {
+  width: 401rem;
+}
+.passwordResetPopup .pop_cont {
+  height: auto;
+}
+
+/* 10.설정 > 부서 및 사용자 설정 : 사용자 수정(popup) */
+.userModifyPopup .pop_wrap {
+  width: 735rem;
+}
+
+/* 10.설정 > 부서 및 사용자 설정 : 사용자 등록(popup) */
+.userAddPopup .pop_wrap {
+  width: 735rem;
+}
+.userAddPopup .ipTable input.minInput {
+  height: 30rem;
+}
+
+/* 10.설정 > 부서 및 사용자 설정 : 사용자 등록 > 부서 선택(popup) */
+.departSelectPopup .pop_wrap {
+  width: 601rem;
+}
+.departSelectPopup .pop_cont {
+  height: 535rem;
+}
+.departSelectPopup .pop_cont .setWrap {
+  margin-bottom: 0;
+}
+.departSelectPopup .pop_cont .departTreeMap {
+  height: 465rem;
+}
+.departSelectPopup .searchInnerWrap_p .searchBox {
+  width: 100%;
+}
+.departSelectPopup .searchInnerWrap_p .searchBox .searchInput {
+  width: 100%;
+  margin-right: 0;
+  cursor: auto;
+}
+
+/* 10.설정 > 부서 및 사용자 설정 : 사용자 삭제(popup) */
+.userDeletePopup .pop_wrap {
+  width: 401rem;
+}
+.userDeletePopup .pop_cont {
+  height: auto;
+}
+
+/* 10.설정 > 부서 및 사용자 설정 : 부서 등록(popup) */
+.departAddPopup .pop_wrap {
+  width: 593rem;
+}
+.departAddPopup .setWrap {
+  margin-bottom: 0;
+}
+
+/* 10.설정 > 부서 및 사용자 설정 : 부서 수정(popup) */
+.departModifyPopup .pop_wrap {
+  width: 593rem;
+}
+.departModifyPopup .pop_cont {
+  height: auto;
+}
+.departModifyPopup .pop_cont .setWrap {
+  margin-bottom: 0;
+}
+
+/* 10.설정 > 부서 및 사용자 설정 : 부서 삭제(popup) */
+.departDeletePopup .pop_wrap {
+  width: 401rem;
+}
+.departDeletePopup .pop_cont {
+  height: auto;
+}
+
+/* 10.설정 > 라이선스 : 라이선스 등록 */
+.licenseRegiPopup .pop_wrap {
+  width: 500rem;
+}
+.licenseRegiPopup .pop_cont {
+  height: auto;
+}
+
+/* 상단 설정 > 라이선스 */
+.topSetPopup .pop_wrap {
+  width: 91vw;
+}
+.topSetPopup .pop_cont {
+  height: 1000rem;
+}
+.topSetPopup .pop_cont .systabWrap .tabCont {
+  height: 888rem;
+}
+.topSetPopup .license .flexWrap {
+  align-items: center;
+  margin-bottom: 10rem;
+}
+.topSetPopup .license .flexWrap h3.contTitle {
+  margin-bottom: 0;
+}
+.topSetPopup .license .flexWrap .bu_wrap button {
+  margin-left: 14rem;
+}/*# sourceMappingURL=css.css.map */

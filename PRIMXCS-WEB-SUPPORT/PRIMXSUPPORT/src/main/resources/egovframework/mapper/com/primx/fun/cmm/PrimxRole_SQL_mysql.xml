@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="roleDAO">
+
+    <!-- 권한 정보 단일 조회 -->
+    <select id="selectRoleById" parameterType="String" resultType="egovframework.com.primx.fun.cmm.service.RoleVO">
+        SELECT * FROM COMTNAUTHORINFO WHERE AUTHOR_CODE = #{authorCode} LIMIT 1
+    </select>
+
+
+    <!-- 권한 정보 전체 리스트 조회 -->
+    <select id="selectAllRoleList" resultType="egovframework.com.primx.fun.cmm.service.RoleVO">
+        SELECT 
+            AUTHOR_CODE AS authorCode,
+            AUTHOR_NM AS authorName,
+            AUTHOR_DC AS authorDescription,
+            AUTHOR_CREAT_DE AS authorCreateDate
+        FROM COMTNAUTHORINFO
+        WHERE AUTHOR_CODE LIKE CONCAT('%', #{authorCode}, '%')
+    </select>
+
+    <!-- 권한 정보 리스트 조회 -->
+    <select id="selectRoleList" resultType="egovframework.com.primx.fun.cmm.service.RoleVO">
+        SELECT 
+            AUTHOR_CODE AS authorCode,
+            AUTHOR_NM AS authorName,
+            AUTHOR_DC AS authorDescription,
+            AUTHOR_CREAT_DE AS authorCreateDate
+        FROM COMTNAUTHORINFO 
+        WHERE AUTHOR_CODE IN 
+        <foreach item="auth" collection="searchAuth" separator="," open="(" close=")">
+            #{auth}
+        </foreach>
+    </select>
+
+    <!-- 권한 정보 단일 조회 -->
+    <select id="selectOneRole" resultType="egovframework.com.primx.fun.cmm.service.RoleVO">
+        SELECT 
+            AUTHOR_CODE AS authorCode,
+            AUTHOR_NM AS authorName,
+            AUTHOR_DC AS authorDescription,
+            AUTHOR_CREAT_DE AS authorCreateDate
+        FROM COMTNAUTHORINFO 
+        WHERE AUTHOR_CODE = #{authorCode} LIMIT 1
+    </select>
+
+
+    <!-- 권한 정보 등록 -->
+    <insert id="insertRole" parameterType="egovframework.com.primx.fun.cmm.service.RoleVO">
+        INSERT INTO COMTNAUTHORINFO (AUTHOR_CODE, AUTHOR_NM, AUTHOR_DC, AUTHOR_CREAT_DE)
+        VALUES (#{authorCode}, #{authorName}, #{authorDescription}, NOW())
+    </insert>
+
+    <!-- 권한 정보 수정 -->
+    <update id="updateRole" parameterType="egovframework.com.primx.fun.cmm.service.RoleVO">
+        UPDATE COMTNAUTHORINFO
+        SET AUTHOR_NM = #{authorName}, AUTHOR_DC = #{authorDescription}
+        WHERE AUTHOR_CODE = #{authorCode}
+    </update>
+
+    <!-- 권한 정보 삭제 -->
+    <delete id="deleteRole" parameterType="String">
+        DELETE FROM COMTNAUTHORINFO WHERE AUTHOR_CODE = #{authorCode}
+    </delete>
+
+    <!-- 사용자 보안 설정 단일 조회 -->
+    <select id="selectSecurityById" parameterType="String" resultType="egovframework.com.primx.fun.cmm.service.SecurityVO">
+        SELECT * FROM COMTNEMPLYRSCRTYESTBS WHERE SCRTY_DTRMN_TRGET_ID = #{securityTargetId} LIMIT 1
+    </select>
+
+    <!-- 사용자 보안 설정 리스트 조회 -->
+    <select id="selectSecurityList" resultType="egovframework.com.primx.fun.cmm.service.SecurityVO">
+        SELECT * FROM COMTNEMPLYRSCRTYESTBS
+    </select>
+
+    <!-- 사용자 보안 설정 등록 -->
+    <insert id="insertSecurity" parameterType="egovframework.com.primx.fun.cmm.service.SecurityVO">
+        INSERT INTO COMTNEMPLYRSCRTYESTBS (SCRTY_DTRMN_TRGET_ID, MBER_TY_CODE, AUTHOR_CODE)
+        VALUES (#{securityTargetId}, #{memberTypeCode}, #{authorCode})
+    </insert>
+
+    <!-- 사용자 보안 설정 수정 -->
+    <update id="updateSecurity" parameterType="egovframework.com.primx.fun.cmm.service.SecurityVO">
+        UPDATE COMTNEMPLYRSCRTYESTBS
+        SET MBER_TY_CODE = #{memberTypeCode}, AUTHOR_CODE = #{authorCode}
+        WHERE SCRTY_DTRMN_TRGET_ID = #{securityTargetId}
+    </update>
+
+    <!-- 사용자 보안 설정 삭제 -->
+    <delete id="deleteSecurity" parameterType="String">
+        DELETE FROM COMTNEMPLYRSCRTYESTBS WHERE SCRTY_DTRMN_TRGET_ID = #{securityTargetId}
+    </delete>
+
+    <!-- 사용자 롤 업데이트 -->
+    <update id="updateUserAuthorCode" parameterType="map">
+        UPDATE COMTNEMPLYRSCRTYESTBS
+        SET AUTHOR_CODE = #{userRole}
+        WHERE SCRTY_DTRMN_TRGET_ID = #{esntlId}
+    </update>
+
+</mapper> 

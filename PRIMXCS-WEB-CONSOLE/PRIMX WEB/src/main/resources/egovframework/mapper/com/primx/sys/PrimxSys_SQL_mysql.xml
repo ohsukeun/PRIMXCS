@@ -1,0 +1,1043 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  수정일                   수정자            수정내용
+  =========     =======    =================================================
+  2011.08.26   	서준식            SSO 로그인을 위한 쿼리 추가
+  2011.09.27    서준식            컬럼 변경 SUB_DN 을  CRTFC_DN_VALUE 로 변경
+  2011.09.28    서준식            컬럼 변경 entrprsmber_id 을  ENTRPRS_MBER_ID 로 변경
+  2020.07.06    신용호            비밀번호 만료여부 조회
+  2021.05.30    정진오            디지털원패스 로그인을 위한 쿼리 추가
+-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="systemDAO">
+
+    <!-- 마지막 부서 코드 조회 -->
+    <select id="selectLastDeptCode" parameterType="map" resultType="string">
+        SELECT DEPT_ID
+        FROM COMTNDEPTINFOMGR
+        WHERE DEPT_ID LIKE CONCAT(#{prefix}, DATE_FORMAT(UTC_TIMESTAMP(), '%Y%m%d'), '%')
+        ORDER BY DEPT_ID DESC
+        LIMIT 1
+    </select>
+
+    <!-- 시스템 현황 전체 조회 -->
+    <select id="selectListSystemStatusInfo" parameterType="egovframework.com.primx.fun.sys.service.SystemStatusSearchVO" resultType="egovframework.com.primx.fun.sys.service.SystemStatusResultDTO">
+		SELECT * FROM (
+			SELECT
+				tsm.C_SEQ_NO AS systemId
+				, tsm.C_AGENT_ID AS agentId
+				, tsm.C_COMPUTER_NAME AS computerName
+				, (
+					SELECT
+						GROUP_CONCAT(tp.policy_code, '||', tp.policy_name, '||', tp2.id ,'||',tp2.product_name)
+					FROM
+						T_POLICY_SYSTEM_MAP tpsm
+						LEFT JOIN T_POLICY tp ON tp.policy_code = tpsm.policy_code
+						LEFT JOIN T_PRODUCTS tp2 ON tp2.id = tp.product_id
+					WHERE
+						tpsm.C_AGENT_ID = tsm.C_AGENT_ID 
+				) AS policys
+				, (
+					SELECT
+						GROUP_CONCAT(tapm.C_AGENT_POLICY_CODE, '||', tapm.C_POLICY_NAME, '||', tapm.C_POLICY_ID  )
+					FROM
+						T_AGENT_POLICY_SYSTEM_MATCH tapsm
+						LEFT JOIN T_AGENT_POLICY_MASTER tapm ON tapm.C_AGENT_POLICY_CODE = tapsm.C_AGENT_POLICY_CODE
+					WHERE
+						tapsm.C_AGENT_ID = tsm.C_AGENT_ID 
+				) AS agentPolicys
+				, c.USER_NM AS userNm
+				, tsm.C_COMMON_SYSTEM_YN AS commonSystemYn
+				, c2.DEPT_NAME AS deptName
+				, tsm.C_WIN_VERSION_STRING AS winVersionString
+				, tsm.C_AGENT_VERSION AS agentVersion
+				, tapm.C_POLICY_NAME AS agentPolicyName
+				, tsm.C_INSERT_DATE AS insertDate
+				, tsm.C_LAST_KA_DATE AS lastKaDate
+				, tusm.C_SEQ_NO AS userSystemMatchSeqNo
+				, tapm.C_DEFAULT_POLICY_YN AS defaultPolicyYn
+				, tapm.C_AGENT_POLICY_CODE AS agentPolicyCode
+				, c.COMPANY_ID AS companyId
+			FROM
+				T_SYSTEM_MASTER tsm
+				LEFT JOIN T_USER_SYSTEM_MATCH tusm ON tusm.C_AGENT_ID = tsm.C_AGENT_ID
+				LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tusm.C_USER_ID 
+				LEFT JOIN COMTNDEPTINFOMGR c2 ON c2.DEPT_ID = c.ORGNZT_ID
+				LEFT JOIN T_AGENT_POLICY_SYSTEM_MATCH tapsm ON tapsm.C_AGENT_ID = tsm.C_AGENT_ID 
+				LEFT JOIN T_AGENT_POLICY_MASTER tapm ON tapm.C_AGENT_POLICY_CODE = tapsm.C_AGENT_POLICY_CODE
+		    <where>
+				AND tsm.C_USE_YN = 'Y'
+
+		        <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
+		        AND tsm.C_INSERT_DATE BETWEEN #{startDt } AND #{endDt }
+		        </if>
+		        <if test="commonSystemYn != null and commonSystemYn != ''">
+		        AND tsm.C_COMMON_SYSTEM_YN = #{commonSystemYn }
+		        </if>
+		        <if test="agentPolicyCode != null and agentPolicyCode != ''">
+		        AND tapm.C_AGENT_POLICY_CODE = #{agentPolicyCode }
+		        </if>
+		        <if test="lastKaDateType != null and lastKaDateType != ''">
+		        	<choose>
+		        		<when test='lastKaDateType == "6M"'>
+		        			AND tsm.C_LAST_KA_DATE <![CDATA[ < ]]> DATE_SUB(UTC_TIMESTAMP(), INTERVAL 6 MONTH)
+		        		</when>
+		        		<when test='lastKaDateType == "3M"'>
+		        			AND tsm.C_LAST_KA_DATE <![CDATA[ < ]]> DATE_SUB(UTC_TIMESTAMP(), INTERVAL 3 MONTH)
+		        		</when>
+		        		<when test='lastKaDateType == "1M"'>
+		        			AND tsm.C_LAST_KA_DATE <![CDATA[ < ]]> DATE_SUB(UTC_TIMESTAMP(), INTERVAL 1 MONTH)
+		        		</when>
+		        		<otherwise>
+		        			AND tsm.C_LAST_KA_DATE <![CDATA[ < ]]> DATE_SUB(UTC_TIMESTAMP(), INTERVAL 1 WEEK)
+		        		</otherwise>
+		        	</choose>
+		        </if>
+				<if test="searchWord != null and searchWord != ''">
+					<choose>
+						<when test='searchType == "all"'>
+						AND (c.USER_NM LIKE CONCAT('%', #{searchWord }, '%') OR
+						tsm.C_COMPUTER_NAME LIKE CONCAT('%', #{searchWord }, '%') OR
+						c2.DEPT_NAME LIKE CONCAT('%', #{searchWord }, '%'))
+						</when>
+						<when test='searchType == "user"'>
+						AND c.USER_NM LIKE CONCAT('%', #{searchWord }, '%')
+						</when>
+						<when test='searchType == "computer"'>
+						AND tsm.C_COMPUTER_NAME LIKE CONCAT('%', #{searchWord }, '%')
+						</when>
+						<when test='searchType == "dept"'>
+						AND c2.DEPT_NAME LIKE CONCAT('%', #{searchWord }, '%')
+						</when>
+					</choose>
+				</if>
+		    </where>
+	    ) T
+	    <where>
+			<if test='productName != null and productName != ""'>
+			AND T.policys LIKE CONCAT('%', #{productName })
+			</if>
+	    </where>
+		ORDER BY T.lastKaDate DESC
+   		LIMIT #{start}, #{recordCountPerPage}
+    </select>
+
+    <!-- 시스템 현황 갯수 조회 -->
+    <select id="selectSystemStatusInfoCnt" parameterType="egovframework.com.primx.fun.sys.service.SystemStatusSearchVO" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM (
+			SELECT
+				tsm.C_SEQ_NO AS systemId
+				, tsm.C_AGENT_ID AS agentId
+				, tsm.C_COMPUTER_NAME AS computerName
+				, (
+					SELECT
+						GROUP_CONCAT(tp.policy_code, '||', tp.policy_name, '||', tp2.id ,'||',tp2.product_name)
+					FROM
+						T_POLICY_SYSTEM_MAP tpsm
+						LEFT JOIN T_POLICY tp ON tp.policy_code = tpsm.policy_code
+						LEFT JOIN T_PRODUCTS tp2 ON tp2.id = tp.product_id
+					WHERE
+						tpsm.C_AGENT_ID = tsm.C_AGENT_ID 
+				) AS policys
+				, c.USER_NM AS userNm
+				, tsm.C_COMMON_SYSTEM_YN AS commonSystemYn
+				, c2.DEPT_NAME AS deptName
+				, tsm.C_WIN_VERSION_STRING AS winVersionString
+				, tsm.C_AGENT_VERSION AS agentVersion
+				, tapm.C_POLICY_NAME AS agentPolicyName
+				, tsm.C_INSERT_DATE AS insertDate
+				, tsm.C_LAST_KA_DATE AS lastKaDate
+				, tusm.C_SEQ_NO AS userSystemMatchSeqNo
+			FROM
+				T_SYSTEM_MASTER tsm
+				LEFT JOIN T_USER_SYSTEM_MATCH tusm ON tusm.C_AGENT_ID = tsm.C_AGENT_ID
+				LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tusm.C_USER_ID 
+				LEFT JOIN COMTNDEPTINFOMGR c2 ON c2.DEPT_ID = c.ORGNZT_ID
+				LEFT JOIN T_AGENT_POLICY_SYSTEM_MATCH tapsm ON tapsm.C_AGENT_ID = tsm.C_AGENT_ID 
+				LEFT JOIN T_AGENT_POLICY_MASTER tapm ON tapm.C_AGENT_POLICY_CODE = tapsm.C_AGENT_POLICY_CODE
+		    <where>
+				AND tsm.C_USE_YN = 'Y'
+
+		        <if test="startDt != null and startDt != '' and endDt != null and endDt != ''">
+		        AND tsm.C_INSERT_DATE BETWEEN #{startDt } AND #{endDt }
+		        </if>
+		        <if test="commonSystemYn != null and commonSystemYn != ''">
+		        AND tsm.C_COMMON_SYSTEM_YN = #{commonSystemYn }
+		        </if>
+		        <if test="agentPolicyCode != null and agentPolicyCode != ''">
+		        AND tapm.C_AGENT_POLICY_CODE = #{agentPolicyCode }
+		        </if>
+		        <if test="lastKaDateType != null and lastKaDateType != ''">
+		        	<choose>
+		        		<when test='lastKaDateType == "6M"'>
+		        			AND tsm.C_LAST_KA_DATE <![CDATA[ < ]]> DATE_SUB(UTC_TIMESTAMP(), INTERVAL 6 MONTH)
+		        		</when>
+		        		<when test='lastKaDateType == "3M"'>
+		        			AND tsm.C_LAST_KA_DATE <![CDATA[ < ]]> DATE_SUB(UTC_TIMESTAMP(), INTERVAL 3 MONTH)
+		        		</when>
+		        		<when test='lastKaDateType == "1M"'>
+		        			AND tsm.C_LAST_KA_DATE <![CDATA[ < ]]> DATE_SUB(UTC_TIMESTAMP(), INTERVAL 1 MONTH)
+		        		</when>
+		        		<otherwise>
+		        			AND tsm.C_LAST_KA_DATE <![CDATA[ < ]]> DATE_SUB(UTC_TIMESTAMP(), INTERVAL 1 WEEK)
+		        		</otherwise>
+		        	</choose>
+		        </if>
+				<if test="searchWord != null and searchWord != ''">
+					<choose>
+						<when test='searchType == "all"'>
+						AND (c.USER_NM LIKE CONCAT('%', #{searchWord }, '%') OR
+						tsm.C_COMPUTER_NAME LIKE CONCAT('%', #{searchWord }, '%') OR
+						c2.DEPT_NAME LIKE CONCAT('%', #{searchWord }, '%'))
+						</when>
+						<when test='searchType == "user"'>
+						AND c.USER_NM LIKE CONCAT('%', #{searchWord }, '%')
+						</when>
+						<when test='searchType == "computer"'>
+						AND tsm.C_COMPUTER_NAME LIKE CONCAT('%', #{searchWord }, '%')
+						</when>
+						<when test='searchType == "dept"'>
+						AND c2.DEPT_NAME LIKE CONCAT('%', #{searchWord }, '%')
+						</when>
+					</choose>
+				</if>
+		    </where>
+		) T
+	    <where>
+			<if test='productName != null and productName != ""'>
+			AND T.policys LIKE CONCAT('%', #{productName })
+			</if>
+	    </where>
+    </select>
+
+    <!-- 시스템 현황 정보 조회 -->
+    <select id="selectSystemStatusInfo" parameterType="Integer" resultType="egovframework.com.primx.fun.sys.service.SystemStatusResultDTO">
+		SELECT
+			tsm.C_SEQ_NO AS systemId
+			, tsm.C_AGENT_ID AS agentId
+			, tsm.C_COMPUTER_NAME AS computerName
+			, tsm.C_COMMON_SYSTEM_YN AS commonSystemYn
+			, tsm.C_WORKGROUP_NAME AS workgroupName
+			, tsm.C_AGENT_VERSION AS agentVersion
+			, tapm.C_POLICY_NAME AS agentPolicyName
+			, tsm.C_WIN_VERSION_STRING AS winVersionString
+			, tsm.C_UUID AS winUuid
+			, tsm.C_MAJOR_VERSION AS osMajorVersion
+			, tsm.C_BUILD_NUMBER AS osBuildNumber
+			, tsm.C_SERVICEPACK_MAJOR AS osServicepackMajor
+			, tsm.C_SERVICEPACK_MINOR AS osServicepackMinor
+			, tsm.C_INSERT_DATE AS insertDate
+			, tsm.C_LAST_KA_DATE AS lastKaDate
+			, c.USER_NM AS userNm
+		FROM
+			T_SYSTEM_MASTER tsm
+			LEFT JOIN T_USER_SYSTEM_MATCH tusm ON tusm.C_AGENT_ID = tsm.C_AGENT_ID
+			LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tusm.C_USER_ID
+			LEFT JOIN T_AGENT_POLICY_SYSTEM_MATCH tapsm ON tapsm.C_AGENT_ID = tsm.C_AGENT_ID 
+			LEFT JOIN T_AGENT_POLICY_MASTER tapm ON tapm.C_AGENT_POLICY_CODE = tapsm.C_AGENT_POLICY_CODE
+		WHERE
+			tsm.C_SEQ_NO = #{value }
+    </select>
+
+	<!-- 시스템 현황 정보 조회 -->
+	<select id="selectSystemStatusInfoById" parameterType="String" resultType="egovframework.com.primx.fun.sys.service.SystemStatusResultDTO">
+		SELECT
+			tsm.C_SEQ_NO AS systemId
+			, tsm.C_AGENT_ID AS agentId
+			, tsm.C_COMPUTER_NAME AS computerName
+			, tsm.C_COMMON_SYSTEM_YN AS commonSystemYn
+			, tsm.C_WORKGROUP_NAME AS workgroupName
+			, tsm.C_AGENT_VERSION AS agentVersion
+			, tapm.C_POLICY_NAME AS agentPolicyName
+			, tsm.C_WIN_VERSION_STRING AS winVersionString
+			, tsm.C_UUID AS winUuid
+			, tsm.C_MAJOR_VERSION AS osMajorVersion
+			, tsm.C_BUILD_NUMBER AS osBuildNumber
+			, tsm.C_SERVICEPACK_MAJOR AS osServicepackMajor
+			, tsm.C_SERVICEPACK_MINOR AS osServicepackMinor
+			, tsm.C_INSERT_DATE AS insertDate
+			, tsm.C_LAST_KA_DATE AS lastKaDate
+			, c.USER_NM AS userNm
+		FROM
+			T_SYSTEM_MASTER tsm
+			LEFT JOIN T_USER_SYSTEM_MATCH tusm ON tusm.C_AGENT_ID = tsm.C_AGENT_ID
+			LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tusm.C_USER_ID
+			LEFT JOIN T_AGENT_POLICY_SYSTEM_MATCH tapsm ON tapsm.C_AGENT_ID = tsm.C_AGENT_ID 
+			LEFT JOIN T_AGENT_POLICY_MASTER tapm ON tapm.C_AGENT_POLICY_CODE = tapsm.C_AGENT_POLICY_CODE
+		WHERE
+			c.EMPLYR_ID = #{emplyrId}
+		limit 1
+	</select>
+
+
+    <!-- Disk 정보 조회 -->
+    <select id="selectListDiskInfo" parameterType="egovframework.com.primx.fun.sys.service.SystemStatusResultDTO" resultType="egovframework.com.primx.fun.sys.service.DiskInfoVO">
+		SELECT
+			tdi.C_DISK_TYPE AS diskType
+			, tdi.C_DISK_NAME AS diskName
+			, tdi.C_VOLUMN_NAME AS volumnName
+			, tdi.C_FILE_SYSTEM_NAME AS fileSystemName
+			, tdi.C_TOTAL_SIZE AS totalSize
+			, tdi.C_FREE_SIZE AS freeSize
+		FROM
+			T_DISK_INFO tdi
+		WHERE
+			tdi.C_AGENT_ID = #{agentId }
+    </select>
+
+    <!-- NIC 정보 조회 -->
+    <select id="selectListNicInfo" parameterType="egovframework.com.primx.fun.sys.service.SystemStatusResultDTO" resultType="egovframework.com.primx.fun.pol.service.NicInfoVO">
+		SELECT 
+			tni.C_IP AS ip
+			, tni.C_MAC AS mac
+			, tni.C_GATEWAY AS gateway
+			, tni.C_DNS AS dns
+			, tni.C_DHCP_SERVER AS dhcpServer
+			, tni.C_NAME AS name
+		FROM 
+			T_NIC_INFO tni 
+		WHERE 
+			tni.C_AGENT_ID = #{agentId }
+    </select>
+
+    <!-- 설치제품 정보 조회 -->
+    <select id="selectListPrimxSetupInfo" parameterType="egovframework.com.primx.fun.sys.service.SystemStatusResultDTO" resultType="egovframework.com.primx.fun.sys.service.PrimxSetupInfoDTO">
+		SELECT
+			tpsi.C_PRODUCT_TYPE AS productType
+			, tp.product_name    AS productName
+			, tpsi.C_PRODUCT_VERSION AS productVersion
+			, COALESCE(tpsi.C_UPDATE_DATE, '') AS updateDate
+			, CASE
+				WHEN tp.id = 4 THEN tapm.C_POLICY_NAME
+				WHEN tp.id = 1 THEN tpy.policy_name
+				ELSE ''
+				END AS policyName
+		FROM T_PRIMX_SETUP_INFO tpsi
+		LEFT JOIN T_PRODUCTS tp 
+				ON tp.id = tpsi.C_PRODUCT_TYPE
+		LEFT JOIN T_AGENT_POLICY_SYSTEM_MATCH tapsm 
+				ON (tp.id = 4 AND tapsm.C_AGENT_ID = tpsi.C_AGENT_ID)
+		LEFT JOIN T_AGENT_POLICY_MASTER tapm
+				ON (tp.id = 4 AND tapm.C_AGENT_POLICY_CODE = tapsm.C_AGENT_POLICY_CODE)
+		LEFT JOIN T_POLICY_SYSTEM_MAP tpsm
+				ON (tp.id = 1 AND tpsm.C_AGENT_ID = tpsi.C_AGENT_ID)
+		LEFT JOIN T_POLICY tpy
+				ON (tp.id = 1 AND tpy.policy_code = tpsm.policy_code)
+		WHERE 
+			tpsi.C_AGENT_ID = #{agentId }
+			AND (
+				(tp.id = 4 AND tapm.C_POLICY_NAME IS NOT NULL)
+				OR (tp.id = 1 AND tpy.policy_name IS NOT NULL)
+			)
+    </select>
+
+    <!-- 클라이언트 프로그램 목록 조회 -->
+    <select id="selectClientProgramList" resultType="egovframework.com.primx.fun.sys.service.ClientProgramDTO">
+        SELECT 
+			u.C_SEQ_NO AS seqNo,
+            p.product_name AS programName,
+            u.C_PROCESSOR_ARCHITECTURE AS processorArchitecture,
+            u.C_FILE_NAME AS fileName,
+            u.C_PRODUCT_VERSION AS productVersion,
+            u.C_INSERT_DATE AS insertDate,
+            u.C_UPDATE_DATE AS updateDate
+        FROM T_UPDATE_INFO u
+        JOIN T_PRODUCTS p ON u.C_PRODUCT_TYPE = p.id
+    </select>
+
+	<!-- id가 0보다 큰 것만 조회 -->
+    <!-- 제품 목록 조회 -->
+    <select id="selectProductList" resultType="string">
+        SELECT product_name FROM T_PRODUCTS where id <![CDATA[ > ]]> 0 ORDER BY id ASC
+    </select>
+
+    <!-- 정책 스크립트 목록 조회 -->
+    <select id="selectPolicyScriptList" parameterType="map" resultType="egovframework.com.primx.fun.sys.service.PolicyScriptDTO">
+        SELECT 
+			tep.id as id,
+            tp.product_name as productName,  
+            tep.script_name as scriptName, 
+            tf.file_original_nm as fileOriginalName
+        FROM T_ENV_POLICY tep 
+        JOIN T_FILE tf ON tep.file_id = tf.file_id 
+        JOIN T_PRODUCTS tp ON tep.product_id = tp.id 
+        WHERE 
+        	tp.product_name = #{productName}
+    </select>
+
+	<!-- 롤권한 목록 조회 -->
+	<select id="selectRoleList" resultType="egovframework.com.primx.fun.sys.service.RoleDTO">
+		SELECT AUTHOR_CODE as role, AUTHOR_DC as roleName FROM COMTNAUTHORINFO
+	</select>
+	
+	<update id="saveClientProgram" parameterType="egovframework.com.primx.fun.file.service.FileVO">
+		UPDATE T_UPDATE_INFO SET
+			C_UPDATE_FILE_HASH = #{updateFileHash},
+			C_FILE_NAME = #{updateFileName},
+			C_UPDATE_DATE = UTC_TIMESTAMP()
+		WHERE
+			C_SEQ_NO = #{seqNo}
+	</update>
+
+	<update id="updateClientProgram" parameterType="egovframework.com.primx.fun.sys.service.UpdateInfoVO">
+		UPDATE T_UPDATE_INFO SET
+			C_UPDATE_FILE_HASH = #{updateFileHash},
+			C_UPDATE_FILE_PATH = #{updateFilePath},
+			C_FILE_NAME = #{fileName},
+			C_PRODUCT_VERSION = #{productVersion},
+			C_UPDATE_DATE = UTC_TIMESTAMP()
+		WHERE
+			C_SEQ_NO = #{seqNo}
+	</update>
+<!-- 
+CREATE TABLE `T_PRODUCTS` (
+  `id` int(11) NOT NULL COMMENT '제폼 ID',
+  `product_name` varchar(255) NOT NULL COMMENT '제품명. Zonecentral, Orizon, Cryhod',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uidx_products` (`product_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='제품';
+-->
+	<!-- 제품 이름 조회 -->
+	<select id="selectProductNameLikeIgnoreCase" parameterType="string" resultType="egovframework.com.primx.fun.sys.service.ProductsVO">
+		SELECT 
+			id,
+			product_name as productName
+		FROM T_PRODUCTS 
+		WHERE product_name LIKE CONCAT('%', #{productName}, '%')
+	</select>
+
+
+<!-- 
+CREATE TABLE `T_UPDATE_INFO` (
+  `C_SEQ_NO` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '번호',
+  `C_PRODUCT_TYPE` tinyint(4) NOT NULL COMMENT '제품 종류 (0: 알 수 없음, 1: PRIMX ZONECENTRAL, 2: PRIMX ORIZON, 3: PRIMX CRYHOD, 4: PRIMX Agent)',
+  `C_FILE_NAME` varchar(255) DEFAULT NULL COMMENT '파일명',
+  `C_PROCESSOR_ARCHITECTURE` int(11) DEFAULT NULL COMMENT 'OS 프로세서 아키텍처 (0: 32BIT, 9: 64BIT)',
+  `C_PRODUCT_VERSION` varchar(20) DEFAULT NULL COMMENT '업데이트 제품 버전',
+  `C_UPDATE_FILE_HASH` varchar(200) DEFAULT NULL COMMENT '업데이트 파일 해시',
+  `C_UPDATE_FILE_PATH` varchar(600) DEFAULT NULL COMMENT '업데이트 파일 경로',
+  `C_INSERT_DATE` datetime DEFAULT NULL COMMENT '생성 일자',
+  `C_UPDATE_DATE` datetime DEFAULT NULL COMMENT '수정 일자',
+  PRIMARY KEY (`C_SEQ_NO`),
+  UNIQUE KEY `uidx_t_update_info` (`C_PRODUCT_TYPE`,`C_PROCESSOR_ARCHITECTURE`),
+  KEY `idx_t_update_info` (`C_PRODUCT_TYPE`,`C_PROCESSOR_ARCHITECTURE`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='PRIMX 제품 업데이트 정보 테이블';
+-->
+	<!-- 제품 타입 조회 -->
+	<select id="selectByProductType" parameterType="long" resultType="egovframework.com.primx.fun.sys.service.UpdateInfoVO">
+		SELECT 
+			C_SEQ_NO as seqNo,
+			C_PRODUCT_TYPE as productType, 
+			C_PROCESSOR_ARCHITECTURE as processorArchitecture,
+			C_FILE_NAME as fileName,
+			C_PRODUCT_VERSION as productVersion,
+			C_UPDATE_FILE_HASH as updateFileHash,
+			C_UPDATE_FILE_PATH as updateFilePath,
+			C_INSERT_DATE as insertDate,
+			C_UPDATE_DATE as updateDate
+		FROM T_UPDATE_INFO
+		WHERE C_PRODUCT_TYPE = #{productType}
+	</select>
+
+	<!-- insertUpdateInfo-->
+	<insert id="insertUpdateInfo" parameterType="egovframework.com.primx.fun.sys.service.UpdateInfoVO">
+		INSERT INTO T_UPDATE_INFO (C_PRODUCT_TYPE, C_PROCESSOR_ARCHITECTURE, C_FILE_NAME, C_PRODUCT_VERSION, C_INSERT_DATE)
+		VALUES (#{productType}, #{processorArchitecture}, #{fileName}, #{productVersion}, UTC_TIMESTAMP())
+	</insert>
+
+	<!-- updatePolicyScript-->
+	<update id="updatePolicyScript" parameterType="map">
+		UPDATE T_ENV_POLICY SET
+			file_id = #{fileId}
+		WHERE id = #{id}
+	</update>
+
+
+
+
+<!--
+
+CREATE TABLE `T_EX_SERVER_INFO` (
+  `C_SEQ_NO` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '번호',
+  `C_SERVER_NAME` varchar(1024) DEFAULT NULL COMMENT '외부서버 이름',
+  `C_SERVER_URL` varchar(1024) DEFAULT NULL COMMENT '업데이트 파일 다운로드 URL',
+  `C_INSERT_DATE` datetime DEFAULT NULL COMMENT '생성 일자',
+  `C_UPDATE_DATE` datetime DEFAULT NULL COMMENT '수정 일자',
+  PRIMARY KEY (`C_SEQ_NO`),
+  UNIQUE KEY `uidx_t_ex_server_info` (`C_SERVER_NAME`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='외부 다운로드 서버 정보 테이블';
+-->
+	<!-- 파일 다운로드 서버 목록 조회 -->
+	<select id="selectFileDownloadServerList" resultType="egovframework.com.primx.fun.sys.service.ExServerInfoVO">
+		SELECT 
+			C_SEQ_NO as seqNo,
+			C_SERVER_NAME as serverName,
+			C_SERVER_URL as serverUrl,
+			C_INSERT_DATE as insertDate,
+			C_UPDATE_DATE as updateDate
+		FROM T_EX_SERVER_INFO
+		ORDER BY C_SEQ_NO ASC
+	</select>
+
+	<!-- 파일 다운로드 서버 삭제 -->
+	<delete id="deleteFileDownloadServer" parameterType="int">
+		DELETE FROM T_EX_SERVER_INFO WHERE C_SEQ_NO = #{seqNo}
+	</delete>
+
+	<!-- 파일 다운로드 서버 추가 -->
+	<insert id="insertFileDownloadServer" parameterType="map">
+		INSERT INTO T_EX_SERVER_INFO (C_SERVER_NAME, C_SERVER_URL, C_INSERT_DATE) VALUES (#{serverName}, #{serverUrl}, UTC_TIMESTAMP())
+	</insert>
+
+
+<!--
+CREATE TABLE `T_UPDATE_SERVER` (
+  `C_SEQ_NO` int(11) NOT NULL AUTO_INCREMENT,
+  `C_PROGRAM` varchar(255) NOT NULL,
+  `C_VERSION` varchar(50) NOT NULL,
+  `C_INSTALL_DATE` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`C_SEQ_NO`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+-->
+	<!-- 서버 프로그램 목록 조회 -->
+	<select id="selectServerProgramList" resultType="egovframework.com.primx.fun.sys.service.ServerProgramDTO">
+		SELECT 
+			C_SEQ_NO as seqNo,
+			C_PROGRAM as program,
+			C_VERSION as version,
+			C_INSTALL_DATE as installDate
+		FROM T_UPDATE_SERVER
+		ORDER BY C_SEQ_NO ASC
+	</select>
+
+<!--
+CREATE TABLE `T_LICENSE_DETAIL` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '자동 생성',
+  `status_cd` varchar(255) DEFAULT NULL COMMENT '상태 코드. USING. 사용 여부',
+  `product_name` varchar(255) DEFAULT NULL COMMENT '제품명. 정책 제품. zonezentral,orizon,cryhod',
+  `quantity` int(11) DEFAULT NULL COMMENT '라이선스 개수',
+  `start_date` varchar(255) DEFAULT NULL COMMENT '라이선스 시작일',
+  `end_date` varchar(255) DEFAULT NULL COMMENT '라이선스 만료일',
+  `general_id` int(11) NOT NULL COMMENT '라이선스 general id',
+  `product_key` varchar(255) DEFAULT NULL COMMENT '라이선스 제품 키',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='라이선스 등록'; 
+-->
+	<!-- 라이선스 상세 목록 조회 -->
+	<select id="selectLicenseDetailList" resultType="egovframework.com.primx.fun.lic.service.LicenseDetailVO">
+		SELECT 
+			id,
+			status_cd as statusCd,
+			product_name as productName,
+			quantity,
+			start_date as startDate,
+			end_date as endDate,
+			general_id as generalId,
+			product_key as productKey
+		FROM T_LICENSE_DETAIL
+		ORDER BY id ASC
+	</select>
+
+	<!-- 비밀번호 설정 정보 조회 -->
+	<select id="selectPasswordSettingInfo" resultType="egovframework.com.primx.fun.sys.service.PasswordSettingVO">
+		SELECT 
+			id,
+			user_role as userRole,
+			pass_expire_days as passExpireDays,
+			pass_min_length as passMinLength,
+			pass_comb_uppercase as passCombUppercase,
+			pass_comb_digit as passCombDigit,
+			pass_comb_symbol as passCombSymbol,
+			pass_notify_before as passNotifyBefore
+		FROM T_ENV_VERIFICATION
+		WHERE user_role = #{userRole}
+		ORDER BY id ASC
+		LIMIT 1
+	</select>
+
+	<!-- 비밀번호 설정 정보 추가 -->
+	<insert id="insertPasswordSetting" parameterType="egovframework.com.primx.fun.sys.service.PasswordSettingVO">
+		INSERT INTO T_ENV_VERIFICATION (
+			user_role,
+			pass_expire_days, 
+			pass_min_length, 
+			pass_comb_uppercase, 
+			pass_comb_digit, 
+			pass_comb_symbol, 
+			pass_notify_before)
+		VALUES (
+			#{userRole}, 
+			#{passExpireDays}, 
+			#{passMinLength}, 
+			#{passCombUppercase}, 
+			#{passCombDigit}, 
+			#{passCombSymbol}, 
+			#{passNotifyBefore})
+	</insert>
+
+	<!-- 비밀번호 설정 정보 업데이트 -->
+	<update id="updatePasswordSetting" parameterType="egovframework.com.primx.fun.sys.service.PasswordSettingVO">
+		UPDATE T_ENV_VERIFICATION SET
+			pass_expire_days = #{passExpireDays},
+			pass_min_length = #{passMinLength},
+			pass_comb_uppercase = #{passCombUppercase},
+			pass_comb_digit = #{passCombDigit},
+			pass_comb_symbol = #{passCombSymbol},
+			pass_notify_before = #{passNotifyBefore}
+		WHERE user_role = #{userRole} AND id = #{id}
+	</update>
+
+	<!-- 이동파일 정책 설정 정보 조회 -->
+	<select id="selectFileMovePolicySettingInfo" resultType="egovframework.com.primx.fun.sys.service.FileMovePolicySettingVO">
+		SELECT 
+			C_FILE_ID as fileId,
+			C_FILE_TYPE as fileType,
+			C_EXPIRED_DATE as expiredDate,
+			C_DEC_COUNT as decCount,
+			C_CERT_URL as certUrl
+		FROM T_POLICY_FILE
+		WHERE C_FILE_TYPE = #{fileType}
+		ORDER BY C_FILE_ID ASC
+		LIMIT 1
+	</select>
+
+	<!-- 이동파일 정책 설정 정보 추가 -->
+	<insert id="insertFileMovePolicySetting" parameterType="egovframework.com.primx.fun.sys.service.FileMovePolicySettingVO">
+		INSERT INTO T_POLICY_FILE (C_FILE_TYPE, C_EXPIRED_DATE, C_DEC_COUNT, C_CERT_URL)
+		VALUES (#{fileType}, #{expiredDate}, #{decCount}, #{certUrl})
+	</insert>
+
+	<!-- 이동파일 정책 설정 정보 업데이트 -->
+	<update id="updateFileMovePolicySetting" parameterType="egovframework.com.primx.fun.sys.service.FileMovePolicySettingVO">
+		UPDATE T_POLICY_FILE SET
+			C_EXPIRED_DATE = #{expiredDate},
+			C_DEC_COUNT = #{decCount},
+			C_CERT_URL = #{certUrl}
+		WHERE C_FILE_TYPE = #{fileType} AND C_FILE_ID = #{fileId}
+	</update>
+
+	<!-- 시스템 타입 업데이트 -->
+	<update id="updateSystemType" parameterType="map">
+		UPDATE T_SYSTEM_MASTER SET
+			C_COMMON_SYSTEM_YN = #{commonSystemYn}
+		WHERE C_SEQ_NO = #{seqNo} AND C_AGENT_ID = #{agentId}
+	</update>
+
+<!--
+CREATE TABLE `T_USER_SYSTEM_MATCH` (
+  `C_SEQ_NO` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '번호',
+  `C_COMPANY_ID` varchar(50) NOT NULL COMMENT '회사 ID',
+  `C_USER_ID` varchar(50) NOT NULL COMMENT '사용자 ID',
+  `C_AGENT_ID` varchar(50) NOT NULL COMMENT 'Agent ID',
+  `C_USER_REG_DATE` datetime DEFAULT NULL COMMENT '사용자 등록 일자',
+  `C_MODIFIED_BY` varchar(50) DEFAULT NULL COMMENT '수정자',
+  `C_MODIFIED_IP` varchar(15) DEFAULT NULL COMMENT '수정 IP',
+  `C_INSERT_DATE` datetime DEFAULT NULL COMMENT '생성 일자',
+  `C_UPDATE_DATE` datetime DEFAULT NULL COMMENT '수정 일자',
+  PRIMARY KEY (`C_SEQ_NO`),
+  UNIQUE KEY `uidx_t_user_system_match` (`C_COMPANY_ID`,`C_USER_ID`,`C_AGENT_ID`),
+  KEY `idx_t_user_system_match` (`C_COMPANY_ID`,`C_USER_ID`,`C_AGENT_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='사용자 시스템 정보 매칭 테이블';
+-->
+	<!-- 사용자 시스템 정보 매칭 정보 추가 -->
+	<insert id="insertUserSystemMatch" parameterType="egovframework.com.primx.fun.sys.service.UserSystemMatchVO">
+		INSERT INTO T_USER_SYSTEM_MATCH (
+			C_COMPANY_ID, 
+			C_USER_ID, 
+			C_AGENT_ID, 
+			C_USER_REG_DATE, 
+			C_MODIFIED_BY, 
+			C_MODIFIED_IP, 
+			C_INSERT_DATE, 
+			C_UPDATE_DATE)
+		VALUES (
+			#{companyId}, 
+			#{userId}, 
+			#{agentId}, 
+			#{userRegDate}, 
+			#{modifiedBy}, 
+			#{modifiedIp}, 
+			UTC_TIMESTAMP(), 
+			UTC_TIMESTAMP()
+			)
+	</insert>	
+
+
+	<!-- 사용자 시스템 정보 매칭 정보 조회 -->
+	<select id="selectUserSystemMatchInfo" parameterType="int" resultType="egovframework.com.primx.fun.sys.service.UserSystemMatchVO">
+		SELECT 
+			C_SEQ_NO as seqNo,
+			C_COMPANY_ID as companyId,
+			C_USER_ID as userId,
+			C_AGENT_ID as agentId,
+			C_USER_REG_DATE as userRegDate,
+			C_MODIFIED_BY as modifiedBy,
+			C_MODIFIED_IP as modifiedIp,
+			C_INSERT_DATE as insertDate,
+			C_UPDATE_DATE as updateDate
+		FROM T_USER_SYSTEM_MATCH
+		WHERE C_SEQ_NO = #{userSystemMatchSeqNo}
+		ORDER BY C_SEQ_NO ASC
+		LIMIT 1
+	</select>
+
+	<!-- 사용자 시스템 정보 매칭 정보 삭제 -->
+	<delete id="deleteUserSystemMatch" parameterType="long">
+		DELETE FROM T_USER_SYSTEM_MATCH WHERE C_SEQ_NO = #{userSystemMatchSeqNo}
+	</delete>
+
+	<!-- 
+	CREATE TABLE `T_SYSTEM_MASTER` (
+  `C_SEQ_NO` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '번호',
+  `C_AGENT_ID` varchar(50) NOT NULL COMMENT 'Agent ID',
+  `C_WIN_VERSION_STRING` varchar(50) DEFAULT NULL COMMENT 'Windows 버전',
+  `C_UUID` varchar(50) DEFAULT NULL COMMENT 'Windows UUID',
+  `C_MAJOR_VERSION` int(11) DEFAULT NULL COMMENT 'OS Major 버전',
+  `C_MINOR_VERSION` int(11) DEFAULT NULL COMMENT 'OS Minor 버전',
+  `C_BUILD_NUMBER` varchar(50) DEFAULT NULL COMMENT 'OS Build 번호',
+  `C_SERVICEPACK_MAJOR` int(11) DEFAULT NULL COMMENT 'OS 서비스팩 Major 버전',
+  `C_SERVICEPACK_MINOR` int(11) DEFAULT NULL COMMENT 'OS 서비스팩 Minor 버전',
+  `C_PROCESSOR_ARCHITECTURE` int(11) DEFAULT NULL COMMENT 'OS 프로세서 아키텍처',
+  `C_RELEASE_ID` varchar(10) DEFAULT NULL COMMENT 'OS Releae ID',
+  `C_COMPUTER_NAME` varchar(260) DEFAULT NULL COMMENT '컴퓨터 이름',
+  `C_WORKGROUP_NAME` varchar(260) DEFAULT NULL COMMENT '작업그룹 이름',
+  `C_ENCRYPTION_KEY` varchar(255) DEFAULT NULL COMMENT '암호 키',
+  `C_AGENT_VERSION` varchar(15) DEFAULT NULL COMMENT 'Agent 버전',
+  `C_AGENT_STATE` tinyint(4) DEFAULT 0 COMMENT 'Agent 상태 (0: 알 수 없음, 1: Online, 2: Offline)',
+  `C_LAST_KA_DATE` datetime DEFAULT NULL COMMENT '마지막 Keep Alive 시간',
+  `C_COMMON_SYSTEM_YN` char(1) DEFAULT 'N' COMMENT '공용 PC 여부 (Y: 공용 PC, N:사용자 PC(Default))',
+  `C_USE_YN` char(1) DEFAULT 'Y' COMMENT '정보 사용 여부 (Y: 사용, N:미사용)',
+  `C_UNINSTALL_YN` char(1) DEFAULT 'N' COMMENT 'Agent 삭제 여부 (Y: 삭제대상, N:삭제안함)',
+  `C_MODIFIED_BY` varchar(50) DEFAULT NULL COMMENT '수정자 User ID',
+  `C_MODIFIED_IP` varchar(15) DEFAULT NULL COMMENT '수정자 IP',
+  `C_INSERT_DATE` datetime DEFAULT NULL COMMENT '생성 일자',
+  `C_UPDATE_DATE` datetime DEFAULT NULL COMMENT '수정 일자',
+  PRIMARY KEY (`C_SEQ_NO`),
+  UNIQUE KEY `uidx_t_system_master` (`C_AGENT_ID`),
+  KEY `idx_t_system_master` (`C_AGENT_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='Agent가 설처된 시스템 정보 테이블';
+o-->
+	<select id="selectSystemMasterInfo" parameterType="int" resultType="egovframework.com.primx.fun.sys.service.SystemMasterVO">
+		SELECT 
+			C_SEQ_NO as seqNo,
+			C_AGENT_ID as agentId,
+			C_WIN_VERSION_STRING as winVersionString,
+			C_UUID as uuid,
+			C_MAJOR_VERSION as majorVersion,
+			C_MINOR_VERSION as minorVersion,
+			C_BUILD_NUMBER as buildNumber,
+			C_SERVICEPACK_MAJOR as servicepackMajor,
+			C_SERVICEPACK_MINOR as servicepackMinor,
+			C_PROCESSOR_ARCHITECTURE as processorArchitecture,
+			C_RELEASE_ID as releaseId,
+			C_COMPUTER_NAME as computerName,
+			C_WORKGROUP_NAME as workgroupName,
+			C_ENCRYPTION_KEY as encryptionKey,
+			C_AGENT_VERSION as agentVersion,
+			C_AGENT_STATE as agentState,
+			C_LAST_KA_DATE as lastKaDate,
+			C_COMMON_SYSTEM_YN as commonSystemYn,
+			C_USE_YN as useYn,
+			C_UNINSTALL_YN as uninstallYn,
+			C_MODIFIED_BY as modifiedBy,
+			C_MODIFIED_IP as modifiedIp,
+			C_INSERT_DATE as insertDate,
+			C_UPDATE_DATE as updateDate
+		FROM T_SYSTEM_MASTER
+		WHERE C_SEQ_NO = #{seqNo}
+		ORDER BY C_SEQ_NO ASC
+		LIMIT 1
+	</select>
+
+	<!-- 사용자 시스템 정보 매칭 정보 목록 조회 -->
+	<select id="selectUserSystemMatchList" parameterType="String" resultType="egovframework.com.primx.fun.sys.service.UserSystemMatchVO">
+		SELECT 
+			C_SEQ_NO as seqNo,
+			C_COMPANY_ID as companyId,
+			C_USER_ID as userId,
+			C_AGENT_ID as agentId,
+			C_USER_REG_DATE as userRegDate,
+			C_MODIFIED_BY as modifiedBy,
+			C_MODIFIED_IP as modifiedIp,
+			C_INSERT_DATE as insertDate,
+			C_UPDATE_DATE as updateDate	
+		FROM T_USER_SYSTEM_MATCH
+		WHERE C_AGENT_ID = #{agentId}
+		ORDER BY C_SEQ_NO ASC
+	</select>
+
+	<!-- 시스템 마스터 정보 업데이트 -->
+	<update id="updateSystemMaster" parameterType="map">
+		UPDATE T_SYSTEM_MASTER SET
+			C_MODIFIED_BY = #{modifiedBy},
+			C_MODIFIED_IP = #{modifiedIp},
+			C_USE_YN = #{useYn},
+			C_UNINSTALL_YN = #{uninstallYn}
+		WHERE C_SEQ_NO = #{seqNo}
+	</update>	
+
+	<!-- 파일 존 목록 조회 -->
+	<select id="selectFileZoneList" resultType="egovframework.com.primx.fun.sys.service.FileZoneVO">
+		SELECT 
+			tfz.C_ZONE_ID as zoneId,
+			tfz.C_ZONE_NM as zoneNm,
+			tfz.C_PROTO as proto,
+			tfz.C_ZONE_DATA as zoneData
+		FROM T_FILE_ZONE tfz 
+		ORDER BY C_ZONE_ID ASC;
+	</select>
+
+	<!-- 파일 존 목록 조회 -->
+	<select id="selectFileZone" parameterType="int" resultType="egovframework.com.primx.fun.sys.service.FileZoneVO">
+		SELECT 
+			tfz.C_ZONE_ID as zoneId,
+			tfz.C_ZONE_NM as zoneNm,
+			tfz.C_PROTO as proto,
+			tfz.C_ZONE_DATA as zoneData
+		FROM T_ZONE_MAP tzm
+		LEFT JOIN T_FILE_ZONE tfz ON tzm.C_ZONEID = tfz.C_ZONE_ID
+		<where>
+			<if test="policyId > 0">
+				AND tzm.C_APID = #{policyId} 
+			</if>
+		</where>
+		ORDER BY C_ZONE_ID ASC;
+	</select>
+
+	<!-- 파일 존 맵 조회 -->
+	<select id="selectFileZoneMap" parameterType="int" resultType="egovframework.com.primx.fun.sys.service.FileZoneMapVO">
+		SELECT 
+			C_APID as apId,
+			C_ZONEID as zoneId
+		FROM T_ZONE_MAP
+		WHERE C_APID = #{policyId}
+		ORDER BY C_ZONE_ID ASC;
+	</select>
+
+	<!-- 파일 존 추가 -->
+	<insert id="insertFileZone" parameterType="egovframework.com.primx.fun.sys.service.FileZoneVO">
+		INSERT INTO T_FILE_ZONE (C_ZONE_NM, C_PROTO, C_ZONE_DATA) VALUES (#{zoneNm}, #{proto}, #{zoneData})
+	</insert>
+
+	<!-- 파일 존 업데이트 -->
+	<update id="updateFileZone" parameterType="egovframework.com.primx.fun.sys.service.FileZoneVO">
+		UPDATE T_FILE_ZONE SET C_ZONE_NM = #{zoneNm}, C_PROTO = #{proto}, C_ZONE_DATA = #{zoneData} WHERE C_ZONE_ID = #{zoneId}
+	</update>
+
+	<!-- 파일 존 삭제 -->
+	<delete id="deleteFileZone" parameterType="int">
+		DELETE FROM T_FILE_ZONE WHERE C_ZONE_ID = #{zoneId}
+	</delete>
+
+	<delete id="deleteFileZoneByAgentPolicyId" parameterType="int">
+		DELETE FROM T_ZONE_MAP WHERE C_APID = #{policyId}
+	</delete>
+
+    <select id="selectProductInfo" parameterType="String" resultType="egovframework.com.primx.fun.sys.service.ProductsVO">
+        SELECT 
+            id as id,
+            product_name as productName
+        FROM T_PRODUCTS
+        WHERE product_name = #{productName}
+    </select>
+
+	<!-- 시스템 현황 정책 목록 조회 -->
+	<select id="selectSystemStatusPolicyList" parameterType="egovframework.com.primx.fun.sys.service.SystemStatusSearchVO" resultType="egovframework.com.primx.fun.sys.service.SystemStatusResultDTO">
+		SELECT 
+			tsm.C_SEQ_NO AS systemId
+			, tsm.C_AGENT_ID AS agentId
+			, tsm.C_COMPUTER_NAME AS computerName
+			, (
+				SELECT
+					GROUP_CONCAT(tp.policy_code, '||', tp.policy_name, '||', tp2.id ,'||',tp2.product_name)
+				FROM
+					T_POLICY_SYSTEM_MAP tpsm
+					LEFT JOIN T_POLICY tp ON tp.policy_code = tpsm.policy_code
+					LEFT JOIN T_PRODUCTS tp2 ON tp2.id = tp.product_id
+				WHERE
+					tpsm.C_AGENT_ID = tsm.C_AGENT_ID 
+			) AS policys
+			, c.USER_NM AS userNm
+			, tsm.C_COMMON_SYSTEM_YN AS commonSystemYn
+			, c2.DEPT_NAME AS deptName
+			, tsm.C_WIN_VERSION_STRING AS winVersionString
+			, tsm.C_AGENT_VERSION AS agentVersion
+			, tp.policy_name AS policyName
+			, tp.policy_code AS policyCode
+			, tsm.C_INSERT_DATE AS insertDate
+			, tsm.C_LAST_KA_DATE AS lastKaDate
+			, tusm.C_SEQ_NO AS userSystemMatchSeqNo
+			, tp.is_default AS defaultPolicyYn
+			, tpsm.modified_date AS modifiedDate
+		FROM T_SYSTEM_MASTER tsm 
+		LEFT JOIN T_USER_SYSTEM_MATCH tusm ON tusm.C_AGENT_ID = tsm.C_AGENT_ID
+		LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tusm.C_USER_ID 
+		LEFT JOIN COMTNDEPTINFOMGR c2 ON c2.DEPT_ID = c.ORGNZT_ID
+		LEFT JOIN T_POLICY_SYSTEM_MAP tpsm ON tpsm.C_AGENT_ID = tsm.C_AGENT_ID
+		LEFT JOIN T_POLICY tp ON tp.policy_code = tpsm.policy_code
+		<where>
+			<if test="policyCode != null and policyCode != ''">
+				AND tp.policy_code = #{policyCode}
+			</if>
+			<if test="searchWord != null and searchWord != ''">
+				AND tsm.C_COMPUTER_NAME LIKE CONCAT('%', #{searchWord}, '%')
+			</if>
+		</where>
+		ORDER BY tsm.C_LAST_KA_DATE DESC
+		LIMIT #{start}, #{recordCountPerPage}
+	</select>
+
+	<!-- 시스템 현황 정책 목록 조회 -->
+	<select id="selectSystemStatusPolicyListCnt" parameterType="egovframework.com.primx.fun.sys.service.SystemStatusSearchVO" resultType="int">
+		SELECT 
+			COUNT(*)
+		FROM T_SYSTEM_MASTER tsm 
+		LEFT JOIN T_USER_SYSTEM_MATCH tusm ON tusm.C_AGENT_ID = tsm.C_AGENT_ID
+		LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tusm.C_USER_ID 
+		LEFT JOIN COMTNDEPTINFOMGR c2 ON c2.DEPT_ID = c.ORGNZT_ID
+		LEFT JOIN T_POLICY_SYSTEM_MAP tpsm ON tpsm.C_AGENT_ID = tsm.C_AGENT_ID
+		LEFT JOIN T_POLICY tp ON tp.policy_code = tpsm.policy_code
+		<where>
+			<if test="policyCode != null and policyCode != ''">
+				AND tp.policy_code = #{policyCode}
+			</if>
+			<if test="searchWord != null and searchWord != ''">
+				AND tsm.C_COMPUTER_NAME LIKE CONCAT('%', #{searchWord}, '%')
+			</if>
+		</where>
+	</select>
+
+	<!-- 서버 설정 정보 조회 -->
+	<select id="selectServerConfig" parameterType="String" resultType="egovframework.com.primx.fun.env.service.ServerConfigVO">
+		SELECT 
+			C_SEQ_NO as seqNo,
+			C_KEY_NAME as keyName,
+			C_VALUE_DATA as valueData,
+			C_INSERT_DATE as insertDate,
+			C_UPDATE_DATE as updateDate
+		FROM T_SERVER_CONFIG
+		WHERE C_KEY_NAME = #{keyName}
+		ORDER BY C_SEQ_NO ASC
+		LIMIT 1
+	</select>
+	
+	<!-- 서버 설정 정보 추가 -->
+	<insert id="insertServerConfig" parameterType="egovframework.com.primx.fun.env.service.ServerConfigVO">
+		INSERT INTO T_SERVER_CONFIG (
+			C_KEY_NAME, C_VALUE_DATA, C_INSERT_DATE, C_UPDATE_DATE) 
+		VALUES (#{keyName}, #{valueData}, UTC_TIMESTAMP(), UTC_TIMESTAMP())
+	</insert>
+	
+	<!-- 서버 설정 정보 업데이트 -->
+	<update id="updateServerConfig" parameterType="egovframework.com.primx.fun.env.service.ServerConfigVO">
+		UPDATE T_SERVER_CONFIG SET 
+			C_VALUE_DATA = #{valueData}, 
+			C_UPDATE_DATE = UTC_TIMESTAMP() 
+		WHERE C_KEY_NAME = #{keyName}
+	</update>
+	
+
+	<!-- selectUnusedSystemList -->
+	<select id="selectUnusedSystemList" parameterType="map" resultType="egovframework.com.primx.fun.sys.service.UnusedSystemDTO">
+		SELECT 
+			tsm.C_SEQ_NO as seqNo
+			, (select DEPT_NAME FROM COMTNDEPTINFOMGR WHERE DEPT_ID = c2.COMPANY_ID ) as companyName
+			, c2.DEPT_NAME as deptName
+			, c.USER_NM as userNm
+			, tsm.C_LAST_KA_DATE as lastKaDate
+		from T_SYSTEM_MASTER tsm
+		LEFT JOIN T_USER_SYSTEM_MATCH tusm ON tusm.C_AGENT_ID = tsm.C_AGENT_ID
+		LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tusm.C_USER_ID 
+		LEFT JOIN COMTNDEPTINFOMGR c2 ON c2.DEPT_ID = c.ORGNZT_ID
+		WHERE 
+			c.EMPLYR_ID is not null 
+			AND c.USE_YN = 'Y'
+			AND tsm.C_LAST_KA_DATE <![CDATA[ < ]]> DATE_SUB(
+    			CONVERT_TZ(CONCAT(DATE(UTC_TIMESTAMP()), ' ', #{time}), '+09:00', '+00:00'),
+    			INTERVAL #{term} DAY
+			)
+		ORDER BY tsm.C_SEQ_NO ASC
+		LIMIT #{start}, #{recordCountPerPage}
+	</select>
+
+	<!-- selectUnusedSystemListCnt -->
+	<select id="selectUnusedSystemListCnt" parameterType="map" resultType="int">
+		SELECT 
+			COUNT(*)
+		FROM T_SYSTEM_MASTER tsm
+		LEFT JOIN T_USER_SYSTEM_MATCH tusm ON tusm.C_AGENT_ID = tsm.C_AGENT_ID
+		LEFT JOIN COMTNEMPLYRINFO c ON c.EMPLYR_ID = tusm.C_USER_ID 
+		LEFT JOIN COMTNDEPTINFOMGR c2 ON c2.DEPT_ID = c.ORGNZT_ID
+		WHERE 
+			c.EMPLYR_ID is not null 
+			AND c.USE_YN = 'Y'
+			AND tsm.C_LAST_KA_DATE < DATE_SUB(
+    			CONVERT_TZ(CONCAT(DATE(UTC_TIMESTAMP()), ' ', #{time}), '+09:00', '+00:00'),
+    			INTERVAL #{term} DAY
+			)
+	</select>
+
+	<!-- selectCommonSystemList -->
+		<select id="selectCommonSystemList" resultType="string">
+		SELECT 
+		C_COMMON_SYSTEM_YN
+		FROM T_SYSTEM_MASTER
+		WHERE C_USE_YN = 'Y';
+	</select>
+
+	
+	<!-- selectCommonSystemList -->
+	<select id="selectSystemStat" resultType="map">
+		SELECT cpu_stat, mem_stat, mem_total, disk_stat, disk_total
+		FROM T_SYSTEM_STAT
+		WHERE create_date >= DATE_SUB(CONVERT_TZ(NOW(), '+00:00', '+09:00'), INTERVAL 1 MINUTE)
+		ORDER BY create_date DESC
+		LIMIT 1;
+	</select>
+
+
+	<!-- selectRequestList-->
+		<select id="selectRequestList" resultType="string">
+		SELECT 
+    	REQUEST_APPROVAL_CODE
+		FROM T_REQUEST
+		WHERE created_date >= DATE_SUB(CONVERT_TZ(NOW(), '+00:00', '+09:00'), INTERVAL 1 DAY);
+	</select>
+
+	<!-- selectApprovalList-->
+		<select id="selectApprovalList" resultType="string">
+		SELECT result_cd
+		FROM T_REQUEST
+		WHERE NOT result_cd = ''
+		AND CREATED_DATE >= DATE_SUB(CONVERT_TZ(NOW(), '+00:00', '+09:00'), INTERVAL 1 DAY);
+	</select>
+
+	<!-- selectLogFilterList -->
+	<select id="selectLogFilterList" parameterType="String" resultType="String">
+		SELECT 
+			LOG_CODE
+		FROM T_LOG_FILTER
+		WHERE USER_ID = #{userId}
+	</select>
+
+	<!-- insertLogFilter -->
+	<insert id="insertLogFilter" parameterType="map">
+		INSERT INTO T_LOG_FILTER (
+			USER_ID,
+			LOG_CODE
+		) VALUES (
+			#{userId},
+			#{logCode}
+		)
+	</insert>
+
+	<!-- deleteLogFilter -->
+	<delete id="deleteLogFilter" parameterType="map">
+		DELETE FROM T_LOG_FILTER
+		WHERE USER_ID = #{userId}
+		AND LOG_CODE = #{logCode}
+	</delete>
+</mapper>

@@ -1,0 +1,39 @@
+{
+  "menu": {
+    "csv": "CSV",
+    "pdf": "PDF",
+    "print": "인쇄",
+    "create_request": "신청서 작성",
+    "agentpolicy": "Agent정책",
+    "create_productpolicy": "제품정책 생성",
+    "create_manager": "관리자 생성",
+    "user": "사용자",
+    "approval": "결재",
+    "create": "생성",
+    "update": "업데이트",
+    "modify": "수정",
+    "delete": "삭제",
+    "manageloginfo": "운영 로그 정보",
+    "productloginfo": "제품 로그 정보",
+    "systeminfo": "시스템 정보",
+    "movefileinfo": "이동파일 정보"
+  },
+  "profilemenu": {
+    "title": "프로파일",
+    "profile": "프로파일",
+    "logout": "로그아웃"
+  },
+  "languagemenu": {
+    "title": "언어",
+    "en": "English",
+    "ko": "한글"
+  },
+  "gridmenu": {
+    "title": "Grid",
+    "sortbyasc": "오름차순 정렬",
+    "sortbydesc": "내림차순 정렬",
+    "unsort": "정렬 해제",
+    "filter": "필터",
+    "managecolumns": "컬럼 관리"
+  }
+}

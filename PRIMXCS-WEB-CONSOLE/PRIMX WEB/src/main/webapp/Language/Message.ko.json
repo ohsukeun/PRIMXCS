@@ -1,0 +1,11 @@
+{
+  "message": {
+    "login":
+    {"logout": {"title": "로그아웃", "message": "로그아웃 하시겠습니까?"},
+    "password": {"title": "passowrdchange", "message": "패스워드를 변경할 수 있습니다."}},
+    "select": 
+    {"select":{"title": "선택", "message": "선택해 주세요"},
+    "user":{"title": "사용자 선택", "message": "사용자를 선택해 주세요"},
+    "department":{"title": "부서 선택", "message": "부서를 선택해 주세요"}}
+  }
+}

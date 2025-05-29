@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userDAO">
+    
+    <select id="countByUserId" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM COMTNEMPLYRINFO
+        WHERE EMPLYR_ID = #{userId}
+    </select>
+    
+    <select id="countByRequestUserId" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM T_REQUEST_USER_APPROVAL
+        WHERE EMPLYR_ID = #{userId}
+    </select>
+
+    <select id="countByMail" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM COMTNEMPLYRINFO
+        WHERE EMAIL_ADRES = #{mail}
+    </select>
+
+    <select id="countByRequestMail" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM T_REQUEST_USER_APPROVAL
+        WHERE EMAIL_ADRES = #{mail}
+    </select>
+
+    <insert id="insertUser" parameterType="egovframework.com.primx.fun.usr.service.UserRegistrationDTO">
+        INSERT INTO COMTNEMPLYRINFO (ESNTL_ID, EMPLYR_ID, PASSWORD, USER_NM, EMAIL_ADRES, ORGNZT_ID, COMPANY_ID, USER_ROLE, EMPLYR_STTUS_CODE, INSERT_DATE, EXPIRED_DATE, PWD_EXPIRED_DATE)
+        VALUES (#{uniqId}, #{emplyrId}, #{password}, #{userName}, #{email}, #{deptId}, #{companyId}, #{userRole}, 'P', UTC_TIMESTAMP(), 
+            <if test="usePeriod == 0">
+                '9999-12-31'
+            </if>
+            <if test="usePeriod == 1">
+                #{expiredDate}
+            </if>
+            , DATE_ADD(UTC_TIMESTAMP(), INTERVAL 90 DAY)
+        )
+    </insert>
+
+    <insert id="insertUserIp" parameterType="map">
+        INSERT INTO COMTNEMMGRINFO (MANAGER_ID, ALLOWED_IP, ACCOUNT_EXPIRY_DATE, INSERT_DATE)
+        VALUES (#{userId}, #{ip}, 
+            <if test="usePeriod == 0">
+                '9999-12-31' 
+            </if>
+            <if test="usePeriod == 1">
+                #{expiredDate} 
+            </if>, 
+            UTC_TIMESTAMP())
+    </insert>
+
+    <select id="countUserIp" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM COMTNEMMGRINFO
+        WHERE MANAGER_ID = #{userId} AND ALLOWED_IP = #{ip}
+    </select>
+
+    <update id="updateUserStatus" parameterType="map">
+        UPDATE COMTNEMPLYRINFO
+        SET USE_YN = 'N', 
+            UPDATE_DATE = UTC_TIMESTAMP()
+        WHERE EMPLYR_ID = #{emplyrId} AND INSERTED_BY_HR_YN = 'N'
+    </update>
+
+    <!-- 사용자 IP 리스트 조회 -->
+    <select id="selectUserIpList" parameterType="String" resultType="egovframework.com.primx.fun.usr.service.IpInfoDTO">
+        SELECT 
+            ALLOWED_IP as allowedIp,
+            ACCOUNT_EXPIRY_DATE as accountExpiryDate
+        FROM COMTNEMMGRINFO
+        WHERE MANAGER_ID = #{emplyrId}
+    </select>
+
+    <!-- 사용자 상세 정보 조회 -->
+    <select id="selectUserDetails" parameterType="String" resultType="egovframework.com.primx.fun.usr.service.UserRegistrationDTO">
+        SELECT 
+            cei.EMPLYR_ID as emplyrId,
+            cei.USER_NM as userName,
+            cei.EMAIL_ADRES as email,
+            cei.USE_YN as useYn,
+            cei.USER_ROLE as userRole,
+            cdi.DEPT_ID as deptId,
+            cdi.COMPANY_ID as companyId,
+            cdi.DEPT_NAME as deptName,
+            cei.EXPIRED_DATE as expiredDate,
+            cei.PWD_EXPIRED_DATE as pwdExpiredDate,
+            cei.PWD_CHANGED as pwdChanged
+        FROM COMTNEMPLYRINFO cei
+        LEFT JOIN COMTNDEPTINFOMGR cdi ON cdi.DEPT_ID = cei.ORGNZT_ID
+        WHERE cei.EMPLYR_ID = #{emplyrId}
+    </select>
+
+    <delete id="deleteUserIp" parameterType="String">
+        DELETE FROM COMTNEMMGRINFO WHERE MANAGER_ID = #{userId}
+    </delete>
+
+    <update id="updateUser" parameterType="egovframework.com.primx.fun.usr.service.UserRegistrationDTO">
+        UPDATE COMTNEMPLYRINFO
+        SET 
+            USER_NM = #{userName}
+            , EMAIL_ADRES = #{email}
+            <if test="deptId != null and deptId != ''"> 
+                , ORGNZT_ID = #{deptId}
+            </if>
+            <if test="companyId != null and companyId != ''">
+                , COMPANY_ID = #{companyId}
+            </if>
+            <if test="userRole != null and userRole != ''">
+                , USER_ROLE = #{userRole}
+            </if>
+            <if test="usePeriod == 0">
+                , EXPIRED_DATE = '9999-12-31'
+            </if>
+            <if test="usePeriod == 1">
+                , EXPIRED_DATE = #{expiredDate}
+            </if>
+        WHERE EMPLYR_ID = #{emplyrId}
+    </update>
+
+    <update id="updatePassword" parameterType="map">
+        UPDATE COMTNEMPLYRINFO
+        SET PASSWORD = #{enNewPassword}, 
+        PWD_CHANGED = #{pwdChanged}, 
+        CHG_PWD_LAST_PNTTM = UTC_TIMESTAMP(), 
+        <if test="passExpireDays > 0">
+            PWD_EXPIRED_DATE = DATE_ADD(UTC_TIMESTAMP(), INTERVAL #{passExpireDays} DAY)
+        </if>
+        <if test="passExpireDays == 0">
+            PWD_EXPIRED_DATE = '9999-12-31'
+        </if>
+        WHERE EMPLYR_ID = #{emplyrId}
+    </update>   
+
+    <update id="updateUserExpiredDate" parameterType="map">
+        UPDATE COMTNEMPLYRINFO
+        SET EXPIRED_DATE = #{expiredDate}
+        WHERE EMPLYR_ID = #{emplyrId}
+    </update>
+
+    <select id="searchPassword" parameterType="map" resultType="String">
+        SELECT PASSWORD
+        FROM COMTNEMPLYRINFO
+        WHERE EMPLYR_ID = #{emplyrId} AND PASSWORD = #{enCurrentPassword}
+    </select>   
+    
+    <select id="selectUsersByDeptIds" parameterType="map" resultType="egovframework.com.primx.fun.usr.service.UserListDTO">
+        SELECT 
+            cei.EMPLYR_ID as emplyrId,
+            cca.AUTHOR_CODE as userRole,
+            cca.AUTHOR_DC as userRoleNm,
+            cei.USER_NM as userNm,
+            cei.EMAIL_ADRES as emailAdres,
+            cdi.DEPT_NAME as deptName,
+            cei.INSERTED_BY_HR_YN as insertByYn,
+            cei.USE_YN as userYn,
+            cei.PWD_CHANGED as pwdChanged,
+            cei.PWD_EXPIRED_DATE as pwdExpiredDate,
+            cei.EXPIRED_DATE as expiredDate,
+            cei.INSERT_DATE as insertDate
+        FROM COMTNEMPLYRINFO cei 
+        JOIN COMTNDEPTINFOMGR cdi 
+            ON cei.COMPANY_ID = cdi.COMPANY_ID 
+            AND cei.ORGNZT_ID = cdi.DEPT_ID
+        JOIN COMTNEMPLYRSCRTYESTBS cces
+            ON cei.ESNTL_ID = cces.SCRTY_DTRMN_TRGET_ID
+        JOIN COMTNAUTHORINFO cca
+            ON cces.AUTHOR_CODE = cca.AUTHOR_CODE
+        <where>
+            <if test="deptIds != null and deptIds.size() > 0">
+                AND cdi.DEPT_ID IN 
+                    <foreach item="deptId" collection="deptIds" open="(" separator="," close=")">
+                        #{deptId}
+                    </foreach>
+            </if>
+            <if test="userType != null and userType != ''">
+                AND UPPER(cca.AUTHOR_CODE) LIKE CONCAT('%', UPPER(#{userType}), '%')
+            </if>
+            <if test="syncType != null and syncType != ''">
+                AND UPPER(cei.INSERTED_BY_HR_YN) = UPPER(#{syncType})
+            </if>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                AND (
+                    cei.EMPLYR_ID LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR cei.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR cei.EMAIL_ADRES LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR cdi.DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                )
+            </if>
+        </where>
+        ORDER BY cei.EMPLYR_SEQ DESC
+
+        LIMIT #{start}, #{length}
+    </select>
+    
+
+    <select id="selectUsersByDeptIdsCnt" parameterType="map" resultType="int">
+        SELECT 
+            count(*)
+        FROM COMTNEMPLYRINFO cei 
+        JOIN COMTNDEPTINFOMGR cdi 
+            ON cei.COMPANY_ID = cdi.COMPANY_ID 
+            AND cei.ORGNZT_ID = cdi.DEPT_ID
+        JOIN COMTNEMPLYRSCRTYESTBS cces
+            ON cei.ESNTL_ID = cces.SCRTY_DTRMN_TRGET_ID
+        JOIN COMTNAUTHORINFO cca
+            ON cces.AUTHOR_CODE = cca.AUTHOR_CODE
+        <where>
+            <if test="deptIds != null and deptIds.size() > 0">
+                AND cdi.DEPT_ID IN 
+                    <foreach item="deptId" collection="deptIds" open="(" separator="," close=")">
+                        #{deptId}
+                    </foreach>
+            </if>
+            <if test="userType != null and userType != ''">
+                AND UPPER(cca.AUTHOR_CODE) LIKE CONCAT('%', UPPER(#{userType}), '%')
+            </if>
+            <if test="syncType != null and syncType != ''">
+                AND UPPER(cei.INSERTED_BY_HR_YN) = UPPER(#{syncType})
+            </if>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                AND (
+                    cei.EMPLYR_ID LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR cei.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR cei.EMAIL_ADRES LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR cdi.DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                )
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectSmartContractUserList" parameterType="map" resultType="egovframework.com.primx.fun.cmm.service.SmartContractVO">
+        SELECT
+            c.EMPLYR_ID as emplyrId
+            , c2.COMPANY_ID as companyId
+            , c2.DEPT_ID as deptId
+            , c2.DEPT_NAME as deptName
+            , c.USER_NM as userNm
+            , c.EMAIL_ADRES as emailAdres
+            , c.PHONE_NO as phoneNo
+            , tusm.C_AGENT_ID as agentId
+            , tni.C_IP as ip
+            , tni.C_MAC as mac
+        FROM COMTNEMPLYRINFO c 
+        LEFT JOIN COMTNDEPTINFOMGR c2 ON c.ORGNZT_ID = c2.DEPT_ID
+        JOIN COMTNEMPLYRSCRTYESTBS cces ON c.ESNTL_ID = cces.SCRTY_DTRMN_TRGET_ID
+        JOIN COMTNAUTHORINFO cca ON cces.AUTHOR_CODE = cca.AUTHOR_CODE
+        LEFT JOIN T_USER_SYSTEM_MATCH tusm ON c.EMPLYR_ID = tusm.C_USER_ID
+        LEFT JOIN T_NIC_INFO tni ON tusm.C_AGENT_ID = tni.C_AGENT_ID
+        WHERE tni.C_NAME = 'Realtek PCIe GbE Family Controller'
+            <if test="deptIds != null and deptIds.size() > 0">
+                AND c2.DEPT_ID IN 
+                    <foreach item="deptId" collection="deptIds" open="(" separator="," close=")">
+                        #{deptId}
+                    </foreach>
+            </if>
+            <if test="userType != null and userType != ''">
+                AND UPPER(cca.AUTHOR_CODE) LIKE CONCAT('%', UPPER(#{userType}), '%')
+            </if>
+            <if test="syncType != null and syncType != ''">
+                AND UPPER(c.INSERTED_BY_HR_YN) = UPPER(#{syncType})
+            </if>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                AND (
+                    c.EMPLYR_ID LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR c.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR c.EMAIL_ADRES LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR c2.DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                )
+            </if>
+            ORDER BY c.EMPLYR_SEQ DESC
+        LIMIT #{start}, #{length}
+    </select>
+
+    <select id="selectSmartContractUserListCnt" parameterType="map" resultType="int">
+        SELECT 
+            count(*)
+        FROM COMTNEMPLYRINFO c 
+        LEFT JOIN COMTNDEPTINFOMGR c2 ON c.ORGNZT_ID = c2.DEPT_ID 
+        JOIN COMTNEMPLYRSCRTYESTBS cces ON c.ESNTL_ID = cces.SCRTY_DTRMN_TRGET_ID
+        JOIN COMTNAUTHORINFO cca ON cces.AUTHOR_CODE = cca.AUTHOR_CODE
+        LEFT JOIN T_USER_SYSTEM_MATCH tusm ON c.EMPLYR_ID = tusm.C_USER_ID
+        LEFT JOIN T_NIC_INFO tni ON tusm.C_AGENT_ID = tni.C_AGENT_ID
+        WHERE tni.C_NAME = 'Realtek PCIe GbE Family Controller'
+            <if test="deptIds != null and deptIds.size() > 0">
+                AND c2.DEPT_ID IN 
+                    <foreach item="deptId" collection="deptIds" open="(" separator="," close=")">
+                        #{deptId}
+                    </foreach>
+            </if>
+            <if test="userType != null and userType != ''">
+                AND UPPER(cca.AUTHOR_CODE) LIKE CONCAT('%', UPPER(#{userType}), '%')
+            </if>
+            <if test="syncType != null and syncType != ''">
+                AND UPPER(c.INSERTED_BY_HR_YN) = UPPER(#{syncType})
+            </if>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                AND (
+                    c.EMPLYR_ID LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR c.USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR c.EMAIL_ADRES LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR c2.DEPT_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                )
+            </if>
+    </select>
+
+    <select id="selectEsntlId" parameterType="String" resultType="String">
+        SELECT ESNTL_ID
+        FROM COMTNEMPLYRINFO
+        WHERE EMPLYR_ID = #{emplyrId}
+    </select>
+
+    <select id="selectUserSeqById" parameterType="String" resultType="int">
+        SELECT EMPLYR_SEQ
+        FROM COMTNEMPLYRINFO
+        WHERE EMPLYR_ID = #{emplyrId}
+    </select>
+
+    <select id="checkUserUseYn" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM COMTNEMPLYRINFO
+        WHERE EMPLYR_ID = #{emplyrId} AND USE_YN = 'Y'
+    </select>
+
+    <!-- UTC_TIMESTAMP() 로부터 PWD_EXPIRED_DATE 까지 남은 일수 조회 -->
+    <select id="checkUserPasswordExpiredDate" parameterType="String" resultType="int">
+        SELECT COALESCE(DATEDIFF(PWD_EXPIRED_DATE, UTC_TIMESTAMP()), 0)
+        FROM COMTNEMPLYRINFO
+        WHERE EMPLYR_ID = #{emplyrId}
+    </select>
+
+    <!-- UTC_TIMESTAMP() 로부트 EXPIRED_DATE 까지 남은 일수 조회 (null 인 경우 9999-12-31 로 처리) -->
+    <select id="checkUserExpiredDate" parameterType="String" resultType="int">
+        SELECT COALESCE(DATEDIFF(
+            COALESCE(EXPIRED_DATE, '9999-12-31'), 
+            UTC_TIMESTAMP()
+        ), 0)
+        FROM COMTNEMPLYRINFO
+        WHERE EMPLYR_ID = #{emplyrId}
+    </select>
+
+</mapper>

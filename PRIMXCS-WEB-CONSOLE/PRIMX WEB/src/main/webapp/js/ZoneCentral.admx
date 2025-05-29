@@ -1,0 +1,2855 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<policyDefinitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" revision="1.0" schemaVersion="1.0" xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
+	<policyNamespaces>
+		<target prefix="ZoneCentral" namespace="PrimX.Policies.ZoneCentral"/>
+		<using prefix="primx" namespace="PrimX.Policies.PrimX"/>
+	</policyNamespaces>
+	<supersededAdm fileName="zc_policies_fra.adm"/>
+	<resources minRequiredRevision="1.0"/>
+	<supportedOn>
+		<definitions>
+			<definition name="SUPPORTED_WinVista" displayName="$(string.SUPPORTED_WinVista)"/>
+		</definitions>
+	</supportedOn>
+	<categories>
+		<category name="CatProduct" displayName="$(string.CatProduct)" explainText="$(string.CatProduct_Explain)">
+			<parentCategory ref="primx:PrimX"/>
+		</category>
+		<category name="CatAccessType" displayName="$(string.CatAccessType)" explainText="$(string.CatAccessType_Explain)">
+			<parentCategory ref="CatProduct"/>
+		</category>
+		<category name="CatOrganization" displayName="$(string.CatOrganization)" explainText="$(string.CatOrganization_Explain)">
+			<parentCategory ref="CatProduct"/>
+		</category>
+		<category name="CatPasswordRules" displayName="$(string.CatPasswordRules)" explainText="$(string.CatPasswordRules_Explain)">
+			<parentCategory ref="CatProduct"/>
+		</category>
+		<category name="CatZonePasswordQuality" displayName="$(string.CatZonePasswordQuality)" explainText="$(string.CatZonePasswordQuality_Explain)">
+			<parentCategory ref="CatPasswordRules"/>
+		</category>
+		<category name="CatZedPasswordQuality" displayName="$(string.CatZedPasswordQuality)" explainText="$(string.CatZedPasswordQuality_Explain)">
+			<parentCategory ref="CatPasswordRules"/>
+		</category>
+		<category name="CatKPWD" displayName="$(string.CatKPWD)" explainText="$(string.CatKPWD_Explain)">
+			<parentCategory ref="CatPasswordRules"/>
+		</category>
+		<category name="CatCertificateTrust" displayName="$(string.CatCertificateTrust)" explainText="$(string.CatCertificateTrust_Explain)">
+			<parentCategory ref="CatProduct"/>
+		</category>
+		<category name="CatUserInterface" displayName="$(string.CatUserInterface)" explainText="$(string.CatUserInterface_Explain)">
+			<parentCategory ref="CatProduct"/>
+		</category>
+		<category name="CatAdvanced" displayName="$(string.CatAdvanced)" explainText="$(string.CatAdvanced_Explain)">
+			<parentCategory ref="CatProduct"/>
+		</category>
+		<category name="CatAdminRights" displayName="$(string.CatAdminRights)" explainText="$(string.CatAdminRights_Explain)">
+			<parentCategory ref="CatAdvanced"/>
+		</category>
+		<category name="CatAdvUserInterfaces" displayName="$(string.CatAdvUserInterfaces)" explainText="$(string.CatAdvUserInterfaces_Explain)">
+			<parentCategory ref="CatAdvanced"/>
+		</category>
+		<category name="CatAdvOpenZone" displayName="$(string.CatAdvOpenZone)" explainText="$(string.CatAdvOpenZone_Explain)">
+			<parentCategory ref="CatAdvUserInterfaces"/>
+		</category>
+		<category name="CatAdvAccessResearch" displayName="$(string.CatAdvAccessResearch)" explainText="$(string.CatAdvAccessResearch_Explain)">
+			<parentCategory ref="CatAdvUserInterfaces"/>
+		</category>
+		<category name="CatSecurity" displayName="$(string.CatSecurity)" explainText="$(string.CatSecurity_Explain)">
+			<parentCategory ref="CatAdvanced"/>
+		</category>
+		<category name="CatWiping" displayName="$(string.CatWiping)" explainText="$(string.CatWiping_Explain)">
+			<parentCategory ref="CatSecurity"/>
+		</category>
+		<category name="CatEncryption" displayName="$(string.CatEncryption)" explainText="$(string.CatEncryption_Explain)">
+			<parentCategory ref="CatAdvanced"/>
+		</category>
+		<category name="CatEncryptionTemplates" displayName="$(string.CatEncryptionTemplates)" explainText="$(string.CatEncryptionTemplates_Explain)">
+			<parentCategory ref="CatEncryption"/>
+		</category>
+		<category name="CatCrypto" displayName="$(string.CatCrypto)" explainText="$(string.CatCrypto_Explain)">
+			<parentCategory ref="CatAdvanced"/>
+		</category>
+		<category name="CatEventLog" displayName="$(string.CatEventLog)" explainText="$(string.CatEventLog_Explain)">
+			<parentCategory ref="CatAdvanced"/>
+		</category>
+		<category name="CatCompatibility" displayName="$(string.CatCompatibility)" explainText="$(string.CatCompatibility_Explain)">
+			<parentCategory ref="CatAdvanced"/>
+		</category>
+		<category name="CatVolumes" displayName="$(string.CatVolumes)" explainText="$(string.CatVolumes_Explain)">
+			<parentCategory ref="CatCompatibility"/>
+		</category>
+		<category name="CatDeprecated" displayName="$(string.CatDeprecated)" explainText="$(string.CatDeprecated_Explain)">
+			<parentCategory ref="CatAdvanced"/>
+		</category>
+		<category name="CatZedMail" displayName="$(string.CatZedMail)" explainText="$(string.CatZedMail_Explain)">
+			<parentCategory ref="CatProduct"/>
+		</category>
+		<category name="CatZPDocLib" displayName="$(string.CatZPDocLib)" explainText="$(string.CatZPDocLib_Explain)">
+			<parentCategory ref="CatProduct"/>
+		</category>
+	</categories>
+	<policies>
+		<policy name="A-DisablePasswordAccess" displayName="$(string.DisablePasswordAccess)" explainText="$(string.DisablePasswordAccess_Explain)" class="Machine" presentation="$(presentation.DisablePasswordAccess)" valueName="DisablePasswordAccess" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatAccessType"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="B-DisablePasswordAccessZed" displayName="$(string.DisablePasswordAccessZed)" explainText="$(string.DisablePasswordAccessZed_Explain)" class="Machine" presentation="$(presentation.DisablePasswordAccessZed)" valueName="DisablePasswordAccessForZed" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatAccessType"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="C-DisableKeyFileAccess" displayName="$(string.DisableKeyFileAccess)" explainText="$(string.DisableKeyFileAccess_Explain)" class="Machine" presentation="$(presentation.DisableKeyFileAccess)" valueName="DisableKeyFileAccess" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatAccessType"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="D-DisableTokenAccess" displayName="$(string.DisableTokenAccess)" explainText="$(string.DisableTokenAccess_Explain)" class="Machine" presentation="$(presentation.DisableTokenAccess)" valueName="DisableTokenAccess" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatAccessType"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="E-DisableCspAccess" displayName="$(string.DisableCspAccess)" explainText="$(string.DisableCspAccess_Explain)" class="Machine" presentation="$(presentation.DisableCspAccess)" valueName="DisableCspAccess" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatAccessType"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="F-PasswordSso" displayName="$(string.PasswordSso)" explainText="$(string.PasswordSso_Explain)" class="Machine" presentation="$(presentation.PasswordSso)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAccessType"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="UseWindowsSsoLogin" valueName="UseWindowsSsoLogin">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+			</elements>
+		</policy>
+		<policy name="G-EnableX12" displayName="$(string.EnableX12)" explainText="$(string.EnableX12_Explain)" class="Machine" presentation="$(presentation.EnableX12)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAccessType"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="EnableX12" valueName="EnableX12">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<text id="X12Options" valueName="X12Options"/>
+			</elements>
+		</policy>
+		<policy name="H-EnableCredentialProvider" displayName="$(string.EnableCredentialProvider)" explainText="$(string.EnableCredentialProvider_Explain)" class="Machine" presentation="$(presentation.EnableCredentialProvider)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAccessType"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="EnableCredentialProvider" valueName="EnableCredentialProvider">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+			</elements>
+		</policy>
+		<policy name="I-ConfigCredentialProvider" displayName="$(string.ConfigCredentialProvider)" explainText="$(string.ConfigCredentialProvider_Explain)" class="Machine" presentation="$(presentation.ConfigCredentialProvider)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAccessType"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="ConfigCredentialProvider" key="Software\Policies\PrimX\ZONECENTRAL\Common\ConfigCredentialProvider" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="A-AccessFilesLocations" displayName="$(string.AccessFilesLocations)" explainText="$(string.AccessFilesLocations_Explain)" class="Machine" presentation="$(presentation.AccessFilesLocations)" key="Software\Policies\PrimX\ZONECENTRAL\Specials">
+			<parentCategory ref="CatOrganization"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="PersonalAccessFileLocation" valueName="PersonalAccessFileLocation" key="Software\Policies\PrimX\ZONECENTRAL\UserTools" required="true" expandable="true"/>
+				<text id="AccessFilesLocation" valueName="AccessFilesLocation" required="true" expandable="true"/>
+				<text id="AccessFilesCacheLocation" valueName="AccessFilesCacheLocation" required="true" expandable="true"/>
+			</elements>
+		</policy>
+		<policy name="B-PersonalAccessFileMode" displayName="$(string.PersonalAccessFileMode)" explainText="$(string.PersonalAccessFileMode_Explain)" class="Machine" presentation="$(presentation.PersonalAccessFileMode)" key="Software\Policies\PrimX\ZONECENTRAL\UserTools">
+			<parentCategory ref="CatOrganization"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="DisablePersonalAccessFile" valueName="DisablePersonalAccessFile">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="PersonalAccessCreationOnLogin" valueName="PersonalAccessCreationOnLogin" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="DisallowPersonalAccessFileCreation" valueName="DisallowPersonalAccessFileCreation">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="SynchronizePersonalAccessFile" valueName="SynchronizePersonalAccessFile">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<text id="PersonalAccessFileName" valueName="PersonalAccessFileName" required="true" expandable="true"/>
+				<text id="PersonalBackupLocation" valueName="PersonalBackupLocation" expandable="true"/>
+			</elements>
+		</policy>
+		<policy name="C-PersonalKeyMode" displayName="$(string.PersonalKeyMode)" explainText="$(string.PersonalKeyMode_Explain)" class="Machine" presentation="$(presentation.PersonalKeyMode)" key="Software\Policies\PrimX\ZONECENTRAL\Specials">
+			<parentCategory ref="CatOrganization"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="AllowPersonalKeyMode" valueName="AllowPersonalKeyMode">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+			</elements>
+		</policy>
+		<policy name="D-AutoReplaceOnSharedZones" displayName="$(string.AutoReplaceOnSharedZones)" explainText="$(string.AutoReplaceOnSharedZones_Explain)" class="Machine" presentation="$(presentation.AutoReplaceOnSharedZones)" key="Software\Policies\PrimX\ZONECENTRAL\Specials">
+			<parentCategory ref="CatOrganization"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="AutoReplaceKeyOnShared" valueName="AutoReplaceKeyOnShared">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+			</elements>
+		</policy>
+		<policy name="E-UpdateZedOnPersonalKeyChange" displayName="$(string.UpdateZedOnPersonalKeyChange)" explainText="$(string.UpdateZedOnPersonalKeyChange_Explain)" class="Machine" presentation="$(presentation.UpdateZedOnPersonalKeyChange)" key="Software\Policies\PrimX\ZONECENTRAL\Specials">
+			<parentCategory ref="CatOrganization"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="UpdateZedOnPersonalKeyChange" valueName="UpdateZedOnPersonalKeyChange" required="true">
+					<item displayName="$(string.UpdateZedOnPersonalKeyChange_None)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.UpdateZedOnPersonalKeyChange_All)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.UpdateZedOnPersonalKeyChange_NotOffline)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="F-UserCertificateSearch" displayName="$(string.UserCertificateSearch)" explainText="$(string.UserCertificatesSearchMode_Explain)" class="Machine" presentation="$(presentation.UserCertificateSearch)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatOrganization"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="ADCertificatesMode" valueName="ADCertificatesMode" required="true">
+					<item displayName="$(string.SearchCertificatesMode_None)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.SearchCertificatesMode_Allowed)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.SearchCertificatesMode_Forced)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.SearchCertificatesMode_OnKey)">
+						<value>
+							<decimal value="4"/>
+						</value>
+					</item>
+					<item displayName="$(string.SearchCertificatesMode_AllowedAndOnKey)">
+						<value>
+							<decimal value="5"/>
+						</value>
+					</item>
+					<item displayName="$(string.SearchCertificatesMode_ForcedAndOnKey)">
+						<value>
+							<decimal value="6"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="G-CertQuietReplaceKey" displayName="$(string.CertQuietReplaceKey)" explainText="$(string.CertQuietReplaceKey_Explain)" class="Machine" presentation="$(presentation.CertQuietReplaceKey)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatOrganization"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="ADQuietReplaceKey" valueName="ADQuietReplaceKey">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+			</elements>
+		</policy>
+		<policy name="H-UserCertificateSources" displayName="$(string.UserCertificateSources)" explainText="$(string.UserCertificateSources_Explain)" class="Machine" presentation="$(presentation.UserCertificateSources)" key="Software\Policies\PrimX\ZONECENTRAL\Common\UserCertSources">
+			<parentCategory ref="CatOrganization"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="UserCertificateSources" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="I-MandatoryMembers" displayName="$(string.MandatoryMembers)" explainText="$(string.MandatoryMembers_Explain)" class="Machine" presentation="$(presentation.MandatoryMembers)" key="Software\Policies\PrimX\ZONECENTRAL\Specials\MandatoryMembers">
+			<parentCategory ref="CatOrganization"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="MandatoryMembers" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="J-MandatoryMembersForZed" displayName="$(string.MandatoryMembersForZed)" explainText="$(string.MandatoryMembersForZed_Explain)" class="Machine" presentation="$(presentation.MandatoryMembersForZed)" key="Software\Policies\PrimX\ZONECENTRAL\Specials\MandatoryMembersForZed">
+			<parentCategory ref="CatOrganization"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="MandatoryMembersForZed" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="K-Consigns" displayName="$(string.Consigns)" explainText="$(string.Consigns_ZC_Explain)" class="Machine" presentation="$(presentation.Consigns)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatOrganization"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="Consigns" key="Software\Policies\PrimX\ZONECENTRAL\Specials\Consigns" additive="false" explicitValue="true"/>
+				<text id="UsersWithConsigns" valueName="UsersWithConsigns" key="Software\Policies\PrimX\ZONECENTRAL\Specials"/>
+				<text id="UsersWithoutConsigns" valueName="UsersWithoutConsigns" key="Software\Policies\PrimX\ZONECENTRAL\Specials"/>
+				<enum id="DisableAutomaticConsign" valueName="DisableAutomaticConsign" required="true">
+					<item displayName="$(string.AutoConsignCheck_Always)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.AutoConsignCheck_Never)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.AutoConsignCheck_OnError)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="L-ZoneMapPublishLocations" displayName="$(string.ZoneMapPublishLocations)" explainText="$(string.ZoneMapPublishLocations_Explain)" class="Machine" presentation="$(presentation.ZoneMapPublishLocations)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatOrganization"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="ZoneMapPublishLocations" valueName="ZoneMapPublishLocations" required="true" expandable="true"/>
+			</elements>
+		</policy>
+		<policy name="M-ZoneMapRemovablePublishLocations" displayName="$(string.ZoneMapRemovablePublishLocations)" explainText="$(string.ZoneMapRemovablePublishLocations_Explain)" class="Machine" presentation="$(presentation.ZoneMapRemovablePublishLocations)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatOrganization"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="ZMRemovablePublishLocations" valueName="ZMRemovablePublishLocations" required="true" expandable="true"/>
+			</elements>
+		</policy>
+		<policy name="N-KeyMapPublishLocations" displayName="$(string.KeyMapPublishLocations)" explainText="$(string.KeyMapPublishLocations_Explain)" class="Machine" presentation="$(presentation.KeyMapPublishLocations)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatOrganization"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="KeyMapPublishLocations" valueName="KeyMapPublishLocations" expandable="true"/>
+			</elements>
+		</policy>
+		<policy name="O-MandUpdateOpts" displayName="$(string.MandUpdateOpts)" explainText="$(string.MandUpdateOpts_Explain)" class="Machine" presentation="$(presentation.MandUpdateOpts)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatOrganization"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="MandUpdateOpts" valueName="MandUpdateOpts" required="true">
+					<item displayName="$(string.MandUpdateOpts_manual)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.MandUpdateOpts_auto)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="A-PasswordDuration" displayName="$(string.PasswordDuration)" explainText="$(string.PasswordDuration_Explain)" class="Machine" presentation="$(presentation.PasswordDuration)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatPasswordRules"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="PasswordDuration" valueName="PasswordDuration" required="true" minValue="0" maxValue="36525"/>
+			</elements>
+		</policy>
+		<policy name="A-ZonePwdMinimalQualityTitle" displayName="$(string.ZonePwdMinimalQualityTitle)" explainText="$(string.PwdMinimalQuality_Explain)" class="Machine" presentation="$(presentation.ZonePwdMinimalQualityTitle)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZonePasswordQuality"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="ZonePwdMinimalQuality" valueName="ZonePwdMinimalQuality" required="true" minValue="0" maxValue="100"/>
+			</elements>
+		</policy>
+		<policy name="B-ZonePwdLengthTarget" displayName="$(string.ZonePwdLengthTarget)" explainText="$(string.PwdLengthTarget_Explain)" class="Machine" presentation="$(presentation.ZonePwdLengthTarget)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZonePasswordQuality"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="ZonePwdLengthTarget" valueName="ZonePwdLengthTarget" required="true" minValue="0" maxValue="100"/>
+				<decimal id="ZonePwdLengthMalus" valueName="ZonePwdLengthMalus" required="true" minValue="1" maxValue="100"/>
+			</elements>
+		</policy>
+		<policy name="C-ZonePwdLowerCaseTarget" displayName="$(string.ZonePwdLowerCaseTarget)" explainText="$(string.PwdLowerCaseTarget_Explain)" class="Machine" presentation="$(presentation.ZonePwdLowerCaseTarget)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZonePasswordQuality"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="ZonePwdLowerCaseTarget" valueName="ZonePwdLowerCaseTarget" required="true" minValue="0" maxValue="26"/>
+				<decimal id="ZonePwdLowerCaseMalus" valueName="ZonePwdLowerCaseMalus" required="true" minValue="1" maxValue="100"/>
+			</elements>
+		</policy>
+		<policy name="D-ZonePwdUpperCaseTarget" displayName="$(string.ZonePwdUpperCaseTarget)" explainText="$(string.PwdUpperCaseTarget_Explain)" class="Machine" presentation="$(presentation.ZonePwdUpperCaseTarget)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZonePasswordQuality"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="ZonePwdUpperCaseTarget" valueName="ZonePwdUpperCaseTarget" required="true" minValue="0" maxValue="26"/>
+				<decimal id="ZonePwdUpperCaseMalus" valueName="ZonePwdUpperCaseMalus" required="true" minValue="1" maxValue="100"/>
+			</elements>
+		</policy>
+		<policy name="E-ZonePwdSymbolTarget" displayName="$(string.ZonePwdSymbolTarget)" explainText="$(string.PwdSymbolTarget_Explain)" class="Machine" presentation="$(presentation.ZonePwdSymbolTarget)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZonePasswordQuality"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="ZonePwdSymbolTarget" valueName="ZonePwdSymbolTarget" required="true" minValue="0" maxValue="33"/>
+				<decimal id="ZonePwdSymbolMalus" valueName="ZonePwdSymbolMalus" required="true" minValue="1" maxValue="100"/>
+			</elements>
+		</policy>
+		<policy name="F-ZonePwdDigitTarget" displayName="$(string.ZonePwdDigitTarget)" explainText="$(string.PwdDigitTarget_Explain)" class="Machine" presentation="$(presentation.ZonePwdDigitTarget)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZonePasswordQuality"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="ZonePwdDigitTarget" valueName="ZonePwdDigitTarget" required="true" minValue="0" maxValue="10"/>
+				<decimal id="ZonePwdDigitMalus" valueName="ZonePwdDigitMalus" required="true" minValue="1" maxValue="100"/>
+			</elements>
+		</policy>
+		<policy name="G-ZonePwdHelpTextsTitle" displayName="$(string.ZonePwdHelpTextsTitle)" explainText="$(string.PwdHelpText_Explain)" class="Machine" presentation="$(presentation.ZonePwdHelpTextsTitle)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZonePasswordQuality"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="ZonePwdHelpTextLong" valueName="ZonePwdHelpTextLong"/>
+			</elements>
+		</policy>
+		<policy name="H-ZonePwdForbiddenKeySet" displayName="$(string.ZonePwdForbiddenKeySet)" explainText="$(string.PwdForbiddenKeySet_Explain)" class="Machine" presentation="$(presentation.ZonePwdForbiddenKeySet)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZonePasswordQuality"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="ZonePwdForbiddenKeySet" valueName="ZonePwdForbiddenKeySet" required="true">
+					<item displayName="$(string.ZonePwdForbiddenKeySet_Off)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZonePwdForbiddenKeySet_OEM102)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZonePwdForbiddenKeySet_AltGr)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZonePwdForbiddenKeySet_OEM102_And_AltGr)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="A-ZedPwdMinimalQualityTitle" displayName="$(string.ZedPwdMinimalQualityTitle)" explainText="$(string.PwdMinimalQuality_Explain)" class="Machine" presentation="$(presentation.ZedPwdMinimalQualityTitle)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedPasswordQuality"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="ZedPwdMinimalQuality" valueName="ZedPwdMinimalQuality" required="true" minValue="0" maxValue="100"/>
+			</elements>
+		</policy>
+		<policy name="B-ZedPwdLengthTarget" displayName="$(string.ZedPwdLengthTarget)" explainText="$(string.PwdLengthTarget_Explain)" class="Machine" presentation="$(presentation.ZedPwdLengthTarget)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedPasswordQuality"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="ZedPwdLengthTarget" valueName="ZedPwdLengthTarget" required="true" minValue="0" maxValue="100"/>
+				<decimal id="ZedPwdLengthMalus" valueName="ZedPwdLengthMalus" required="true" minValue="1" maxValue="100"/>
+			</elements>
+		</policy>
+		<policy name="C-ZedPwdLowerCaseTarget" displayName="$(string.ZedPwdLowerCaseTarget)" explainText="$(string.PwdLowerCaseTarget_Explain)" class="Machine" presentation="$(presentation.ZedPwdLowerCaseTarget)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedPasswordQuality"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="ZedPwdLowerCaseTarget" valueName="ZedPwdLowerCaseTarget" required="true" minValue="0" maxValue="26"/>
+				<decimal id="ZedPwdLowerCaseMalus" valueName="ZedPwdLowerCaseMalus" required="true" minValue="1" maxValue="100"/>
+			</elements>
+		</policy>
+		<policy name="D-ZedPwdUpperCaseTarget" displayName="$(string.ZedPwdUpperCaseTarget)" explainText="$(string.PwdUpperCaseTarget_Explain)" class="Machine" presentation="$(presentation.ZedPwdUpperCaseTarget)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedPasswordQuality"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="ZedPwdUpperCaseTarget" valueName="ZedPwdUpperCaseTarget" required="true" minValue="0" maxValue="26"/>
+				<decimal id="ZedPwdUpperCaseMalus" valueName="ZedPwdUpperCaseMalus" required="true" minValue="1" maxValue="100"/>
+			</elements>
+		</policy>
+		<policy name="E-ZedPwdSymbolTarget" displayName="$(string.ZedPwdSymbolTarget)" explainText="$(string.PwdSymbolTarget_Explain)" class="Machine" presentation="$(presentation.ZedPwdSymbolTarget)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedPasswordQuality"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="ZedPwdSymbolTarget" valueName="ZedPwdSymbolTarget" required="true" minValue="0" maxValue="33"/>
+				<decimal id="ZedPwdSymbolMalus" valueName="ZedPwdSymbolMalus" required="true" minValue="1" maxValue="100"/>
+			</elements>
+		</policy>
+		<policy name="F-ZedPwdDigitTarget" displayName="$(string.ZedPwdDigitTarget)" explainText="$(string.PwdDigitTarget_Explain)" class="Machine" presentation="$(presentation.ZedPwdDigitTarget)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedPasswordQuality"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="ZedPwdDigitTarget" valueName="ZedPwdDigitTarget" required="true" minValue="0" maxValue="10"/>
+				<decimal id="ZedPwdDigitMalus" valueName="ZedPwdDigitMalus" required="true" minValue="1" maxValue="100"/>
+			</elements>
+		</policy>
+		<policy name="G-ZedPwdHelpTextsTitle" displayName="$(string.ZedPwdHelpTextsTitle)" explainText="$(string.PwdHelpText_Explain)" class="Machine" presentation="$(presentation.ZedPwdHelpTextsTitle)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedPasswordQuality"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="ZedPwdHelpTextLong" valueName="ZedPwdHelpTextLong"/>
+			</elements>
+		</policy>
+		<policy name="A-KPWDEnable" displayName="$(string.KPWDEnable)" explainText="$(string.KPWDEnable_Explain)" class="Machine" presentation="$(presentation.KPWDEnable)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatKPWD"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="KPWDEnable" valueName="KPWDEnable" required="true">
+					<item displayName="$(string.KPWDEnable_On)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.KPWDEnable_Disabled)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.KPWDEnable_Disabled_Zed)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.KPWDEnable_Disabled_ZedMail)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="A-RelaxCertChainErrors" displayName="$(string.RelaxCertChainErrors)" explainText="$(string.RelaxCertChainErrors_Explain)" class="Machine" presentation="$(presentation.RelaxCertChainErrors)" valueName="RelaxCertChainErrors" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCertificateTrust"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="B-RestrictCertRoots" displayName="$(string.RestrictCertRoots)" explainText="$(string.RestrictCertRoots_Explain)" class="Machine" presentation="$(presentation.RestrictCertRoots)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto\RestrictCertRoots">
+			<parentCategory ref="CatCertificateTrust"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="RestrictCertRoots" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="C-CanUseOutOfDateCertificates_General" displayName="$(string.CanUseOutOfDateCertificates_General)" explainText="$(string.CanUseOutOfDateCertificates_Explain)" class="Machine" presentation="$(presentation.CanUseOutOfDateCertificates_General)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCertificateTrust"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="CanUseOutOfDateCertificates" valueName="CanUseOutOfDateCertificates">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<decimal id="OutOfDateCertificatesDelay" valueName="OutOfDateCertificatesDelay" minValue="0" maxValue="36525"/>
+			</elements>
+		</policy>
+		<policy name="D-ForceCRLRefresh" displayName="$(string.ForceCRLRefresh)" explainText="$(string.ForceCRLRefresh_Explain)" class="Machine" presentation="$(presentation.ForceCRLRefresh)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCertificateTrust"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="ForceCRLRefresh" valueName="ForceCRLRefresh" required="true" minValue="1"/>
+			</elements>
+		</policy>
+		<policy name="E-UserKeyTrustControl" displayName="$(string.UserKeyTrustControl)" explainText="$(string.UserKeyTrustControl_Explain)" class="Machine" presentation="$(presentation.UserKeyTrustControl)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCertificateTrust"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="UserKeyTrustControl" valueName="UserKeyTrustControl" required="true">
+					<item displayName="$(string.UserKeyTrustControl_None)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.UserKeyTrustControl_Any)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.UserKeyTrustControl_Netshare)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.UserKeyTrustControl_Online)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="F-RelaxCertKeyUsage" displayName="$(string.RelaxCertKeyUsage)" explainText="$(string.RelaxCertKeyUsage_Explain)" class="Machine" presentation="$(presentation.RelaxCertKeyUsage)" valueName="RelaxCertKeyUsage" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCertificateTrust"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="G-RestrictCertExtendedKeyUsage" displayName="$(string.RestrictCertExtendedKeyUsage)" explainText="$(string.RestrictCertExtendedKeyUsage_Explain)" class="Machine" presentation="$(presentation.RestrictCertExtendedKeyUsage)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto\RestrictCertExtendedKeyUsage">
+			<parentCategory ref="CatCertificateTrust"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="RestrictCertExtendedKeyUsage" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="H-RestrictCertExtendedKeyUsageZed" displayName="$(string.RestrictCertExtendedKeyUsageZed)" explainText="$(string.RestrictCertExtendedKeyUsageZed_Explain)" class="Machine" presentation="$(presentation.RestrictCertExtendedKeyUsageZed)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto\RestrictCertExtendedKeyUsageForZed">
+			<parentCategory ref="CatCertificateTrust"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="RestrictCertExtendedKeyUsageZed" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="I-AdditionalCert" displayName="$(string.AdditionalCert)" explainText="$(string.AdditionalCert_Explain)" class="Machine" presentation="$(presentation.AdditionalCert)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCertificateTrust"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="AdditionalCert" valueName="AdditionalCert" expandable="true"/>
+			</elements>
+		</policy>
+		<policy name="J-CanUseOutOfDateCertificatesForPrivUse_General" displayName="$(string.CanUseOutOfDateCertificatesForPrivUse_General)" explainText="$(string.CanUseOutOfDateCertificatesForPrivUse_Explain)" class="Machine" presentation="$(presentation.CanUseOutOfDateCertificatesForPrivUse_General)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCertificateTrust"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="CanUseOutOfDateCertificatesForPrivUse" valueName="CanUseOutOfDateCertificatesForPrivUse">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<decimal id="OutOfDateCertificatesDelayForPrivUse" valueName="OutOfDateCertificatesDelayForPrivUse" minValue="0" maxValue="36525"/>
+			</elements>
+		</policy>
+		<policy name="A-CloseZonesKeyboardShortcut" displayName="$(string.CloseZonesKeyboardShortcut)" explainText="$(string.CloseZonesKeyboardShortcut_Explain)" class="Machine" presentation="$(presentation.CloseZonesKeyboardShortcut)" key="Software\Policies\PrimX\ZONECENTRAL\UserTools">
+			<parentCategory ref="CatUserInterface"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="CloseZonesKeyboardShortcut" valueName="CloseZonesKeyboardShortcut" required="true">
+					<item displayName="$(string.NoShortcut)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.CloseZonesKeyboardShortcut_CtrlSquare)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.CloseZonesKeyboardShortcut_TripleCtrl)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="B-DisableScreenSaverDetect" displayName="$(string.DisableScreenSaverDetect)" explainText="$(string.DisableScreenSaverDetect_Explain)" class="Machine" presentation="$(presentation.DisableScreenSaverDetect)" valueName="DisableScreenSaverDetect" key="Software\Policies\PrimX\ZONECENTRAL\UserTools">
+			<parentCategory ref="CatUserInterface"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="C-AdminInPlaceOperations" displayName="$(string.AdminInPlaceOperations)" explainText="$(string.AdminInPlaceOperations_Explain)" class="Machine" presentation="$(presentation.AdminInPlaceOperations)" key="Software\Policies\PrimX\ZONECENTRAL\UserTools">
+			<parentCategory ref="CatUserInterface"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="RestrictHidePolicies" valueName="RestrictHidePolicies" expandable="true"/>
+				<boolean id="UserCannotChangePassword" valueName="UserCannotChangePassword">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="UserCannotChangeRsa" valueName="UserCannotChangeRsa">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideFolderPropertyPage" valueName="HideFolderPropertyPage">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideAccessFilePropertyPage" valueName="HideAccessFilePropertyPage">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HidePersonalAccessMonitor" valueName="HidePersonalAccessMonitor">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HidePersonalKeyMonitor" valueName="HidePersonalKeyMonitor">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideFolderContextMenu" valueName="HideFolderContextMenu">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideUnauthorizedInPlaceOps" valueName="HideUnauthorizedInPlaceOps">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideInPlaceEncrypt" valueName="HideInPlaceEncrypt">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideInPlaceDecrypt" valueName="HideInPlaceDecrypt">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideInPlaceVerify" valueName="HideInPlaceVerify">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideInPlaceTranscrypt" valueName="HideInPlaceTranscrypt">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideInPlaceAccesses" valueName="HideInPlaceAccesses">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideInPlaceAccessesOps" valueName="HideInPlaceAccessesOps">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideAddPassword" valueName="HideAddPassword">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideAddPasswordForZed" valueName="HideAddPasswordForZed">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideAddCertFile" valueName="HideAddCertFile">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideAddCertFileForZed" valueName="HideAddCertFileForZed">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideAddCertStore" valueName="HideAddCertStore">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideAddCertStoreForZed" valueName="HideAddCertStoreForZed">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideAddLDAP" valueName="HideAddLDAP">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideAddLDAPForZed" valueName="HideAddLDAPForZed">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideInPlaceDetails" valueName="HideInPlaceDetails">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideInPlaceGeneralPage" valueName="HideInPlaceGeneralPage">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="DisallowZoneLabelChange" valueName="DisallowZoneLabelChange">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideInPlaceCreateClearZone" valueName="HideInPlaceCreateClearZone">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideInPlaceGroup" valueName="HideInPlaceGroup">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideInPlaceSeparate" valueName="HideInPlaceSeparate">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideInPlaceExceptions" valueName="HideInPlaceExceptions">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideInPlaceExceptionsOps" valueName="HideInPlaceExceptionsOps">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideInPlaceSubzones" valueName="HideInPlaceSubzones">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideShowSos" valueName="HideShowSos">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideCheckerDetails" valueName="HideCheckerDetails">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideComputerWideOperations" valueName="HideComputerWideOperations">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideAddAccessFile" valueName="HideAddAccessFile">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideAddAccessFileForZed" valueName="HideAddAccessFileForZed">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="HideInPlaceRecover" valueName="HideInPlaceRecover">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+			</elements>
+		</policy>
+		<policy name="D-DeleteZoneOptions" displayName="$(string.DeleteZoneOptions)" explainText="$(string.DeleteZoneOptions_Explain)" class="Machine" presentation="$(presentation.DeleteZoneOptions)" key="Software\Policies\PrimX\ZONECENTRAL\FileOperations">
+			<parentCategory ref="CatUserInterface"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="DeleteZoneOptions" valueName="DeleteZoneOptions" required="true">
+					<item displayName="$(string.DeleteZoneEnabled)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.DeleteZoneOpenFirst)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.DeleteZoneDisabled)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="E-ProtectEncryptedFileDeletion" displayName="$(string.ProtectEncryptedFileDeletion)" explainText="$(string.ProtectEncryptedFileDeletion_Explain)" class="Machine" presentation="$(presentation.ProtectEncryptedFileDeletion)" valueName="ProtectEncryptedFileDeletion" key="Software\Policies\PrimX\ZONECENTRAL\FileOperations">
+			<parentCategory ref="CatUserInterface"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="F-DisableEncryptedZoneNetShare" displayName="$(string.DisableEncryptedZoneNetShare)" explainText="$(string.DisableEncryptedZoneNetShare_Explain)" class="Machine" presentation="$(presentation.DisableEncryptedZoneNetShare)" valueName="DisableEncryptedZoneNetShare" key="Software\Policies\PrimX\ZONECENTRAL\FileOperations">
+			<parentCategory ref="CatUserInterface"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="G-OpenZoneMessage" displayName="$(string.OpenZoneMessage)" explainText="$(string.OpenZoneMessage_Explain)" class="Machine" presentation="$(presentation.OpenZoneMessage)" key="Software\Policies\PrimX\ZONECENTRAL\UserTools">
+			<parentCategory ref="CatUserInterface"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="DisableOpenZoneMessage" valueName="DisableOpenZoneMessage" required="true">
+					<item displayName="$(string.OpenZoneMessageAll)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.OpenZoneMessageNone)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.OpenZoneMessageNotUser)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="H-LDAPServers" displayName="$(string.LDAPServers)" explainText="$(string.LDAPServers_Explain)" class="Machine" presentation="$(presentation.LDAPServers)" key="Software\Policies\PrimX\ZONECENTRAL\ZoneManagement\LDAPServers">
+			<parentCategory ref="CatUserInterface"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="LDAPServers" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="I-OnSessionLock" displayName="$(string.OnSessionLock)" explainText="$(string.OnSessionLock_Explain)" class="Machine" presentation="$(presentation.OnSessionLock)" key="Software\Policies\PrimX\ZONECENTRAL\UserTools">
+			<parentCategory ref="CatUserInterface"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="OnSessionLock" valueName="OnSessionLock" required="true">
+					<item displayName="$(string.OnSessionLockCloseAll)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.OnSessionUnlockCloseAll)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.OnSessionLockNothing)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="J-DisableSystray" displayName="$(string.DisableSystray)" explainText="$(string.DisableSystray_Explain)" class="Machine" presentation="$(presentation.DisableSystray)" valueName="DisableSystray" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatUserInterface"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="K-RestrictShowRecoveryAccess" displayName="$(string.RestrictShowRecoveryAccess)" explainText="$(string.RestrictShowRecoveryAccess_Explain)" class="Machine" presentation="$(presentation.RestrictShowRecoveryAccess)" key="Software\Policies\PrimX\ZONECENTRAL\OpenZone">
+			<parentCategory ref="CatUserInterface"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="RestrictShowRecoveryAccess" valueName="RestrictShowRecoveryAccess"/>
+			</elements>
+		</policy>
+		<policy name="L-RestrictShowMandatory" displayName="$(string.RestrictShowMandatory)" explainText="$(string.RestrictShowMandatory_Explain)" class="Machine" presentation="$(presentation.RestrictShowMandatory)" key="Software\Policies\PrimX\ZONECENTRAL\UserTools">
+			<parentCategory ref="CatUserInterface"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="RestrictShowMandatory" valueName="RestrictShowMandatory"/>
+			</elements>
+		</policy>
+		<policy name="M-RemovableDevices" displayName="$(string.RemovableDevices)" explainText="$(string.RemovableDevices_Explain)" class="Machine" presentation="$(presentation.RemovableDevices)" key="Software\Policies\PrimX\ZONECENTRAL\Common\RemovableDevices">
+			<parentCategory ref="CatUserInterface"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="RemovableDevices" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="N-OverlaysDefinition" displayName="$(string.OverlaysDefinition)" explainText="$(string.OverlaysDefinition_Explain)" class="Machine" presentation="$(presentation.OverlaysDefinition)" key="Software\Policies\PrimX\ZONECENTRAL\Common\OverlaysDefinition">
+			<parentCategory ref="CatUserInterface"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="OverlaysDefinition" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="O-DereferenceOverlays" displayName="$(string.DereferenceOverlays)" explainText="$(string.DereferenceOverlays_Explain)" class="Machine" presentation="$(presentation.DereferenceOverlays)" key="Software\Policies\PrimX\ZONECENTRAL\Common\DereferenceOverlays">
+			<parentCategory ref="CatUserInterface"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="DereferenceOverlays" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="A-RestrictCommandsToSysAdmin" displayName="$(string.RestrictCommandsToSysAdmin)" explainText="$(string.RestrictCommandsToSysAdmin_Explain)" class="Machine" presentation="$(presentation.RestrictCommandsToSysAdmin)" valueName="RestrictCommandsToSysAdmin" key="Software\Policies\PrimX\ZONECENTRAL\ZoneManagement">
+			<parentCategory ref="CatAdminRights"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="B-SORoleMode" displayName="$(string.SORoleMode)" explainText="$(string.SORoleMode_Explain)" class="Machine" presentation="$(presentation.SORoleMode)" key="Software\Policies\PrimX\ZONECENTRAL\ZoneManagement">
+			<parentCategory ref="CatAdminRights"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="DisableSOCommandsMode" valueName="DisableSOCommandsMode">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<decimal id="MinimalAdminCount" valueName="MinimalAdminCount" required="true" minValue="1" maxValue="36525"/>
+			</elements>
+		</policy>
+		<policy name="C-UserRights" displayName="$(string.UserRights)" explainText="$(string.UserRights_Explain)" class="Machine" presentation="$(presentation.UserRights)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAdminRights"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="UserRights" key="Software\Policies\PrimX\ZONECENTRAL\Common\LocationsRights" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="A-ZBUIOptions" displayName="$(string.ZBUIOptions)" explainText="$(string.ZBUIOptions_Explain)" class="Machine" presentation="$(presentation.ZBUIOptions)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAdvUserInterfaces"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="ZBUIOptions" key="Software\Policies\PrimX\ZONECENTRAL\Common\ZBoardUIOptions" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="B-GroupsSynchroLDAPServers" displayName="$(string.GroupsSynchroLDAPServers)" explainText="$(string.GroupsSynchroLDAPServers_Explain)" class="Machine" presentation="$(presentation.GroupsSynchroLDAPServers)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAdvUserInterfaces"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="GroupsSynchroLDAPServers" key="Software\Policies\PrimX\ZONECENTRAL\Common\GroupsSynchroLDAPServers" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="C-PKISynchroLDAPServers" displayName="$(string.PKISynchroLDAPServers)" explainText="$(string.PKISynchroLDAPServers_Explain)" class="Machine" presentation="$(presentation.PKISynchroLDAPServers)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAdvUserInterfaces"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="PKISynchroLDAPServers" key="Software\Policies\PrimX\ZONECENTRAL\Common\PKISynchroLDAPServers" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="D-OverlayIconForClearFolders" displayName="$(string.OverlayIconForClearFolders)" explainText="$(string.OverlayIconForClearFolders_Explain)" class="Machine" presentation="$(presentation.OverlayIconForClearFolders)" key="Software\Policies\PrimX\ZONECENTRAL\UserTools">
+			<parentCategory ref="CatAdvUserInterfaces"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="OverlayIconForClearFolders" valueName="OverlayIconForClearFolders" required="true">
+					<item displayName="$(string.NoOverlayIcon)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.OverlayOnlyForHeadOfClearZones)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.OverlayForAnyClearFolder)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.OverlayOnlyForHeadOfExplicitClearZones)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="E-OverlayIconForEncryptedFolders" displayName="$(string.OverlayIconForEncryptedFolders)" explainText="$(string.OverlayIconForEncryptedFolders_Explain)" class="Machine" presentation="$(presentation.OverlayIconForEncryptedFolders)" key="Software\Policies\PrimX\ZONECENTRAL\UserTools">
+			<parentCategory ref="CatAdvUserInterfaces"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="OverlayIconForEncryptedFolders" valueName="OverlayIconForEncryptedFolders" required="true">
+					<item displayName="$(string.NoOverlayIcon)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.OverlayOnlyForHeadOfEncryptedZones)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.OverlayForAnyEncryptedFolder)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="F-OverlayIconForFiles" displayName="$(string.OverlayIconForFiles)" explainText="$(string.OverlayIconForFiles_Explain)" class="Machine" presentation="$(presentation.OverlayIconForFiles)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAdvUserInterfaces"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="OverlayIconForFiles" valueName="OverlayIconForFiles" required="true">
+					<item displayName="$(string.FileOverlayNone)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.FileOverlayForExceptions)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.FileOverlayForZones)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.FileOverlayForAll)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="G-WatermarksForFolders" displayName="$(string.WatermarksForFolders)" explainText="$(string.WatermarksForFolders_Explain)" class="Machine" presentation="$(presentation.WatermarksForFolders)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAdvUserInterfaces"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="WatermarksForFolders" valueName="WatermarksForFolders" required="true">
+					<item displayName="$(string.WatermarksForFolders_None)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.WatermarksForFolders_Encrypted)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.WatermarksForFolders_Clear)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.WatermarksForFolders_Both)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="H-UserCannotCloseZone" displayName="$(string.UserCannotCloseZone)" explainText="$(string.UserCannotCloseZone_Explain)" class="Machine" presentation="$(presentation.UserCannotCloseZone)" valueName="UserCannotCloseZone" key="Software\Policies\PrimX\ZONECENTRAL\UserTools">
+			<parentCategory ref="CatAdvUserInterfaces"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="I-UserCannotCloseKey" displayName="$(string.UserCannotCloseKey)" explainText="$(string.UserCannotCloseKey_Explain)" class="Machine" presentation="$(presentation.UserCannotCloseKey)" valueName="UserCannotCloseKey" key="Software\Policies\PrimX\ZONECENTRAL\UserTools">
+			<parentCategory ref="CatAdvUserInterfaces"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="J-UserCannotCloseAll" displayName="$(string.UserCannotCloseAll)" explainText="$(string.UserCannotCloseAll_Explain)" class="Machine" presentation="$(presentation.UserCannotCloseAll)" valueName="UserCannotCloseAll" key="Software\Policies\PrimX\ZONECENTRAL\UserTools">
+			<parentCategory ref="CatAdvUserInterfaces"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="K-SosHelpInfo" displayName="$(string.SosHelpInfo)" explainText="$(string.SosHelpInfo_Explain)" class="Machine" presentation="$(presentation.SosHelpInfo)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAdvUserInterfaces"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="SosHelpInfo" valueName="SosHelpInfo" required="true"/>
+			</elements>
+		</policy>
+		<policy name="L-CreateZedWithZoneAccesses" displayName="$(string.CreateZedWithZoneAccesses)" explainText="$(string.CreateZedWithZoneAccesses_Explain)" class="Machine" presentation="$(presentation.CreateZedWithZoneAccesses)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAdvUserInterfaces"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="CreateZedWithZoneAccesses" valueName="CreateZedWithZoneAccesses" required="true">
+					<item displayName="$(string.CreateZedWithZoneAccesses_None)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.CreateZedWithZoneAccesses_Forced)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.CreateZedWithZoneAccesses_Propose)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="M-ZedOptions" displayName="$(string.ZedOptions)" explainText="$(string.ZedOptions_Explain)" class="Machine" presentation="$(presentation.ZedOptions)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAdvUserInterfaces"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="ZedOptions" valueName="ZedOptions" required="true"/>
+			</elements>
+		</policy>
+		<policy name="A-UseDefaultDesktop" displayName="$(string.UseDefaultDesktop)" explainText="$(string.UseDefaultDesktop_Explain)" class="Machine" presentation="$(presentation.UseDefaultDesktop)" valueName="UseDefaultDesktop" key="Software\Policies\PrimX\ZONECENTRAL\OpenZone">
+			<parentCategory ref="CatAdvOpenZone"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="B-OpenZoneDelay" displayName="$(string.OpenZoneDelay)" explainText="$(string.OpenZoneDelay_Explain)" class="Machine" presentation="$(presentation.OpenZoneDelay)" key="Software\Policies\PrimX\ZONECENTRAL\OpenZone">
+			<parentCategory ref="CatAdvOpenZone"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="OpenZoneDelay" valueName="OpenZoneDelay" required="true" minValue="30" maxValue="65535"/>
+			</elements>
+		</policy>
+		<policy name="C-OpenAllOnFirstOpen" displayName="$(string.OpenAllOnFirstOpen)" explainText="$(string.OpenAllOnFirstOpen_Explain)" class="Machine" presentation="$(presentation.OpenAllOnFirstOpen)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAdvOpenZone"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="OpenAllOnFirstOpen" valueName="OpenAllOnFirstOpen">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<text id="DelayBetweenAutoOpenings" valueName="DelayBetweenAutoOpenings" required="true"/>
+			</elements>
+		</policy>
+		<policy name="D-DisableOpenZonePromptWithoutPersonalAccess" displayName="$(string.DisableOpenZonePromptWithoutPersonalAccess)" explainText="$(string.DisableOpenZonePromptWithoutPersonalAccess_Explain)" class="Machine" presentation="$(presentation.DisableOpenZonePromptWithoutPersonalAccess)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAdvOpenZone"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="DisableOpenZonePromptWithoutPersonalAccess" valueName="DisableOpenZonePromptWithoutPersonalAccess" required="true">
+					<item displayName="$(string.DOZPWPA_DefaultEnable)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.DOZPWPA_DefaultDisable)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.DOZPWPA_ForceEnable)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.DOZPWPA_ForceDisable)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="A-AutoSyncPrioritySimple" displayName="$(string.AutoSyncPrioritySimple)" explainText="$(string.AutoSyncPrioritySimple_Explain)" class="Machine" presentation="$(presentation.AutoSyncPrioritySimple)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAdvAccessResearch"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="AutoSyncPrioritySimple" valueName="AutoSyncPrioritySimple" required="true">
+					<item displayName="$(string.AutoSyncPriorityCertFirst)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.AutoSyncPriorityZafFirst)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.AutoSyncPriorityCertOnly)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.AutoSyncPriorityZafOnly)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="B-AutoSyncPriorityExpert" displayName="$(string.AutoSyncPriorityExpert)" explainText="$(string.AutoSyncPriorityExpert_Explain)" class="Machine" presentation="$(presentation.AutoSyncPriorityExpert)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAdvAccessResearch"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="AutoSyncPriorityExpert" key="Software\Policies\PrimX\ZONECENTRAL\Common\AutoSyncPriorityExpert" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="C-ZM_AfSources" displayName="$(string.ZM_AfSources)" explainText="$(string.ZM_AfSources_Explain)" class="Machine" presentation="$(presentation.ZM_AfSources)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatAdvAccessResearch"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="ZM_AfFolders" key="Software\Policies\PrimX\ZONECENTRAL\Common\ZM_AfFolders" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="D-AdditionalZaf" displayName="$(string.AdditionalZaf)" explainText="$(string.AdditionalZaf_Explain)" class="Machine" presentation="$(presentation.AdditionalZaf)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatAdvAccessResearch"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="AdditionalZaf" valueName="AdditionalZaf" expandable="true"/>
+			</elements>
+		</policy>
+		<policy name="A-ZedMaskItemName" displayName="$(string.ZedMaskItemName)" explainText="$(string.ZedMaskItemName_Explain)" class="Machine" presentation="$(presentation.ZedMaskItemName)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="ZedMaskItemName" valueName="ZedMaskItemName" required="true">
+					<item displayName="$(string.ZedMaskItemName_None)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZedMaskItemName_Forced)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="B-SecurityControl" displayName="$(string.SecurityControl)" explainText="$(string.SecurityControl_Explain)" class="Machine" presentation="$(presentation.SecurityControl)" key="Software\Policies\PrimX\ZONECENTRAL\Common\SecurityControl">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="SecurityControl" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="C-CloseKeyOnTimeOut" displayName="$(string.CloseKeyOnTimeOut)" explainText="$(string.CloseKeyOnTimeOut_Explain)" class="Machine" presentation="$(presentation.CloseKeyOnTimeOut)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="CloseKeyOnTimeOut" valueName="CloseKeyOnTimeOut" minValue="0" maxValue="525600"/>
+			</elements>
+		</policy>
+		<policy name="D-KeyAttemptPeriod" displayName="$(string.KeyAttemptPeriod)" explainText="$(string.KeyAttemptPeriod_Explain)" class="Machine" presentation="$(presentation.KeyAttemptPeriod)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="KeyAttemptForPeriodEnable" valueName="KeyAttemptForPeriodEnable">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<text id="KeyAttemptForPeriodParams" valueName="KeyAttemptForPeriodParams" key="Software\Policies\PrimX\ZONECENTRAL\Common"/>
+			</elements>
+		</policy>
+		<policy name="E-ActionOnChangingZoneAccesses" displayName="$(string.ActionOnChangingZoneAccesses)" explainText="$(string.ActionOnChangingZoneAccesses_Explain)" class="Machine" presentation="$(presentation.ActionOnChangingZoneAccesses)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="ActionOnChangingZoneAccesses" valueName="ActionOnChangingZoneAccesses" required="true">
+					<item displayName="$(string.ActionOnChangingZoneAccessesNothing)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.ActionOnChangingZoneAccessesAskUserForTranscryption)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.ActionOnChangingZoneAccessesForceTranscryption)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="F-PasswordsAttempts" displayName="$(string.PasswordsAttempts)" explainText="$(string.PasswordsAttempts_Explain)" class="Machine" presentation="$(presentation.PasswordsAttempts)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="PasswordsAttempts" valueName="PasswordsAttempts" required="true" minValue="1" maxValue="99"/>
+			</elements>
+		</policy>
+		<policy name="G-FileCreation" displayName="$(string.FileCreation)" explainText="$(string.FileCreation_Explain)" class="Machine" presentation="$(presentation.FileCreation)" key="Software\Policies\PrimX\ZONECENTRAL\FileOperations">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="DisableFileCreationNetwork" valueName="DisableFileCreationNetwork">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<boolean id="DisableFileCreationRemovable" valueName="DisableFileCreationRemovable">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+			</elements>
+		</policy>
+		<policy name="H-SosAccessMode" displayName="$(string.SosAccessMode)" explainText="$(string.SosAccessMode_Explain)" class="Machine" presentation="$(presentation.SosAccessMode)" key="Software\Policies\PrimX\ZONECENTRAL\Specials">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="DisableSosAccess" valueName="DisableSosAccess" required="true">
+					<item displayName="$(string.SosAccessMode_SosAndOTA)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.SosAccessMode_None)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.SosAccessMode_SosOnly)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.SosAccessMode_OTAOnly)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="I-AllowClearRestore" displayName="$(string.AllowClearRestore)" explainText="$(string.AllowClearRestore_Explain)" class="Machine" presentation="$(presentation.AllowClearRestore)" valueName="AllowClearRestore" key="Software\Policies\PrimX\ZONECENTRAL\FileOperations">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="J-DisableAccessKeysReuse" displayName="$(string.DisableAccessKeysReuse)" explainText="$(string.DisableAccessKeysReuse_Explain)" class="Machine" presentation="$(presentation.DisableAccessKeysReuse)" valueName="DisableAccessKeysReuse" key="Software\Policies\PrimX\ZONECENTRAL\OpenZone">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="K-ClearShare" displayName="$(string.ClearShare)" explainText="$(string.ClearShare_Explain)" class="Machine" presentation="$(presentation.ClearShare)" valueName="ClearShare" key="Software\Policies\PrimX\ZONECENTRAL\FileOperations">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="L-ActionOnKeyClosed" displayName="$(string.ActionOnKeyClosed)" explainText="$(string.ActionOnKeyClosed_Explain)" class="Machine" presentation="$(presentation.ActionOnKeyClosed)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="CloseZoneOnKeyClosed" valueName="CloseZoneOnKeyClosed" required="true">
+					<item displayName="$(string.ActionOnKeyClosedNothing)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.ActionOnKeyClosedCloseZones)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.ActionOnKeyClosedLockWorkstation)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="M-RestrictAllowRecoveryAccess" displayName="$(string.RestrictAllowRecoveryAccess)" explainText="$(string.RestrictAllowRecoveryAccess_Explain)" class="Machine" presentation="$(presentation.RestrictAllowRecoveryAccess)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="RestrictAllowRecoveryAccess" valueName="RestrictAllowRecoveryAccess"/>
+			</elements>
+		</policy>
+		<policy name="N-EnableWatchOverPolicies" displayName="$(string.EnableWatchOverPolicies)" explainText="$(string.EnableWatchOverPolicies_Explain)" class="Machine" presentation="$(presentation.EnableWatchOverPolicies)" valueName="EnableWatchOverPolicies" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="O-DisableAPI" displayName="$(string.DisableAPI)" explainText="$(string.DisableAPI_Explain)" class="Machine" presentation="$(presentation.DisableAPI)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="DisableAPI" valueName="DisableAPI">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+			</elements>
+		</policy>
+		<policy name="P-AfSignRoots" displayName="$(string.AfSignRoots)" explainText="$(string.AfSignRoots_Explain)" class="Machine" presentation="$(presentation.AfSignRoots)" key="Software\Policies\PrimX\ZONECENTRAL\Common\AccessFileSignAuthorizedRoots">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="AfSignRoots" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="Q-AccessFilesTrustControl" displayName="$(string.AccessFilesTrustControl)" explainText="$(string.AccessFilesTrustControl_Explain)" class="Machine" presentation="$(presentation.AccessFilesTrustControl)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="AccessFilesTrustControl" valueName="AccessFilesTrustControl" required="true">
+					<item displayName="$(string.TrustControlNothing)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.TrustControlSignature)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.TrustControlKeySize)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.TrustControlSignatureAndKeySize)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="R-AccessFilesTrustControlForZed" displayName="$(string.AccessFilesTrustControlForZed)" explainText="$(string.AccessFilesTrustControlForZed_Explain)" class="Machine" presentation="$(presentation.AccessFilesTrustControlForZed)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="AccessFilesTrustControlForZed" valueName="AccessFilesTrustControlForZed" required="true">
+					<item displayName="$(string.TrustControlForZedNothing)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.TrustControlForZedSignature)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.TrustControlForZedKeySize)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.TrustControlForZedSignatureAndKeySize)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="S-ZoneIntegrityControl" displayName="$(string.ZoneIntegrityControl)" explainText="$(string.ZoneIntegrityControl_Explain)" class="Machine" presentation="$(presentation.ZoneIntegrityControl)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="ZoneIntegrityControl" valueName="ZoneIntegrityControl" required="true">
+					<item displayName="$(string.ZoneIntegrityControlNone)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZoneIntegrityControlControlAllowissing)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZoneIntegrityControlControlWarnMissing)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZoneIntegrityControlControlBlockMissing)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="T-ZedFormatVersion" displayName="$(string.ZedFormatVersion)" explainText="$(string.ZedFormatVersion_Explain)" class="Machine" presentation="$(presentation.ZedFormatVersion)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatSecurity"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="ZedFormatVersion" valueName="ZedFormatVersion" required="true">
+					<item displayName="$(string.ZedFormatVersion_1)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZedFormatVersion_2)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="A-DisableWiping" displayName="$(string.DisableWiping)" explainText="$(string.DisableWiping_Explain)" class="Machine" presentation="$(presentation.DisableWiping)" valueName="DisableWiping" key="Software\Policies\PrimX\ZONECENTRAL\Wiping">
+			<parentCategory ref="CatWiping"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="B-WipeEncryptedFiles" displayName="$(string.WipeEncryptedFiles)" explainText="$(string.WipeEncryptedFiles_Explain)" class="Machine" presentation="$(presentation.WipeEncryptedFiles)" valueName="WipeEncryptedFiles" key="Software\Policies\PrimX\ZONECENTRAL\Wiping">
+			<parentCategory ref="CatWiping"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="C-WipingPattern" displayName="$(string.WipingPattern)" explainText="$(string.WipingPattern_Explain)" class="Machine" presentation="$(presentation.WipingPattern)" key="Software\Policies\PrimX\ZONECENTRAL\Wiping">
+			<parentCategory ref="CatWiping"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="WipingPattern" valueName="WipingPattern" required="true" maxLength="16"/>
+			</elements>
+		</policy>
+		<policy name="D-DisableHiberfileWiping" displayName="$(string.DisableHiberfileWiping)" explainText="$(string.DisableHiberfileWiping_Explain)" class="Machine" presentation="$(presentation.DisableHiberfileWiping)" valueName="DisableHiberfileWiping" key="Software\Policies\PrimX\ZONECENTRAL\Wiping">
+			<parentCategory ref="CatWiping"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="A-DisableTempAndIECacheClean" displayName="$(string.DisableTempAndIECacheClean)" explainText="$(string.DisableTempAndIECacheClean_Explain)" class="Machine" presentation="$(presentation.DisableTempAndIECacheClean)" valueName="DisableTempAndIECacheClean" key="Software\Policies\PrimX\ZONECENTRAL\Specials">
+			<parentCategory ref="CatEncryption"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="B-DisableCscEncryption" displayName="$(string.DisableCscEncryption)" explainText="$(string.DisableCscEncryption_Explain)" class="Machine" presentation="$(presentation.DisableCscEncryption)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatEncryption"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="DisableCscEncryption" valueName="DisableCscEncryption">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+			</elements>
+		</policy>
+		<policy name="C-DisableNetworkRedirectedFoldersEncryption" displayName="$(string.DisableNetworkRedirectedFoldersEncryption)" explainText="$(string.DisableNetworkRedirectedFoldersEncryption_Explain)" class="Machine" presentation="$(presentation.DisableNetworkRedirectedFoldersEncryption)" valueName="DisableNetworkRedirectedFoldersEncryption" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatEncryption"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="D-MaxApplyDirectivesAbort" displayName="$(string.MaxApplyDirectivesAbort)" explainText="$(string.MaxApplyDirectivesAbort_Explain)" class="Machine" presentation="$(presentation.MaxApplyDirectivesAbort)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatEncryption"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="MaxApplyDirectivesAbort" valueName="MaxApplyDirectivesAbort" required="true" minValue="0" maxValue="999"/>
+			</elements>
+		</policy>
+		<policy name="E-CheckerPeriodicity" displayName="$(string.CheckerPeriodicity)" explainText="$(string.CheckerPeriodicity_Explain)" class="Machine" presentation="$(presentation.CheckerPeriodicity)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatEncryption"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="CheckerPeriodicity" valueName="CheckerPeriodicity" required="true" minValue="0" maxValue="999"/>
+				<decimal id="CheckerPeriodicityWhenNotCompliant" valueName="CheckerPeriodicityWhenNotCompliant" required="true" minValue="0" maxValue="999"/>
+			</elements>
+		</policy>
+		<policy name="F-AlternateBackupLocation" displayName="$(string.AlternateBackupLocation)" explainText="$(string.AlternateBackupLocation_Explain)" class="Machine" presentation="$(presentation.AlternateBackupLocation)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatEncryption"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="AlternateBackupLocation" valueName="AlternateBackupLocation" required="true" expandable="true"/>
+			</elements>
+		</policy>
+		<policy name="G-DelayBeforeSessionClosure" displayName="$(string.DelayBeforeSessionClosure)" explainText="$(string.DelayBeforeSessionClosure_Explain)" class="Machine" presentation="$(presentation.DelayBeforeSessionClosure)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatEncryption"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="DelayBeforeSessionClosure" valueName="DelayBeforeSessionClosure" required="true" minValue="0" maxValue="999"/>
+			</elements>
+		</policy>
+		<policy name="H-EnableEncryptionParametersCheck" displayName="$(string.EnableEncryptionParametersCheck)" explainText="$(string.EnableEncryptionParametersCheck_Explain)" class="Machine" presentation="$(presentation.EnableEncryptionParametersCheck)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatEncryption"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="EnableEncryptionParametersCheck" valueName="EnableEncryptionParametersCheck" required="true">
+					<item displayName="$(string.EnableEncryptionParametersCheck_No)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.EnableEncryptionParametersCheck_CryptParams)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.EnableEncryptionParametersCheck_SealMissing)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.EnableEncryptionParametersCheck_All)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="A-ZoneTpls" displayName="$(string.ZoneTpls)" explainText="$(string.AllZoneTpls_Explain)" class="Machine" presentation="$(presentation.ZoneTpls)" key="Software\Policies\PrimX\ZONECENTRAL\Specials">
+			<parentCategory ref="CatEncryptionTemplates"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="ZoneTpls" key="Software\Policies\PrimX\ZONECENTRAL\Specials\ZoneTpls" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="B-ZoneTplsForRemovable" displayName="$(string.ZoneTplsForRemovable)" explainText="$(string.AllZoneTpls_Explain)" class="Machine" presentation="$(presentation.ZoneTplsForRemovable)" key="Software\Policies\PrimX\ZONECENTRAL\Specials">
+			<parentCategory ref="CatEncryptionTemplates"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="ZoneTplsForRemovable" key="Software\Policies\PrimX\ZONECENTRAL\Specials\ZoneTplsForRemovable" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="C-ZoneTplsForContainers" displayName="$(string.ZoneTplsForContainers)" explainText="$(string.AllZoneTpls_Explain)" class="Machine" presentation="$(presentation.ZoneTplsForContainers)" key="Software\Policies\PrimX\ZONECENTRAL\Specials">
+			<parentCategory ref="CatEncryptionTemplates"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="ZoneTplsForContainers" key="Software\Policies\PrimX\ZONECENTRAL\Specials\ZoneTplsForContainers" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="A-EncryptionAlgorithm" displayName="$(string.EncryptionAlgorithm)" explainText="$(string.EncryptionAlgorithm_Explain)" class="Machine" presentation="$(presentation.EncryptionAlgorithm)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCrypto"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="EncryptionAlgorithm" valueName="EncryptionAlgorithm" required="true">
+					<item displayName="$(string.AlgAES)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.AlgEXT)">
+						<value>
+							<decimal value="5"/>
+						</value>
+					</item>
+					<item displayName="$(string.AlgSEED)">
+						<value>
+							<decimal value="10"/>
+						</value>
+					</item>
+					<item displayName="$(string.AlgARIA)">
+						<value>
+							<decimal value="11"/>
+						</value>
+					</item>
+				</enum>
+				<enum id="EncryptionKeySize" valueName="EncryptionKeySize" required="true">
+					<item displayName="$(string.Key128)">
+						<value>
+							<decimal value="128"/>
+						</value>
+					</item>
+					<item displayName="$(string.Key192)">
+						<value>
+							<decimal value="192"/>
+						</value>
+					</item>
+					<item displayName="$(string.Key256)">
+						<value>
+							<decimal value="256"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="B-HashAlgorithm" displayName="$(string.HashAlgorithm)" explainText="$(string.HashAlgorithm_Explain)" class="Machine" presentation="$(presentation.HashAlgorithm)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCrypto"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="HashAlgorithm" valueName="HashAlgorithm" required="true">
+					<item displayName="$(string.AlgSHA256)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+					<item displayName="$(string.AlgSHA512)">
+						<value>
+							<decimal value="4"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="C-PasswordKeyDerivation" displayName="$(string.PasswordKeyDerivation)" explainText="$(string.PasswordKeyDerivation_Explain)" class="Machine" presentation="$(presentation.PasswordKeyDerivation)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCrypto"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="PBxSaltLen" valueName="PBxSaltLen" required="true" minValue="8" maxValue="32"/>
+				<decimal id="PBxIterationCount" valueName="PBxIterationCount" required="true" minValue="10000" maxValue="500000000"/>
+				<decimal id="PBxVectorLen" valueName="PBxVectorLen" required="true" minValue="4" maxValue="32"/>
+				<enum id="DeriveMechanism" valueName="DeriveMechanism">
+					<item displayName="$(string.DeriveMechanism_SHA256_PBE)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.DeriveMechanism_SHA512_PBE)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.DeriveMechanism_SHA256_PBKDF2)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+					<item displayName="$(string.DeriveMechanism_SHA512_PBKDF2)">
+						<value>
+							<decimal value="4"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="D-Tokens" displayName="$(string.Tokens)" explainText="$(string.Tokens_Explain)" class="Machine" presentation="$(presentation.Tokens)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto\Tokens">
+			<parentCategory ref="CatCrypto"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="Tokens" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="E-CryptoExtension" displayName="$(string.CryptoExtension)" explainText="$(string.CryptoExtension_Explain)" class="Machine" presentation="$(presentation.CryptoExtension)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCrypto"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="CryptoExtension" valueName="CryptoExtension"/>
+			</elements>
+		</policy>
+		<policy name="F-CspWhiteList" displayName="$(string.CspWhiteList)" explainText="$(string.CspWhiteList_Explain)" class="Machine" presentation="$(presentation.CspWhiteList)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatCrypto"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="CspWhiteList" valueName="CspWhiteList" expandable="true"/>
+				<text id="CspBlackList" valueName="CspBlackList" expandable="true"/>
+			</elements>
+		</policy>
+		<policy name="G-EncryptionMechanism" displayName="$(string.EncryptionMechanism)" explainText="$(string.EncryptionMechanism_Explain)" class="Machine" presentation="$(presentation.EncryptionMechanism)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatCrypto"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="EnableCTSMode" valueName="EnableCTSMode" required="true">
+					<item displayName="$(string.EncryptionMechanism_STREAM)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.EncryptionMechanism_CTS)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.EncryptionMechanism_CTS3)">
+						<value>
+							<decimal value="4"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="H-EncryptionMechanismForZed" displayName="$(string.EncryptionMechanismForZed)" explainText="$(string.EncryptionMechanismForZed_Explain)" class="Machine" presentation="$(presentation.EncryptionMechanismForZed)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatCrypto"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="EnableCTSModeForZed" valueName="EnableCTSModeForZed" required="true">
+					<item displayName="$(string.EncryptionMechanism_STREAM)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.EncryptionMechanism_CTS)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="I-EnableAESNI" displayName="$(string.EnableAESNI)" explainText="$(string.EnableAESNI_Explain)" class="Machine" presentation="$(presentation.EnableAESNI)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatCrypto"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="EnableAESNI" valueName="EnableAESNI">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+			</elements>
+		</policy>
+		<policy name="J-RSAES" displayName="$(string.RSAES)" explainText="$(string.RSAES_Explain)" class="Machine" presentation="$(presentation.RSAES)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatCrypto"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="RSAES" valueName="RSAES" required="true">
+					<item displayName="$(string.RSAES_PKCSv1_5)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.RSAES_OAEP_SHA256)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.RSAES_OAEP_SHA512)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="K-ZafRSAKeySize" displayName="$(string.ZafRSAKeySize)" explainText="$(string.ZafRSAKeySize_Explain)" class="Machine" presentation="$(presentation.ZafRSAKeySize)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCrypto"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="ZafRSAKeySize" valueName="ZafRSAKeySize" required="true">
+					<item displayName="$(string.ZafRSAKeySize2048)">
+						<value>
+							<decimal value="2048"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZafRSAKeySize3072)">
+						<value>
+							<decimal value="3072"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZafRSAKeySize4096)">
+						<value>
+							<decimal value="4096"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="L-RANDOMGENERATOR" displayName="$(string.RANDOMGENERATOR)" explainText="$(string.RANDOMGENERATOR_Explain)" class="Machine" presentation="$(presentation.RANDOMGENERATOR)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCrypto"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="RandomGenerator" valueName="RandomGenerator" required="true">
+					<item displayName="$(string.RANDOMGENERATOR_HASH_SHA512)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.RANDOMGENERATOR_HMAC_SHA512)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+					<item displayName="$(string.RANDOMGENERATOR_CTR_AES256DF)">
+						<value>
+							<decimal value="3"/>
+						</value>
+					</item>
+					<item displayName="$(string.RANDOMGENERATOR_CRYEXT)">
+						<value>
+							<decimal value="5"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="M-SIGNATUREMECHANISM" displayName="$(string.SIGNATUREMECHANISM)" explainText="$(string.SIGNATUREMECHANISM_Explain)" class="Machine" presentation="$(presentation.SIGNATUREMECHANISM)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCrypto"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="SignatureMechanism" valueName="SignatureMechanism" required="true">
+					<item displayName="$(string.SIGNATUREMECHANISM_PKCS1V15)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.SIGNATUREMECHANISM_PKCS1V22)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="N-WrappingMechanism" displayName="$(string.WrappingMechanism)" explainText="$(string.WrappingMechanism_Explain)" class="Machine" presentation="$(presentation.WrappingMechanism)" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCrypto"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="WrappingMechanism" valueName="WrappingMechanism" required="true">
+					<item displayName="$(string.WrappingMechanism_CBC_PAD)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.WrappingMechanism_KWP)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="A-ReportToServer" displayName="$(string.ReportToServer)" explainText="$(string.ReportToServer_Explain)" class="Machine" presentation="$(presentation.ReportToServer)" key="Software\Policies\PrimX\ZONECENTRAL\EventLog">
+			<parentCategory ref="CatEventLog"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="ReportToServer" valueName="ReportToServer" required="true"/>
+			</elements>
+		</policy>
+		<policy name="B-LogZoneOpenClose" displayName="$(string.LogZoneOpenClose)" explainText="$(string.LogZoneOpenClose_Explain)" class="Machine" presentation="$(presentation.LogZoneOpenClose)" valueName="LogZoneOpenClose" key="Software\Policies\PrimX\ZONECENTRAL\EventLog">
+			<parentCategory ref="CatEventLog"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="C-EnableSuccessfulCommandLog" displayName="$(string.EnableSuccessfulCommandLog)" explainText="$(string.EnableSuccessfulCommandLog_Explain)" class="Machine" presentation="$(presentation.EnableSuccessfulCommandLog)" valueName="EnableSuccessfulCommandLog" key="Software\Policies\PrimX\ZONECENTRAL\EventLog">
+			<parentCategory ref="CatEventLog"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="D-DisableFailedCommandLog" displayName="$(string.DisableFailedCommandLog)" explainText="$(string.DisableFailedCommandLog_Explain)" class="Machine" presentation="$(presentation.DisableFailedCommandLog)" valueName="DisableFailedCommandLog" key="Software\Policies\PrimX\ZONECENTRAL\EventLog">
+			<parentCategory ref="CatEventLog"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="E-LogFileWiped" displayName="$(string.LogFileWiped)" explainText="$(string.LogFileWiped_Explain)" class="Machine" presentation="$(presentation.LogFileWiped)" valueName="LogFileWiped" key="Software\Policies\PrimX\ZONECENTRAL\EventLog">
+			<parentCategory ref="CatEventLog"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="F-LogEncryptedFileAccess" displayName="$(string.LogEncryptedFileAccess)" explainText="$(string.LogEncryptedFileAccess_Explain)" class="Machine" presentation="$(presentation.LogEncryptedFileAccess)" valueName="LogEncryptedFileAccess" key="Software\Policies\PrimX\ZONECENTRAL\EventLog">
+			<parentCategory ref="CatEventLog"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="G-LogEncryptedFileAccessReject" displayName="$(string.LogEncryptedFileAccessReject)" explainText="$(string.LogEncryptedFileAccessReject_Explain)" class="Machine" presentation="$(presentation.LogEncryptedFileAccessReject)" valueName="LogEncryptedFileAccessReject" key="Software\Policies\PrimX\ZONECENTRAL\EventLog">
+			<parentCategory ref="CatEventLog"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="H-LogCreateClearFileReject" displayName="$(string.LogCreateClearFileReject)" explainText="$(string.LogCreateClearFileReject_Explain)" class="Machine" presentation="$(presentation.LogCreateClearFileReject)" valueName="LogCreateClearFileReject" key="Software\Policies\PrimX\ZONECENTRAL\EventLog">
+			<parentCategory ref="CatEventLog"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="I-CommandLogFile" displayName="$(string.CommandLogFile)" explainText="$(string.CommandLogFile_Explain)" class="Machine" presentation="$(presentation.CommandLogFile)" key="Software\Policies\PrimX\ZONECENTRAL\ZoneManagement">
+			<parentCategory ref="CatEventLog"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="CommandLogFile" valueName="CommandLogFile" required="true" expandable="true"/>
+			</elements>
+		</policy>
+		<policy name="A-EnablePasswordPasting" displayName="$(string.EnablePasswordPasting)" explainText="$(string.EnablePasswordPasting_Explain)" class="Machine" presentation="$(presentation.EnablePasswordPasting)" valueName="EnablePasswordPasting" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="B-DisableKeyboardDriver" displayName="$(string.DisableKeyboardDriver)" explainText="$(string.DisableKeyboardDriver_Explain)" class="Machine" presentation="$(presentation.DisableKeyboardDriver)" valueName="DisableKeyboardDriver" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="C-DisablePageFileEncryption" displayName="$(string.DisablePageFileEncryption)" explainText="$(string.DisablePageFileEncryption_Explain)" class="Machine" presentation="$(presentation.DisablePageFileEncryption)" valueName="DisablePageFileEncryption" key="Software\Policies\PrimX\ZONECENTRAL\Specials">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="D-AppExceptions" displayName="$(string.AppExceptions)" explainText="$(string.AppExceptions_Explain)" class="Machine" presentation="$(presentation.AppExceptions)" key="Software\Policies\PrimX\ZONECENTRAL\Specials\AppExceptions">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="AppExceptions" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="E-AppFoldersPrivileges" displayName="$(string.AppFoldersPrivileges)" explainText="$(string.AppFoldersPrivileges_Explain)" class="Machine" presentation="$(presentation.AppFoldersPrivileges)" key="Software\Policies\PrimX\ZONECENTRAL\Specials\AppFoldersPrivileges">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="AppFoldersPrivileges" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="F-OpenZoneOnOpen" displayName="$(string.OpenZoneOnOpen)" explainText="$(string.OpenZoneOnOpen_Explain)" class="Machine" presentation="$(presentation.OpenZoneOnOpen)" valueName="OpenZoneOnOpen" key="Software\Policies\PrimX\ZONECENTRAL\Volumes">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="G-FileExceptions" displayName="$(string.FileExceptions)" explainText="$(string.FileExceptions_Explain)" class="Machine" presentation="$(presentation.FileExceptions)" key="Software\Policies\PrimX\ZONECENTRAL\Specials\FileExceptions">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="DisableDefaultFileException" valueName="DisableDefaultFileException" key="Software\Policies\PrimX\ZONECENTRAL\Specials">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+				<list id="FileExceptions" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="H-BootAndSysExceptions" displayName="$(string.BootAndSysExceptions)" explainText="$(string.BootAndSysExceptions_Explain)" class="Machine" presentation="$(presentation.BootAndSysExceptions)" key="Software\Policies\PrimX\ZONECENTRAL\Specials\BootAndSysExceptions">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="BootAndSysExceptions" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="I-RoamingProfiles" displayName="$(string.RoamingProfiles)" explainText="$(string.RoamingProfiles_Explain)" class="Machine" presentation="$(presentation.RoamingProfiles)" key="Software\Policies\PrimX\ZONECENTRAL\Specials">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="DisableRoamingCoherenceCheck" valueName="DisableRoamingCoherenceCheck">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+			</elements>
+		</policy>
+		<policy name="J-InspectOptions" displayName="$(string.InspectOptions)" explainText="$(string.InspectOptions_Explain)" class="Machine" presentation="$(presentation.InspectOptions)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<decimal id="InspectOptions" valueName="InspectOptions" key="Software\Policies\PrimX\ZONECENTRAL\Common" required="true" minValue="0" maxValue="999"/>
+				<list id="InspectMandatory" key="Software\Policies\PrimX\ZONECENTRAL\Common\InspectMandatory" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="K-ConstantOpenTitle" displayName="$(string.ConstantOpenTitle)" explainText="$(string.ConstantOpenTitle_Explain)" class="Machine" presentation="$(presentation.ConstantOpenTitle)" valueName="ConstantOpenTitle" key="Software\Policies\PrimX\ZONECENTRAL\OpenZone">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="L-DisableLocksOnNetPaths" displayName="$(string.DisableLocksOnNetPaths)" explainText="$(string.DisableLocksOnNetPaths_Explain)" class="Machine" presentation="$(presentation.DisableLocksOnNetPaths)" key="Software\Policies\PrimX\ZONECENTRAL\Volumes\DisableLocksOnNetPaths">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="DisableLocksOnNetPaths" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="M-PxcaInWinlogon" displayName="$(string.PxcaInWinlogon)" explainText="$(string.PxcaInWinlogon_Explain)" class="Machine" presentation="$(presentation.PxcaInWinlogon)" valueName="ZccaInWinlogon" key="Software\Policies\PrimX\ZONECENTRAL\Crypto">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="N-OfflineFiles" displayName="$(string.OfflineFiles)" explainText="$(string.OfflineFiles_Explain)" class="Machine" presentation="$(presentation.OfflineFiles)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="OfflineFiles" valueName="OfflineFiles" required="true">
+					<item displayName="$(string.OfflineFiles_Ignore_File)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.OfflineFiles_Ignore_Attribute)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+					<item displayName="$(string.OfflineFiles_Download_File)">
+						<value>
+							<decimal value="2"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="O-UseLegacyFilesystemFilter" displayName="$(string.UseLegacyFilesystemFilter)" explainText="$(string.UseLegacyFilesystemFilter_Explain)" class="Machine" presentation="$(presentation.UseLegacyFilesystemFilter)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="UseLegacyFilesystemFilter" valueName="UseLegacyFilesystemFilter">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+			</elements>
+		</policy>
+		<policy name="P-Reserved" displayName="$(string.Reserved)" explainText="$(string.Reserved_Explain)" class="Machine" presentation="$(presentation.Reserved)" key="Software\Policies\PrimX\ZONECENTRAL\Common\Reserved">
+			<parentCategory ref="CatCompatibility"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="Reserved" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="A-FileSystemsToExclude" displayName="$(string.FileSystemsToExclude)" explainText="$(string.FileSystemsToExclude_Explain)" class="Machine" presentation="$(presentation.FileSystemsToExclude)" key="Software\Policies\PrimX\ZONECENTRAL\Volumes\FileSystemsToExclude">
+			<parentCategory ref="CatVolumes"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="FileSystemsToExclude" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="B-VolumesToExclude" displayName="$(string.VolumesToExclude)" explainText="$(string.VolumesToExclude_Explain)" class="Machine" presentation="$(presentation.VolumesToExclude)" key="Software\Policies\PrimX\ZONECENTRAL\Volumes\VolumesToExclude">
+			<parentCategory ref="CatVolumes"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="VolumesToExclude" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="C-StorageDriversToExclude" displayName="$(string.StorageDriversToExclude)" explainText="$(string.StorageDriversToExclude_Explain)" class="Machine" presentation="$(presentation.StorageDriversToExclude)" key="Software\Policies\PrimX\ZONECENTRAL\Volumes\StorageDriversToExclude">
+			<parentCategory ref="CatVolumes"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="StorageDriversToExclude" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="D-NetVolumesToInclude" displayName="$(string.NetVolumesToInclude)" explainText="$(string.NetVolumesToInclude_Explain)" class="Machine" presentation="$(presentation.NetVolumesToInclude)" key="Software\Policies\PrimX\ZONECENTRAL\Volumes\NetVolumesToInclude">
+			<parentCategory ref="CatVolumes"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="NetVolumesToInclude" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="A-ZM_CertSources" displayName="$(string.ZM_CertSources)" explainText="$(string.ZM_CertSources_Explain)" class="Machine" presentation="$(presentation.ZM_CertSources)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedMail"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="ZM_WinCertStores" key="Software\Policies\PrimX\ZONECENTRAL\Common\ZM_WinCertStores" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="B-ZM_LdapSources" displayName="$(string.ZM_LdapSources)" explainText="$(string.ZM_LdapSources_Explain)" class="Machine" presentation="$(presentation.ZM_LdapSources)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedMail"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="ZM_LdapCertStores" key="Software\Policies\PrimX\ZONECENTRAL\Common\ZM_LdapCertStores" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="C-ZM_XFormOptions" displayName="$(string.ZM_XFormOptions)" explainText="$(string.ZM_XFormOptions_Explain)" class="Machine" presentation="$(presentation.ZM_XFormOptions)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedMail"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="ZM_XFormOptions" key="Software\Policies\PrimX\ZONECENTRAL\Common\ZM_XFormOptions" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="D-ZM_CanSendUnsolved" displayName="$(string.ZM_CanSendUnsolved)" explainText="$(string.ZM_CanSendUnsolved_Explain)" class="Machine" presentation="$(presentation.ZM_CanSendUnsolved)" valueName="ZM_CanSendUnsolved" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedMail"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<enabledValue>
+				<decimal value="1"/>
+			</enabledValue>
+			<disabledValue>
+				<decimal value="0"/>
+			</disabledValue>
+		</policy>
+		<policy name="E-ZM_RulesKeywords" displayName="$(string.ZM_RulesKeywords)" explainText="$(string.ZM_RulesKeywords_Explain)" class="Machine" presentation="$(presentation.ZM_RulesKeywords)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedMail"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="ZM_RulesKeywordsThatEnforceEncryption" valueName="ZM_RulesKeywordsThatEnforceEncryption"/>
+				<text id="ZM_RulesKeywordsThatRecommendEncryption" valueName="ZM_RulesKeywordsThatRecommendEncryption"/>
+			</elements>
+		</policy>
+		<policy name="F-ZM_RulesProperties" displayName="$(string.ZM_RulesProperties)" explainText="$(string.ZM_RulesProperties_Explain)" class="Machine" presentation="$(presentation.ZM_RulesProperties)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedMail"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="ZM_RulesPropertiesThatEnforceEncryption" valueName="ZM_RulesPropertiesThatEnforceEncryption"/>
+				<text id="ZM_RulesPropertiesThatRecommendEncryption" valueName="ZM_RulesPropertiesThatRecommendEncryption"/>
+			</elements>
+		</policy>
+		<policy name="G-ZM_RulesRecipients" displayName="$(string.ZM_RulesRecipients)" explainText="$(string.ZM_RulesRecipients_Explain)" class="Machine" presentation="$(presentation.ZM_RulesRecipients)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedMail"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="ZM_RulesRecipientsList" valueName="ZM_RulesRecipientsList"/>
+				<enum id="ZM_RulesActionWhenAllRecipientsMatchList" valueName="ZM_RulesActionWhenAllRecipientsMatchList" required="true">
+					<item displayName="$(string.ZM_EnforceEncryption_AttachOnly)">
+						<value>
+							<decimal value="65"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_EnforceEncryption)">
+						<value>
+							<decimal value="64"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_RecommendEncryption_AttachOnly)">
+						<value>
+							<decimal value="33"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_RecommendEncryption)">
+						<value>
+							<decimal value="32"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_ForbidEncryption)">
+						<value>
+							<decimal value="256"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_NothingEncryption)">
+						<value>
+							<decimal value="16"/>
+						</value>
+					</item>
+				</enum>
+				<enum id="ZM_RulesActionWhenSomeRecipientsMatchList" valueName="ZM_RulesActionWhenSomeRecipientsMatchList" required="true">
+					<item displayName="$(string.ZM_EnforceEncryption_AttachOnly)">
+						<value>
+							<decimal value="65"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_EnforceEncryption)">
+						<value>
+							<decimal value="64"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_RecommendEncryption_AttachOnly)">
+						<value>
+							<decimal value="33"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_RecommendEncryption)">
+						<value>
+							<decimal value="32"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_ForbidEncryption)">
+						<value>
+							<decimal value="256"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_NothingEncryption)">
+						<value>
+							<decimal value="16"/>
+						</value>
+					</item>
+				</enum>
+				<enum id="ZM_RulesActionWhenNoRecipientsMatchList" valueName="ZM_RulesActionWhenNoRecipientsMatchList" required="true">
+					<item displayName="$(string.ZM_EnforceEncryption_AttachOnly)">
+						<value>
+							<decimal value="65"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_EnforceEncryption)">
+						<value>
+							<decimal value="64"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_RecommendEncryption_AttachOnly)">
+						<value>
+							<decimal value="33"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_RecommendEncryption)">
+						<value>
+							<decimal value="32"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_ForbidEncryption)">
+						<value>
+							<decimal value="256"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_NothingEncryption)">
+						<value>
+							<decimal value="16"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="H-ZM_RulesDefault" displayName="$(string.ZM_RulesDefault)" explainText="$(string.ZM_RulesDefault_Explain)" class="Machine" presentation="$(presentation.ZM_RulesDefault)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedMail"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="ZM_RulesDefaultAction" valueName="ZM_RulesDefaultAction" required="true">
+					<item displayName="$(string.ZM_EnforceEncryption_AttachOnly)">
+						<value>
+							<decimal value="65"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_EnforceEncryption)">
+						<value>
+							<decimal value="64"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_RecommendEncryption_AttachOnly)">
+						<value>
+							<decimal value="33"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_RecommendEncryption)">
+						<value>
+							<decimal value="32"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_NothingEncryption)">
+						<value>
+							<decimal value="16"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="I-ZM_AccessFilesTrustControl" displayName="$(string.ZM_AccessFilesTrustControl)" explainText="$(string.ZM_AccessFilesTrustControl_Explain)" class="Machine" presentation="$(presentation.ZM_AccessFilesTrustControl)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZedMail"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<enum id="ZM_AccessFilesTrustControl" valueName="ZM_AccessFilesTrustControl" required="true">
+					<item displayName="$(string.ZM_TrustControlNothing)">
+						<value>
+							<decimal value="0"/>
+						</value>
+					</item>
+					<item displayName="$(string.ZM_TrustControlSignature)">
+						<value>
+							<decimal value="1"/>
+						</value>
+					</item>
+				</enum>
+			</elements>
+		</policy>
+		<policy name="A-ZPLocalFilesLocation" displayName="$(string.ZPLocalFilesLocation)" explainText="$(string.ZPLocalFilesLocation_Explain)" class="Machine" presentation="$(presentation.ZPLocalFilesLocation)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZPDocLib"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="ZPLocalFilesLocation" valueName="ZPLocalFilesLocation"/>
+				<decimal id="ZPLocalFilesExpiration" valueName="ZPLocalFilesExpiration" minValue="0" maxValue="365"/>
+			</elements>
+		</policy>
+		<policy name="B-ZPBPCrossBrowserCompatibility" displayName="$(string.ZPBPCrossBrowserCompatibility)" explainText="$(string.ZPBPCrossBrowserCompatibility_Explain)" class="Machine" presentation="$(presentation.ZPBPCrossBrowserCompatibility)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatZPDocLib"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="ZPBPDisableCrossBrowserCompatibility" valueName="ZPBPDisableCrossBrowserCompatibility">
+					<trueValue>
+						<decimal value="0"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="1"/>
+					</falseValue>
+				</boolean>
+			</elements>
+		</policy>
+		<policy name="C-ZPBPAllowedBrowsers" displayName="$(string.ZPBPAllowedBrowsers)" explainText="$(string.ZPBPAllowedBrowsers_Explain)" class="Machine" presentation="$(presentation.ZPBPAllowedBrowsers)" key="Software\Policies\PrimX\ZONECENTRAL\Common\ZPBPAllowedBrowsers">
+			<parentCategory ref="CatZPDocLib"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="ZPBPAllowedBrowsers" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="D-ZPBPAllowedWebOrigins" displayName="$(string.ZPBPAllowedWebOrigins)" explainText="$(string.ZPBPAllowedWebOrigins_Explain)" class="Machine" presentation="$(presentation.ZPBPAllowedWebOrigins)" key="Software\Policies\PrimX\ZONECENTRAL\Common\ZPBPAllowedWebOrigins">
+			<parentCategory ref="CatZPDocLib"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="ZPBPAllowedWebOrigins" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+		<policy name="A-DisablePrivatePolicies" displayName="$(string.DisablePrivatePolicies)" explainText="$(string.DisablePrivatePolicies_Explain)" class="Machine" presentation="$(presentation.DisablePrivatePolicies)" key="Software\Policies\PrimX\ZONECENTRAL">
+			<parentCategory ref="CatProduct"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<boolean id="DisablePrivatePolicies" valueName="DisablePrivatePolicies">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+			</elements>
+		</policy>
+		<policy name="B-PoliciesId" displayName="$(string.PoliciesId)" explainText="$(string.PoliciesId_Explain)" class="Machine" presentation="$(presentation.PoliciesId)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatProduct"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="PoliciesId" valueName="PoliciesId" key="Software\Policies\PrimX\ZONECENTRAL\Common"/>
+			</elements>
+		</policy>
+		<policy name="C-LicencePolicies" displayName="$(string.LicencePolicies)" explainText="$(string.Licence_Explain)" class="Machine" presentation="$(presentation.LicencePolicies)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatProduct"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="Licence" key="Software\Policies\PrimX\ZONECENTRAL\Common\Licence" additive="false" explicitValue="true"/>
+				<text id="LicenceOptions" valueName="LicenceOptions" key="Software\Policies\PrimX\ZONECENTRAL\Common"/>
+			</elements>
+		</policy>
+		<policy name="D-ProductDeactivation" displayName="$(string.ProductDeactivation)" explainText="$(string.ProductDeactivation_Explain)" class="Machine" presentation="$(presentation.ProductDeactivation)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatProduct"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="RestrictProductActivation" valueName="RestrictProductActivation" expandable="true"/>
+				<text id="RestrictProductDeactivation" valueName="RestrictProductDeactivation" expandable="true"/>
+				<boolean id="DefaultProductDeactivation" valueName="DefaultProductDeactivation">
+					<trueValue>
+						<decimal value="1"/>
+					</trueValue>
+					<falseValue>
+						<decimal value="0"/>
+					</falseValue>
+				</boolean>
+			</elements>
+		</policy>
+		<policy name="E-NetPolicies" displayName="$(string.NetPolicies)" explainText="$(string.NetPolicies_Explain)" class="Machine" presentation="$(presentation.NetPolicies)" key="Software\Policies\PrimX\ZONECENTRAL">
+			<parentCategory ref="CatProduct"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<text id="NetPolicies" valueName="NetPolicies" key="Software\Policies\PrimX\ZONECENTRAL"/>
+			</elements>
+		</policy>
+		<policy name="F-SignPolicyCertificateCheck" displayName="$(string.SignPolicyCertificateCheck)" explainText="$(string.SignPolicyCertificateCheck_Explain)" class="Machine" presentation="$(presentation.SignPolicyCertificateCheck)" key="Software\Policies\PrimX\ZONECENTRAL\Common">
+			<parentCategory ref="CatProduct"/>
+			<supportedOn ref="SUPPORTED_WinVista"/>
+			<elements>
+				<list id="SignPolicyCertificateCheck" key="Software\Policies\PrimX\ZONECENTRAL\Common\SignPolicyCertificateCheck" additive="false" explicitValue="true"/>
+			</elements>
+		</policy>
+	</policies>
+</policyDefinitions>

@@ -1,0 +1,604 @@
+@charset "UTF-8";
+/* PUBLIC */
+body {
+  font-size: 16rem;
+  overflow-x: hidden;
+  width: 100vw;
+  height: 100vh;
+  background: url(../../../../images/egovframework/com/primx/bg.jpg) no-repeat center/cover;
+}
+
+::-moz-selection {
+  background-color: #262262;
+  color: #fff;
+}
+
+::selection {
+  background-color: #262262;
+  color: #fff;
+}
+
+.mr10 {
+  margin-right: 10rem !important;
+}
+
+.mb00 {
+  margin-bottom: 0 !important;
+}
+
+.mb10 {
+  margin-bottom: 10rem !important;
+}
+
+.mb15 {
+  margin-bottom: 15rem !important;
+}
+
+.mb20 {
+  margin-bottom: 20rem !important;
+}
+
+.mb30 {
+  margin-bottom: 30rem !important;
+}
+
+.stxt {
+  font-size: 16rem;
+  margin-bottom: 3rem;
+  display: block;
+}
+
+/* input.noWrite{border: 1px solid #ffa6a6; background-color: #fff2f2 !important;} */
+/* LAYOUT */
+.container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding-left: 50rem !important;
+  padding-right: 50rem !important;
+}
+.container.ty2 {
+  padding-left: 340rem !important;
+  padding-right: 340rem !important;
+}
+
+/* TEXT */
+strong {
+  font-weight: 500;
+}
+
+em {
+  color: #262262;
+}
+
+/* BG용 IMG : 이미지태그를 배경으로 쓸때 쓰임 */
+.cover {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+/* [ ● Text ] 형태 텍스트 */
+.dotTxt, .dotList > li {
+  position: relative;
+  padding-left: 18rem;
+}
+
+.dotTxt::before, .dotList > li::before {
+  content: "•";
+  display: block;
+  position: absolute;
+  left: 10rem;
+  top: 13rem;
+}
+
+/* ETC */
+.wImg {
+  filter: brightness(0) invert(1);
+} /* 이미지 하얀색으로 만들기*/
+.bImg {
+  filter: brightness(0);
+} /* 이미지 검정색으로 만들기 */
+.wColor {
+  color: #fff;
+}
+
+.allWrap {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.allWrap.main .logo .mainLogo {
+  display: block !important;
+}
+.allWrap.main header nav .hamberger span {
+  background-color: #fff;
+}
+.allWrap.main header nav .subList li a {
+  color: #fff;
+}
+.allWrap.subPage .logo .subLogo {
+  display: block !important;
+}
+.allWrap header {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  top: 30rem;
+  width: 100%;
+  z-index: 999;
+  height: 32rem;
+}
+.allWrap header .logo a { /* width: 688rem; */
+  width: 140rem;
+}
+.allWrap header .logo a svg {
+  width: 100%;
+}
+.allWrap header nav {
+  width: 150rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+}
+.allWrap header nav .hamberger {
+  width: 115rem;
+  height: 23rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  cursor: pointer;
+}
+.allWrap header nav .hamberger span {
+  width: 100%;
+  height: 5rem;
+  background-color: #262262;
+  border-radius: 50rem;
+  display: block;
+  transition: 0.3s;
+  transform-origin: 0 0;
+}
+.allWrap header nav .subList {
+  width: 100%;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s;
+  transform: translateY(10rem);
+  margin-top: 24rem;
+}
+.allWrap header nav .subList li {
+  width: 100%;
+}
+.allWrap header nav .subList li a {
+  width: 100%;
+  text-align: right;
+  font-size: 20rem;
+  font-weight: 500;
+  margin-top: 10rem;
+  padding-right: 8rem;
+  position: relative;
+}
+.allWrap header nav .subList li a::before {
+  content: "";
+  background-color: #fbaa19;
+  width: 10rem;
+  height: 10rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 100%;
+  opacity: 0;
+  transition: 0.3s;
+  transform: scale(0);
+}
+.allWrap header nav .subList li a:hover::before {
+  opacity: 1;
+  transform: scale(1);
+}
+.allWrap header nav.on .hamberger span:nth-child(1) {
+  transform: rotate(9deg);
+}
+.allWrap header nav.on .hamberger span:nth-child(2) {
+  transform: rotate(-9deg);
+}
+.allWrap header nav.on .subList {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.allWrap footer {
+  height: 50rem;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  background-color: #262262;
+  color: #fff;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+}
+.content.mainWrap {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #262262;
+  /* swiper */
+}
+.content.mainWrap .swiper {
+  width: 100%;
+  height: 100%;
+  /* 재생/정지 버튼 */
+}
+.content.mainWrap .swiper .swiper-slide {
+  color: #fff;
+}
+.content.mainWrap .swiper .swiper-slide .titleWrap {
+  width: 700rem;
+  margin-bottom: 70rem;
+  margin-top: 130rem;
+}
+.content.mainWrap .swiper .swiper-slide .titleWrap img {
+  width: 100%;
+}
+.content.mainWrap .swiper .swiper-slide .titleWrap span {
+  opacity: 0.8;
+  margin-top: 15rem;
+  font-size: 20rem;
+  font-weight: 500;
+}
+.content.mainWrap .swiper .swiper-slide .divWrap {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.content.mainWrap .swiper .swiper-slide .divWrap .leftWrap {
+  display: flex;
+  justify-content: space-between;
+  width: 55%;
+}
+.content.mainWrap .swiper .swiper-slide .divWrap .leftWrap .itemWrap {
+  width: calc(50% - 10rem);
+}
+.content.mainWrap .swiper .swiper-slide .divWrap .leftWrap .itemWrap li {
+  font-size: 20rem;
+  padding: 15rem 20rem;
+  border: 1rem solid #fff;
+  margin-bottom: 15rem;
+  border-radius: 50rem;
+}
+.content.mainWrap .swiper .swiper-slide .divWrap .rightWrap {
+  padding-left: 50rem;
+  width: 45%;
+}
+.content.mainWrap .swiper .swiper-pagination {
+  bottom: 50rem;
+  width: auto;
+  left: 50rem;
+}
+.content.mainWrap .swiper .swiper-pagination span {
+  width: 37rem;
+  height: 37rem;
+  margin: 0 7rem;
+  display: inline-block;
+  border-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.5019607843);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: transparent;
+  opacity: 1;
+}
+.content.mainWrap .swiper .swiper-pagination span.swiper-pagination-bullet-active {
+  border: 1rem solid #F8AA00;
+  background-color: rgba(248, 170, 0, 0.1);
+}
+.content.mainWrap .swiper .swiper-pagination span:nth-child(1) {
+  background-image: url(../../../../images/egovframework/com/primx/zc.png);
+}
+.content.mainWrap .swiper .swiper-pagination span:nth-child(2) {
+  background-image: url(../../../../images/egovframework/com/primx/oz.png);
+}
+.content.mainWrap .swiper .swiper-pagination span:nth-child(3) {
+  background-image: url(../../../../images/egovframework/com/primx/cy.png);
+}
+.content.mainWrap .swiper .progress-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 70rem;
+  left: 220rem;
+  width: 100rem;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.content.mainWrap .swiper .progress-bar .progress {
+  width: 0;
+  height: 100%;
+  background: #F8AA00;
+  transition: width linear;
+}
+.content.mainWrap .swiper .controls {
+  position: absolute;
+  left: 329rem;
+  bottom: 64rem;
+  z-index: 99999;
+}
+.content.mainWrap .swiper .controls button {
+  cursor: pointer;
+  color: white;
+}
+.content .innerWrap {
+  padding: 40rem;
+  height: -moz-fit-content;
+  height: fit-content;
+  width: 575rem;
+  background-color: #ffffff;
+  border-radius: 15rem;
+  box-shadow: 0 0 15rem rgba(38, 34, 98, 0.1098039216);
+  margin: auto; /* margin-top: 250rem; margin-bottom: 100rem; */
+}
+.content .innerWrap h2 {
+  font-size: 30rem;
+  margin-bottom: 20rem;
+}
+.content .innerWrap .listWrap li {
+  margin-bottom: 15rem;
+  position: relative;
+}
+.content .innerWrap .listWrap li .tit {
+  padding-left: 0rem;
+  padding-bottom: 5rem;
+  font-weight: 500;
+}
+.content .innerWrap .listWrap .flexWrap {
+  display: flex;
+  justify-content: space-between;
+}
+.content .innerWrap .listWrap .flexWrap.js {
+  justify-content: start;
+}
+.content .innerWrap.myPageWrap {
+  /* .buWrap{ padding: 0; display: flex; margin-left: 10rem;
+  	button{ padding: 0; border-radius: 0; width: auto;
+  		&.editBtn{background: url(../../../../images/egovframework/com/primx/edit.svg)no-repeat center/cover transparent; width: 35rem; height: 35rem;}
+  		&.saveBtn{background: url(../../../../images/egovframework/com/primx/save.svg)no-repeat center/cover transparent; width: 35rem; height: 35rem;}
+  	}
+  } */
+}
+.content .innerWrap.myPageWrap h2 {
+  display: flex;
+}
+.content .downloadWrap .buWrap button {
+  padding: 0;
+}
+.content .downloadWrap .buWrap button a {
+  padding: 20rem;
+}
+
+.buWrap {
+  padding-top: 10rem;
+}
+.buWrap button {
+  background-color: #262262;
+  color: #fff;
+  width: 100%;
+  padding: 20rem;
+  border-radius: 15rem;
+  font-size: 20rem;
+}
+.buWrap button.signUp {
+  background-color: unset;
+  color: #262262;
+  text-align: right;
+  font-size: 18rem;
+  padding: 0;
+  margin-top: 20rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  cursor: default;
+}
+.buWrap button.signUp a {
+  width: auto;
+}
+
+button {
+  transition: 0.4s;
+}
+button.checkBtn {
+  border: 1rem solid #262262;
+  border-radius: 15rem;
+  color: #262262;
+  width: 150rem;
+  margin-left: 10rem;
+}
+button.checkBtn:hover {
+  background-color: rgba(12, 0, 197, 0.13);
+}
+button.accountBtn {
+  background: url(../../../../images/egovframework/com/primx/link.svg) no-repeat right 10rem center/20rem transparent;
+  color: #262262;
+  font-size: 16rem;
+  border: 1rem solid #262262;
+  font-weight: 400;
+  width: 230rem;
+  margin-left: 10rem;
+  border-radius: 15rem;
+  height: auto;
+}
+button.accountBtn a {
+  padding: 0 35rem 0 10rem;
+  height: 100%;
+  line-height: 45rem;
+}
+
+.pwViewBtn {
+  width: 24rem;
+  height: 24rem;
+  position: absolute;
+  right: 20rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: url(../../../../images/egovframework/com/primx/eye-off.svg) no-repeat center/cover;
+}
+
+.pwInput.on ~ .pwViewBtn {
+  background: url(../../../../images/egovframework/com/primx/eye.svg) no-repeat center/cover;
+}
+
+input {
+  transition: background 0.3s;
+  border: 1rem solid transparent;
+}
+input:focus {
+  background-color: #f6fbfe !important;
+  border: 1rem solid #eee;
+}
+input.txtBox {
+  width: 100%;
+  padding: 13rem;
+  color: #262262;
+  border-radius: 15rem;
+  background-color: #f8f8f8;
+}
+input.pwInput {
+  padding-right: 50rem;
+}
+input.disabled {
+  background-color: #eeeeee;
+  color: #a8a8a8;
+}
+
+.selectBox {
+  color: #262262;
+  border-radius: 15rem;
+  background-color: #f8f8f8;
+  outline: none;
+  width: 280rem;
+  margin-right: 10rem;
+}
+.selectBox .drop {
+  padding: 13rem;
+  cursor: pointer;
+  height: 100%;
+  width: 100%;
+  background: url(../../../../images/egovframework/com/primx/arr_d.svg) no-repeat right 15rem center/15rem;
+  font-size: 14rem;
+  border-radius: 10rem;
+  transition: 0.3s;
+  box-sizing: border-box;
+}
+
+.datepicker {
+  cursor: pointer;
+  position: relative;
+  background: url(../../../../images/egovframework/com/primx/cal.svg) no-repeat right 15rem center/16rem;
+}
+
+@media screen and (min-width: 1281px) {
+  .mo {
+    display: none !important;
+  }
+}
+@media screen and (max-width: 1280px) {
+  /* PUBLIC */
+  .pc {
+    display: none !important;
+  }
+  .container {
+    padding-left: 20rem !important;
+    padding-right: 20rem !important;
+  }
+  .container.ty2 {
+    padding-left: 20rem !important;
+    padding-right: 20rem !important;
+  }
+  .dotTxt, .dotList > li {
+    padding-left: 8rem;
+  }
+  .dotTxt::before, .dotList > li::before {
+    top: 10rem;
+    width: 4rem;
+    height: 4rem;
+  }
+  .mainCbtn {
+    padding: 18rem 0 !important;
+  }
+  .allWrap header .logo a {
+    width: 130rem;
+  }
+  .allWrap header nav .subList {
+    margin-top: 10rem;
+  }
+  .allWrap header nav .subList li a {
+    font-size: 18rem;
+  }
+  .allWrap button.accountBtn {
+    background-image: none;
+  }
+  .allWrap button.accountBtn a {
+    padding: 0;
+  }
+  .content {
+    padding: 100rem 0 30rem;
+  }
+  .content.mainWrap .swiper .swiper-slide .titleWrap {
+    width: 100%;
+    margin-top: 10rem;
+    margin-bottom: 30rem;
+  }
+  .content.mainWrap .swiper .swiper-slide .titleWrap span {
+    font-size: 18rem;
+  }
+  .content.mainWrap .swiper .swiper-slide .divWrap {
+    flex-wrap: wrap;
+  }
+  .content.mainWrap .swiper .swiper-slide .divWrap > div {
+    width: 100% !important;
+  }
+  .content.mainWrap .swiper .swiper-slide .divWrap .leftWrap .itemWrap li {
+    font-size: 14rem;
+    padding: 7rem 13rem;
+    margin-bottom: 8rem;
+  }
+  .content.mainWrap .swiper .swiper-slide .divWrap .rightWrap {
+    display: none;
+  }
+  .content.mainWrap .swiper .swiper-pagination {
+    left: auto;
+    right: 20rem;
+    bottom: 0;
+  }
+  .content .innerWrap {
+    padding: 30rem;
+    max-width: calc(100% - 40rem);
+    width: 485rem;
+  }
+  .content .innerWrap h2 {
+    font-size: 24rem;
+  }
+  button.checkBtn {
+    width: 130rem;
+  }
+  .buWrap button {
+    font-size: 16rem;
+    padding: 15rem;
+  }
+}/*# sourceMappingURL=layout.css.map */

@@ -1,0 +1,39 @@
+{
+  "menu": {
+    "csv": "CSV",
+    "pdf": "PDF",
+    "print": "Print",
+    "create_request": "Create request",
+    "agentpolicy": "Agent Policy",
+    "create_productpolicy": "Create Product Policy",
+    "create_manager": "Create Manager",
+    "user": "User",
+    "approval": "Approval",
+    "create": "Create",
+    "update": "Update",
+    "modify": "Modify",
+    "delete": "Delete",
+    "manageloginfo": "Manage log Info",
+    "productloginfo": "Product log Info",
+    "systeminfo": "System Info",
+    "movefileinfo": "Movefile Info"
+  },
+  "profilemenu": {
+    "title": "Profile",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+  "languagemenu": {
+    "title": "Language",
+    "en": "English",
+    "ko": "한글"
+  },
+  "gridmenu": {
+    "title": "Grid",
+    "sortbyasc": "Sort by ASC",
+    "sortbydesc": "Sort by DESC",
+    "unsort": "Unsort",
+    "filter": "Filter",
+    "managecolumns": "Manage columns"
+  }
+}

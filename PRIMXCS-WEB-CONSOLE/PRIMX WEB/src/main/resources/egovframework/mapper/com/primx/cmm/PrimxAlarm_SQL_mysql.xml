@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="alarmDAO">
+
+    <select id="selectAlarmMapList" resultType="egovframework.com.primx.fun.cmm.service.AlarmMapVO">
+        SELECT 
+            C_CODE AS code,
+            C_TYPE_DESC AS typeDesc,
+            C_USED_YN AS usedYn
+        FROM T_ALARM_MAP
+        ORDER BY C_CODE ASC
+    </select>
+
+    <select id="selectAlarmMapListCount" resultType="int">
+        SELECT COUNT(*) 
+        FROM T_ALARM_MAP
+    </select>
+
+    <select id="selectAlarmMapListByCode" resultType="egovframework.com.primx.fun.cmm.service.AlarmMapVO">
+        SELECT 
+            C_CODE AS code,
+            C_TYPE_DESC AS typeDesc,
+            C_USED_YN AS usedYn
+        FROM T_ALARM_MAP
+        WHERE C_CODE = #{code}
+        ORDER BY C_CODE ASC
+    </select>
+
+    <select id="selectAlarmList" parameterType="map" resultType="egovframework.com.primx.fun.cmm.service.AlarmVO">
+        SELECT 
+            ta.C_SEQ_NO AS seqNo,
+            ta.C_USER_ID AS userId,
+            cni.USER_NM AS userNm,
+            ta.C_PATH AS path,
+            ta.C_TYPE AS type,
+            tam.C_TYPE_DESC AS typeDesc,
+            ta.C_USER_ROLE AS userRole,
+            ta.C_INSERT_DATE AS insertDate,
+            ta.C_READ AS isRead,
+            ta.C_TARGET_ID AS targetId
+        FROM T_ALARM ta
+        LEFT JOIN T_ALARM_MAP tam ON ta.C_TYPE = tam.C_CODE
+        LEFT JOIN COMTNEMPLYRINFO cni ON ta.C_USER_ID = cni.EMPLYR_ID
+        WHERE ta.C_TARGET_ID = #{targetId}
+        <if test="userRole == 'ADMIN'">
+            OR ta.C_USER_ROLE = #{userRole}
+        </if>
+        ORDER BY ta.C_INSERT_DATE DESC
+    </select>
+
+    <select id="selectAlarmListCount" parameterType="map" resultType="int">
+        SELECT COUNT(*) 
+        FROM T_ALARM ta
+        LEFT JOIN T_ALARM_MAP tam ON ta.C_TYPE = tam.C_CODE
+        LEFT JOIN COMTNEMPLYRINFO cni ON ta.C_TARGET_ID = cni.EMPLYR_ID
+        WHERE ta.C_TARGET_ID = #{targetId}
+        <if test="userRole == 'ADMIN'">
+            OR ta.C_USER_ROLE = #{userRole}
+        </if>
+    </select>
+
+    <insert id="insertAlarm" parameterType="egovframework.com.primx.fun.cmm.service.AlarmVO">
+        INSERT INTO T_ALARM (
+            C_USER_ID,
+            C_PATH,
+            C_TYPE,
+            C_USER_ROLE,
+            C_INSERT_DATE,
+            C_READ,
+            C_TARGET_ID
+        ) VALUES (
+            #{userId},
+            #{path},
+            #{type},
+            #{userRole},
+            UTC_TIMESTAMP(),
+            0,
+            #{targetId}
+        )
+    </insert>
+
+    <update id="updateAlarm" parameterType="egovframework.com.primx.fun.cmm.service.AlarmVO">
+        UPDATE T_ALARM
+        SET
+            C_READ = #{isRead}
+        WHERE C_SEQ_NO = #{seqNo}
+    </update>
+
+    <update id="readAlarm" parameterType="map">
+        UPDATE T_ALARM
+        SET
+            C_READ = 1
+        WHERE C_SEQ_NO = #{seqNo}
+    </update>
+
+    <update id="readAllAlarm" parameterType="map">
+        UPDATE T_ALARM
+        SET
+            C_READ = 1
+        WHERE C_TARGET_ID = #{targetId}
+    </update>
+
+</mapper> 

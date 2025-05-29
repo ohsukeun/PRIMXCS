@@ -1,0 +1,247 @@
+:root {
+    --clr-primary: #2962ff;
+    --clr-primary-hover: #0d47a1;
+    --clr-gray-med: #78909c;
+    --clr-gray-light: #cfd8dc;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html,body {
+        margin: 0;
+        font-family: "Open Sans", sans-serif;
+        width: 100%;
+        height: 100%;
+}
+
+header {
+    --flex-direction: row;
+    --justify-content: space-between;
+    --align-items: center;
+    padding : 2px;
+    border-bottom: 2px solid var(--clr-gray-light);
+}
+.hdTitle{
+    font-family: "Open Sans", sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+footer {
+    display: flex;
+    flex-direction: row;
+    --justify-content: space-between;
+    align-items: center;
+    padding-top: 1em;
+    border-top: 2px solid var(--clr-gray-light);
+}
+
+table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+th, td {
+    border:1px solid var(--clr-gray-light);
+    padding: 2px;
+    word-wrap:break-word;
+}
+th {
+    background: #e4e4e4;
+}
+
+.tdTitle {
+	background-color: #e4e4e4;
+}
+
+input[type=radio]+label{
+    cursor: pointer;
+    width: 50px;
+    height: 20px;
+    text-align: center;
+}
+
+input[type=radio]+label:hover,
+input[type=radio]:focus+label{
+    background: #ddd;
+}
+
+input[type=checkbox] {
+    cursor: pointer;
+}
+
+label {
+    cursor: pointer;
+}
+
+main {
+    margin-top: 10px;
+}
+
+input[type="text"] {
+    border: solid 1px #D2691E;
+    border-radius: 4px;
+    height: 20px;
+}
+
+input[type="text"]:read-only {
+    border: solid 1px #000000;
+    background:  #e4e4e4;
+}
+
+.btn-setting {
+    background: #ffffff;
+    /* border: 1px solid red; */
+}
+.btn-chart-del {
+    background: #ffffff;
+}
+.btn-add {
+    width: 6em;
+    height: 2em;
+    font-size: 1em;
+    border: none;
+    background-color: #2962ff;
+    color: white;
+    cursor: pointer;
+    font-family: "Open Sans", sans-serif;
+    font-weight: bold;
+    border-radius: 0.2em;
+    outline: none;
+    transition: all 100ms ease-in;
+}
+
+.btn-add:active,
+.btn-add:hover {
+    background-color: var(--clr-primary-hover);
+}
+.btn-add:disabled {
+  background: #ccc;
+}
+
+#div-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 2em 0em;
+}
+
+.div-pan-layout {
+    /* background: #ffffff; */
+    /*  border-radius: 5px; */
+    /* border: 1px solid #9e9e9e; */
+    padding: 2px;
+}
+.div-chart-layout {
+    background: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #9e9e9e;
+    padding: 0px;
+    height: 100%;
+    overflow-y: hidden;
+}
+.tableFixHead {
+     overflow-y: auto;
+}
+
+/* 대시보드 선택 */
+#dashboardTable {
+     width:100%;
+     table-layout: fixed;
+}
+#dashboardTable thead {
+     float: left;
+      width:100%;
+}
+#dashboardTable tbody {
+      overflow-y: auto;
+      overflow-x: hidden;
+      float: left;
+      height: 330px;
+}
+#dashboardTable tbody tr {
+    width:1011px;
+}
+
+#dashboardTable tbody tr:hover { 
+    background-color: lightyellow;
+}
+
+
+/* 템플릿 관리 */
+#templatetTable {
+     width:100%;
+     table-layout: fixed;
+}
+#templatetTable thead {
+     float: left;
+      width:100%;
+}
+#templatetTable tbody {
+      overflow-y: auto;
+      overflow-x: hidden;
+      float: left;
+      height: 270px;
+}
+#templatetTable tbody tr {
+      width:100%;
+}
+
+#chartContainer {
+    height: 100%;
+    width:100%;
+    padding: 5px;
+    position: relative;
+}
+/* 차트 아이콘 */
+
+.chart-icon {
+    background: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #222020;
+    padding: 5px;
+    height: 220px;
+    width:200px;
+    position: absolute;
+}
+.chart-image {
+    width:190px;
+    height:210px;
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+    position: relative;
+    cursor:pointer;
+}
+.chartId {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    height: 20px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: bold;
+    font-size: small;
+    background: #ffffff;
+}
+
+ #resultMessage { 
+    width: 240px;
+    height: 170px;
+    padding: 0.4em;
+    position: absolute;
+    top: 100px;
+    left:100px;
+    z-index:9999;
+}
+
+.linkText {
+    background-color: #e6ecff;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+

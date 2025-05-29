@@ -1,0 +1,189 @@
+{
+  "dialog": {
+    "managerlogin": 
+    {
+      "title": "Manager Login",
+      "id": "ID",
+      "password": "Password",
+      "loginbtn": "LOGIN"
+    },
+    "userlogin": 
+    {
+      "title": "User Login",
+      "id": "ID",
+      "password": "Password",
+      "loginbtn": "LOGIN"
+    },
+    "profile": 
+    {
+      "title": "Profile",
+      "id": "ID",
+      "name": "Name",
+      "department": "Department",
+      "email": "Email",
+      "level": "Level",
+      "modifybtn": "Modify",
+      "savebtn": "Save"
+    },
+    "password": 
+    {
+      "title": "Password",
+      "oldpassword": "Old Password",
+      "newpassword": "New Password",
+      "confirmpassword": "Confirm Password"
+    },
+    "request": 
+    {
+      "title": "Request",
+      "userinfo": "User Info",
+      "requestno": "Request No",
+      "username": "User Name",
+      "requestdate": "Request Date",
+      "approvalinfo": "Approval Info",
+      "approvalstatus": "Approval Status",
+      "approvallist": "Approval List",
+      "requestinfo": "Request Info",
+      "requesttitle": "Request Title",
+      "requestfile": "File",
+      "requestreason": "Request Reason"
+    },
+    "approval": 
+    {
+      "title": "Approval",
+      "approvalinfo": "Approval Info",
+      "approvalreason": "Approval Reason"
+    },
+    "manager": 
+    {
+      "title": "Manager",
+      "managerid": "Manager ID",
+      "managername": "Manager Name",
+      "email": "EMail",
+      "level": "Level",
+      "period": "Period",
+      "iplimit": "IP limit"
+    },
+    "user": 
+    {
+      "title": "User",
+      "userid": "User ID",
+      "username": "User Name",
+      "email": "EMail",
+      "department": "Department"
+    },
+    "department": 
+    {
+      "title": "Department",
+      "departmentname": "Department Name",
+      "parentdeptname": "Parent Department Name"
+    },
+    "agentpolicy": 
+    {
+      "title": "Agent Policy",
+      "type": "Type",
+      "policyid": "Policy ID",
+      "policyname": "Policy name",
+      "insertuser": "Insert User",
+      "insertdate": "Insert date",
+      "modifyuser": "Modify User",
+      "modifydate": "modify date",
+      "filepolicy": 
+      {"title": "File policy",
+        "movefile":
+        {"title": "Move file",
+          "notuse": "Not use",
+          "userdirectcreate": "User direct Create",
+          "userconsolecreate": "User console Create"}
+      },
+      "menupolicy": 
+      {"title": "Tray Menu policy",
+        "traymenu":{
+          "product": "Product menu",
+          "userconsole": "User Console",
+          "movefilecreate": "Movefile Create"}
+      }
+    },
+    "manageloginfo": 
+    {
+      "title": "Manager Log Info",
+      "datetime": "Date Time",
+      "class": "Class",
+      "type": "Type",
+      "systemname": "System Name",
+      "username": "User Name",
+      "insertuser": "Insert User",
+      "contents": "Contents"
+    },
+    "productloginfo": 
+    {
+      "title": "Product Log Info",
+      "datetime": "Date Time",
+      "level": "Level",
+      "type": "Type",
+      "product": "Product",
+      "systemname": "System Name",
+      "username": "User Name",
+      "insertuser": "Insert User",
+      "contents": "Contents"
+    },
+    "movefileinfo": 
+    {
+      "title": "Movefile Info",
+      "status": "Status",
+      "fileid": "File ID",
+      "filename": "File Name",
+      "size": "Size",
+      "sourcefile": "Source File",
+      "expireddate": "Expired Date",
+      "remaining": "Remaining",
+      "systemname": "System Name",
+      "username": "User Name",
+      "insertdate": "Insert Date"
+    },
+    "systeminfo": 
+    {
+      "title": "System Info",
+      "type": "Type",
+      "systemid": "System ID",
+      "systemname": "System Name",
+      "insertdate": "Insert Date",
+      "generalinfo": "General Info",
+      "gworkgroup": "Workgroup",
+      "guserdomain": "User Domain",
+      "gagentversion": "Agent Version",
+      "gagentpolicy": "Agent Policy",
+      "gusername": "User Name",
+      "glastconnectdatetime": "Last connect datetime",
+      "osinfo": "OS Info",
+      "owinversion": "Windows Version",
+      "owinuuid": "Windows UUID",
+      "oosversion": "OS Version",
+      "oosbuildnumber": "OS Build number",
+      "oosprimaryservicepack": "OS Primary Service pack",
+      "oossecondaryservicepack": "OS Secondary Service pack",
+      "diskinfo": "Disk Info",
+      "ddiskname": "Disk Name",
+      "ddisktype": "Disk Type",
+      "dvolumename": "Volume Name",
+      "dfilesystem": "File System",
+      "dtotalsize": "Total Size",
+      "dfreesize": "Free Size",
+      "nicinfo": "NIC Info",
+      "nnicname": "NIC name",
+      "nmac": "MAC address",
+      "nip": "IP address",
+      "ngateway": "Gateway",
+      "ndns": "DNS",
+      "ndhcp": "DHCP address",
+      "productinfo": "Product Info",
+      "pproductname": "Product Name",
+      "pproductversion": "Product Version",
+      "pproductpolicy": "Product Policy",
+      "papplydatetime": "Apply datetime"
+    },
+    "organization": 
+    {
+      "title": "organization"
+    }
+  }
+}
