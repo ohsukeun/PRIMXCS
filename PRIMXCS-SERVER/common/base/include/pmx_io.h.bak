@@ -1,0 +1,438 @@
+/// @file pmx_io.h
+/// @author Park, sung soo
+/// @date 2023-06-19
+/// @brief I/O handling related structure, class and macros
+
+#include <endian.h>
+
+#include <pmx_mysql_obj.h>
+#include <pmx_xml.h>
+
+#ifndef __PMX_IO_H__
+#define __PMX_IO_H__
+//-----------------------------------------------------------------------------
+// GLOBAL DEFINITIONS
+//-----------------------------------------------------------------------------
+#if defined(_WIN32) || defined(_WIN64)
+	#pragma pack(1)
+#else
+	#define PS_TAIL  __attribute__((__packed__))
+#endif
+
+/// I/O header structure (total 150 byte)
+typedef struct _S_PMX_AGENT_CMD_HD
+{
+// Version 
+#define PMX_PROTOCOL_VER_MAJOR  1
+#define PMX_PROTOCOL_VER_MINOR1 0
+#define PMX_PROTOCOL_VER_MINOR2 0
+#define PMX_PROTOCOL_VER_MINOR3 0
+	UCHAR  Version[4];     ///< protocol version 1000
+
+// Mark
+#define PMX_PROTOCOL_MARK1     'M'
+#define PMX_PROTOCOL_MARK2     'X'
+#define PMX_PROTOCOL_MARK3     'C'
+#define PMX_PROTOCOL_MARK4     'S'
+	UCHAR  Mark[4];        ///< check mark 'MXCS'
+
+	UCHAR  AgentID[40];    ///< agent unique id (uuid)
+	UINT64 CommandTime;    ///< command time (GMT). network order
+
+// body contents.
+#define PMX_CONTENTS_TYPE_COMPRESSED 100
+#define PMX_CONTENTS_TYPE_PLAIN_TEXT 200
+	UINT   ContentsType;   ///< body contents. network order
+
+	UCHAR  RandomPad[10];  ///< random number
+	UINT   TimeOut;        ///< timeout (seconds). 0:30sec / max:300sec. network order
+	UINT   DecompressSize; ///< decompressed body length. network order. (if compressed, uncompressed size)        
+	UINT   BodyLen;        ///< body data length. network order
+	UCHAR  Pad[68];        ///< padding bytes
+
+	VOID Init()
+	{
+		Version[0] = PMX_PROTOCOL_VER_MAJOR;
+		Version[1] = PMX_PROTOCOL_VER_MINOR1;
+		Version[2] = PMX_PROTOCOL_VER_MINOR2;
+		Version[3] = PMX_PROTOCOL_VER_MINOR3;
+		Mark[0] = 'M'; 
+		Mark[1] = 'X'; 
+		Mark[2] = 'C'; 
+		Mark[3] = 'S';
+		SetCommandTime();
+		SetContentsType(PMX_CONTENTS_TYPE_COMPRESSED);
+		SetRandomPad();
+		SetTimeOut(PMX_DEFAULT_IO_TIMEOUT);
+		SetDecompressSize(0);
+		SetBodyLen(0);
+		memset(Pad, 0x00, 68);
+	};
+	VOID SetCommandTime()
+	{
+		time_t tCur = 0;
+		time(&tCur);
+		CommandTime = htobe64((uint64_t)tCur);
+	};
+	VOID SetCommandTime(IN uint64_t tTime)
+	{
+		CommandTime = htobe64((uint64_t)tTime);
+	};
+	time_t GetCommandTime()
+	{
+		return (time_t)be64toh(CommandTime);
+	};
+	VOID SetContentsType(IN UINT nType)
+	{
+		ContentsType = (UINT)htonl(nType);
+	};
+	UINT GetContentsType()
+	{
+		return (UINT)ntohl(ContentsType);
+	};
+	VOID SetRandomPad() ///< copy current time_t value
+	{
+		WCString sBuf = (CHAR*)"";
+		time_t tCur = 0;
+
+		time(&tCur);
+		sBuf.Format("%lu", (ULONG)tCur);
+		for(INT nID = 0; nID < sBuf.GetLength(); nID++)
+		{
+			RandomPad[nID] = sBuf[nID];
+			if(9 == nID) break;
+		}
+	};
+	VOID SetTimeOut(IN UINT nTimeOut)
+	{
+		TimeOut = (UINT)htonl(nTimeOut);
+	};
+	UINT GetTImeOut()
+	{
+		return (UINT)ntohl(TimeOut);
+	};
+	VOID SetDecompressSize(IN UINT nSize)
+	{
+		DecompressSize = (UINT)htonl(nSize);
+	};
+	UINT GetDecompressSize()
+	{
+		return (UINT)ntohl(DecompressSize);
+	};
+	VOID SetBodyLen(IN UINT nLen)
+	{
+		BodyLen = (UINT)htonl(nLen);
+	};
+	UINT GetBodyLen()
+	{
+		return (UINT)ntohl(BodyLen);
+	};
+	SWC_BOOL CheckMark()
+	{
+		if ('M' == Mark[0] &&
+			'X' == Mark[1] &&
+			'C' == Mark[2] &&
+			'S' == Mark[3])
+		{
+			return TRUE;
+		}
+		return FALSE;
+	};
+
+#if defined(_WIN32) || defined(_WIN64)
+} S_PMX_AGENT_CMD_HD, *pS_PMX_AGENT_CMD_HD;
+#else
+} PS_TAIL S_PMX_AGENT_CMD_HD, *pS_PMX_AGENT_CMD_HD;
+#endif
+#define S_PMX_AGENT_CMD_HD_LEN    sizeof(S_PMX_AGENT_CMD_HD)
+
+// XML element, attribute and values ------------------------------------------
+// elememts
+#define PMX_XML_ELM_AGENT                    "AGENT"
+#define PMX_XML_ELM_AGENTID                  "AgentID"
+#define PMX_XML_ELM_AGENTPOLICYSTAMP         "AgentPolicyStamp"
+#define PMX_XML_ELM_AGENTUPDATE              "AgentUpdate"
+#define PMX_XML_ELM_AGENTVERSION             "AgentVersion"
+#define PMX_XML_ELM_AUTHEXPORFILE            "AuthExportFile"
+#define PMX_XML_ELM_AUTHNOTENCRYPTION        "AuthNotEncryption"
+#define PMX_XML_ELM_AUTHSERVERADDR           "AuthServerAddr"
+#define PMX_XML_ELM_AUTHSERVERPORT           "AuthServerPort"
+#define PMX_XML_ELM_AUTHORITYEXPORFILE       "AuthorityExportFile"
+#define PMX_XML_ELM_AUTHORITYUSERMOD         "AuthorityUserMod"
+#define PMX_XML_ELM_AUTHORITYWEBCONSOLE      "AuthorityWebConsole"
+#define PMX_XML_ELM_AUTHWEBMANAGER           "AuthWebManager"
+#define PMX_XML_ELM_BUILDNUMBER              "BuildNumber"
+#define PMX_XML_ELM_CELLPHONE                "CellPhone"
+#define PMX_XML_ELM_CODE                     "Code"
+#define PMX_XML_ELM_COMMAND                  "command"
+#define PMX_XML_ELM_COMPANYID                "CompanyID"
+#define PMX_XML_ELM_COMPUTERNAME             "ComputerName"
+#define PMX_XML_ELM_CREATEDATE               "CreateDate"
+#define PMX_XML_ELM_CRYHOD                   "CRYHOD"
+#define PMX_XML_ELM_CRYHODUPDATE             "CryhodUpdate"
+#define PMX_XML_ELM_DATETIME                 "DateTime"
+#define PMX_XML_ELM_DECRYPTIONCOUNT          "DecryptionCount"
+#define PMX_XML_ELM_DEPARTMENTMENT           "Department"
+#define PMX_XML_ELM_DHCPSERVER               "DHCPServer"
+#define PMX_XML_ELM_DISKDRIVE                "DiskDrive"
+#define PMX_XML_ELM_DISKDRIVES               "DiskDrives"
+#define PMX_XML_ELM_DNS                      "DNS"
+#define PMX_XML_ELM_DOWNLOADINFO             "DownloadInfo"
+#define PMX_XML_ELM_DOWNLOADURL              "DownloadURL"
+#define PMX_XML_ELM_DT_DECRYPTIONAUTHREQUEST "DT:DecryptionAuthRequest"
+#define PMX_XML_ELM_DT_EXPORTFILE            "DT:ExportFile"
+#define PMX_XML_ELM_DT_KEEYALIVERESPONSE     "DT:KeepAliveResponse"
+#define PMX_XML_ELM_DT_LOGDATA               "DT:LogData"
+#define PMX_XML_ELM_DT_MODULESTATE           "DT:ModuleState"
+#define PMX_XML_ELM_DT_POLICYDATA            "DT:PolicyData"
+#define PMX_XML_ELM_DT_SYSTEMDATA            "DT:SystemData"
+#define PMX_XML_ELM_DT_UPDATEFILEREQUEST     "DT:UpdateFileRequest"
+#define PMX_XML_ELM_DT_UPDATEFILERESPONSE    "DT:UpdateFileResponse"
+#define PMX_XML_ELM_DT_USERDATA              "DT:UserData"
+#define PMX_XML_ELM_ENABLE                   "Enable"
+#define PMX_XML_ELM_EXPANDCOMMAND            "ExpandCommand"
+#define PMX_XML_ELM_EXPIRYDATE               "ExpiryDate" 
+#define PMX_XML_ELM_EXPORSHELFLIFE           "ExportShelfLife"
+#define PMX_XML_ELM_EXPORTFILEMENU           "ExportFileMenu"
+#define PMX_XML_ELM_EXPNO                    "ExtNo"
+#define PMX_XML_ELM_FAILCODE                 "failcode"
+#define PMX_XML_ELM_FAILMSG                  "failmsg"
+#define PMX_XML_ELM_FILEDATA                 "FileData"
+#define PMX_XML_ELM_FILEHASH                 "FileHash"
+#define PMX_XML_ELM_FILEKEY                  "FileKey"
+#define PMX_XML_ELM_FILENAME                 "FileName"
+#define PMX_XML_ELM_FILESIZE                 "FileSize"
+#define PMX_XML_ELM_FILESYSTEMNAME           "FileSystemName"
+#define PMX_XML_ELM_FREESIZE                 "FreeSize"
+#define PMX_XML_ELM_GW                       "GW"
+#define PMX_XML_ELM_HASHDATA                 "Hashdata"
+#define PMX_XML_ELM_ID                       "ID"
+#define PMX_XML_ELM_INSTALL                  "Install"
+#define PMX_XML_ELM_IP                       "IP"
+#define PMX_XML_ELM_KEEPALIVECYCLE           "KeepAliveCycle"
+#define PMX_XML_ELM_LASTPOLICYDATE           "LastPolicyDate"
+#define PMX_XML_ELM_LASTPOLICYID             "LastPolicyID"
+#define PMX_XML_ELM_LOGCODE                  "LogCode"
+#define PMX_XML_ELM_LOGCYCLE                 "LogCycle"
+#define PMX_XML_ELM_LOGDATA                  "LogData"
+#define PMX_XML_ELM_LOGDATETIME              "LogDateTime"
+#define PMX_XML_ELM_LOGDESC                  "LogDesc"
+#define PMX_XML_ELM_LOGLEVEL                 "LogLevel"
+#define PMX_XML_ELM_LOGTYPE                  "LogType"
+#define PMX_XML_ELM_MAC                      "MAC"
+#define PMX_XML_ELM_MAIL                     "Mail"
+#define PMX_XML_ELM_MAJORVERSION             "MajorVersion"
+#define PMX_XML_ELM_MENU                     "Menu"
+#define PMX_XML_ELM_MINORVERSION             "MinorVersion"
+#define PMX_XML_ELM_NAME                     "Name"
+#define PMX_XML_ELM_NIC                      "NIC"
+#define PMX_XML_ELM_NICS                     "NICs"
+#define PMX_XML_ELM_NETBIOS                  "NetBios"
+#define PMX_XML_ELM_ORGFILES                 "OrgFiles"
+#define PMX_XML_ELM_ORIZON                   "ORIZON"
+#define PMX_XML_ELM_ORIZONUPDATE             "OrizonUpdate"
+#define PMX_XML_ELM_PATH                     "Path"
+#define PMX_XML_ELM_PROCESSARCHITECTURE      "ProcessorArchitecture"
+#define PMX_XML_ELM_PRODUCTMENU              "ProductMenu"
+#define PMX_XML_ELM_PRODUCYTYPE              "ProductType"
+#define PMX_XML_ELM_RELEASEID                "ReleaseID"
+#define PMX_XML_ELM_REPLY                    "reply"
+#define PMX_XML_ELM_REQUEST                  "request"
+#define PMX_XML_ELM_RESPONSE                 "response"
+#define PMX_XML_ELM_RESULT                   "result"
+#define PMX_XML_ELM_SERVICEPACKMAJOR         "ServicePackMajor"
+#define PMX_XML_ELM_SERVICEPACKMINOR         "ServicePackMinor"
+#define PMX_XML_ELM_SHAREPC                  "SharePC"
+#define PMX_XML_ELM_SUBCODE                  "SubCode"
+#define PMX_XML_ELM_TEL                      "Tel"
+#define PMX_XML_ELM_TOTALSIZE                "TotalSize"
+#define PMX_XML_ELM_TYPE                     "Type"
+#define PMX_XML_ELM_UPDATEVERSION            "UpdateVersion"
+#define PMX_XML_ELM_USEEXSERVER              "UseExServer"
+#define PMX_XML_ELM_USERID                   "UserID"
+#define PMX_XML_ELM_UUID                     "UUID"
+#define PMX_XML_ELM_VERSION                  "Version"
+#define PMX_XML_ELM_VOLUMENAME               "VolumeName"
+#define PMX_XML_ELM_WEBUSERCONSOLEMENU       "WebManagerConsoleMenu"
+#define PMX_XML_ELM_WEBUSERCONSOLEURL        "WebUserConsoleURL"
+#define PMX_XML_ELM_WINUSER                  "WinUser"
+#define PMX_XML_ELM_WINVERSION               "WinVersion"
+#define PMX_XML_ELM_WORKGROUPNAME            "WorkGroupName"
+#define PMX_XML_ELM_ZONECENTRAL              "ZONECENTRAL"
+#define PMX_XML_ELM_ZONECENTRALUPDATE        "ZonecentralUpdate"
+
+// attributes
+#define PMX_XML_ATR_DHCP                     "DHCP"
+#define PMX_XML_ATR_NAME                     "Name"
+#define PMX_XML_ATR_MAC                      "MAC"
+#define PMX_XML_ATR_MODE                     "Mode"
+#define PMX_XML_ATR_SERVERTIME               "ServerTime"
+#define PMX_XML_ATR_SHELFLIFE                "ShelfLife"
+#define PMX_XML_ATR_SIZE                     "Size"
+#define PMX_XML_ATR_URL                      "URL"
+
+// values
+#define PMX_XML_VAL_0                        "0"
+#define PMX_XML_VAL_1                        "1"
+#define PMX_XML_VAL_AGENT                    "AGENT"
+#define PMX_XML_VAL_AUTHENTICATION           "AUTHENTICATION"
+#define PMX_XML_VAL_CRYHOD                   "CRYHOD"
+#define PMX_XML_VAL_ERROR                    "ERROR"
+#define PMX_XML_VAL_EX001                    "EX001"
+#define PMX_XML_VAL_EX002                    "EX002"
+#define PMX_XML_VAL_EX003                    "EX003"
+#define PMX_XML_VAL_EX004                    "EX004"
+#define PMX_XML_VAL_EX005                    "EX005"
+#define PMX_XML_VAL_EXDECRYPTION             "EXDECRYPTION"
+#define PMX_XML_VAL_INFO                     "INFO"
+#define PMX_XML_VAL_INSERT                   "INSERT"
+#define PMX_XML_VAL_KADATA                   "KADATA"
+#define PMX_XML_VAL_LOGDATA                  "LOGDATA"
+#define PMX_XML_VAL_NO                       "NO"
+#define PMX_XML_VAL_NONE                     "NONE"
+#define PMX_XML_VAL_ORIZON                   "ORIZON"
+#define PMX_XML_VAL_REQUEST                  "REQUEST"
+#define PMX_XML_VAL_SHUTDOWN                 "SHUTDOWN"
+#define PMX_XML_VAL_SYSTEMDATA               "SYSTEMDATA"
+#define PMX_XML_VAL_UNINSTALL                "UNINSTALL"
+#define PMX_XML_VAL_UPDATE                   "UPDATE"
+#define PMX_XML_VAL_UPDATEFILE               "UPDATEFILE"
+#define PMX_XML_VAL_USERDATA                 "USERDATA"
+#define PMX_XML_VAL_WARNING                  "WARNING"
+#define PMX_XML_VAL_YES                      "YES"
+#define PMX_XML_VAL_ZONECENTRAL              "ZONECENTRAL"
+
+// products name
+#define PMX_PRODUCT_NAME_ZONECENTRAL         "PRIMX ZONECENTRAL"
+#define PMX_PRODUCT_NAME_ORIZON              "PRIMX ORIZON"
+#define PMX_PRODUCT_NAME_CRYHOD              "PRIMX CRYHOD"
+#define PMX_PRODUCT_NAME_AGENT               "PRIMX AGENT"
+
+// type values for each product
+enum _PMX_PRODUCT_TYPE
+{
+	PMX_PRODUCT_TYPE_UNDEFINED = 0, // undefined product
+	PMX_PRODUCT_TYPE_ZONECENTRAL,   // 1: PRIMX ZONECENTRAL
+	PMX_PRODUCT_TYPE_ORIZON,        // 2: PRIMX ORIZON
+	PMX_PRODUCT_TYPE_CRYHOD,        // 3: PRIMX CRYHOD
+	PMX_PRODUCT_TYPE_AGENT,         // 4: PRIMX Agent
+};
+
+// values for each case
+enum _PMX_AGENT_STATE
+{
+	PMX_AGENT_STATE_UNKNOWN = 0, // default value
+	PMX_AGENT_STATE_ONLINE,      // 1: on-line
+	PMX_AGENT_STATE_OFFLINE,     // 2: off-line
+};
+
+enum _PMX_AGENT_DHCP_STATE
+{
+	PMX_AGENT_STATIC_IP = 0, // static ip
+	PMX_AGENT_DHCP_IP,       // 1: dhcp ip
+};
+
+#define PMX_VALUE_Y                          'Y'
+#define PMX_VALUE_N                          'N'
+
+#define PMX_XML_HEADER                       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+
+// TODO: xml read and write class for each i/o case
+class CPmxXmlIO : public CPmxXml
+{
+public:
+	WCString GetCode            () { return m_sCode; }
+	WCString GetSubCode         () { return m_sSubCode; }
+	WCString GetCompanyID       () { return m_sCompanyID; }
+	WCString GetAgentID         () { return m_sAgentID; }
+	WCString GetUserID          () { return m_sUserID; }
+	WCString GetDateTime        () { return m_sDateTime; }
+	WCString GetSharePC         () { return m_sSharePC; }
+	WCString GetAgentVersion    () { return m_sAgentVersion; }
+	WCString GetAgentPolicyStemp() { return m_sAgentPolicyStamp; }
+
+	SWC_BOOL MakeTransactionQueriesFromSystemData  (OUT WCArray<WCString>& arrQueries);
+	VOID     MakeTransactionQueriesFromKADataUpdate(OUT WCArray<WCString>& arrQueries);
+	SWC_BOOL MakeTransactionQueriesFromLogData     (OUT WCArray<WCString>& arrQueries);
+
+	WCString MakeSystemDataRelyXml    (IN SWC_BOOL bSuccess, IN const WCString sFailCode = (CHAR*)"", IN const WCString sFailMsg = (CHAR*)"");
+	WCString MakeUserDataReplyXml     (IN CMyRSet* pRSet, IN const WCString sFailCode = (CHAR*)"", IN const WCString sFailMsg = (CHAR*)""); 
+	WCString MakeKeepAliveReplyXml    (IN SWC_BOOL bSuccess, 
+								       IN WCString sExpandCommmand,                // 6. extended command
+								       IN INT nKeepAliveCycle,                     // 7. keep alive interval (seconds)
+								       IN INT nLogCycle,                           // 8. log send interval (seconds)
+								       IN WCString sAgentUpdate,                   // 9. PRIMX agent update or not (YES/NO)
+								       IN WCString sZonecentralUpdate,             // 10. PRIMX ZoneCentral update or not (YES/NO)
+								       IN WCString sOrizonUpdate,                  // 11. PRIMX Orizon update or not (YES/NO)
+								       IN WCString sCryhodUpdate,                  // 12. PRIMX Cryhod update or not (YES/NO)
+								       IN WCString sServerTime,                    // 13. current server time
+								       IN INT nExportShelfLife,                    // 14. export file day limit (days)
+								       IN WCString sCompanyID,                     // 15. out company ID
+									   IN WCString sAuthServerAddr,                // 16. authentication server address
+								       IN INT nAuthServerPort,                     // 17. authentication server port
+								       IN WCString sProductMenuEnable,             // 18. product ment enable (YES/NO)
+								       IN WCString sWebManagerConsoleMenuEnable,   // 19. web manager console menu enable (YES/NO)
+								       IN WCString sWebManagerConsoleURL,          // 20. web manager console url
+								       IN WCString sExportMenuEnable,              // 21. export menu enable (YES/NO)
+								       IN WCString sAuthWebManager,                // 22. file export request, confirm auth. (YES/NO)
+								       IN WCString sAuthExportFile,                // 23. create export file auth. (YES/NO)
+								       IN WCString sAuthNotEncryptionPath,         // 24. use not encryption path auth. (YES/NO)
+								       IN WCArray<WCString> arrNotEncryptPathList, // 25. not encryption path list ('|' divied)
+								       IN WCString sFailCode = (CHAR*)"",
+								       IN WCString sFailMsg = (CHAR*)"");
+	WCString MakeLogDataReplyXml      (IN SWC_BOOL bSuccess, IN const WCString sFailCode = (CHAR*)"", IN const WCString sFailMsg = (CHAR*)""); 
+	SWC_BOOL ExtracrtUpdateFileRequest(OUT INT& nProductType, OUT WCString& sInstalledVersion);
+	WCString MakeUpdateFileReplyXml   (IN SWC_BOOL bSuccess,
+									   IN INT nProductType,
+									   IN WCString sCurrentProductVersion,
+									   IN WCString sFileHash,
+									   IN WCArray<WCString> arrExServerURL,
+									   IN UINT nFileSize,
+									   IN WCString sFailCode = (CHAR*)"",
+									   IN WCString sFailMsg = (CHAR*)"");
+	SWC_BOOL ExtractAuthFileInfo      (OUT WCString& sFileKey, 
+									   OUT WCString& sCompanyID, 
+									   OUT WCString& sFileHash,
+									   OUT WCString& sRequestIP,
+									   OUT WCString& sRequestMAC);
+	WCString MakeAuthExDecryptReplyXml(IN SWC_BOOL bSuccess, IN const WCString sFailCode, IN const WCString sFailMsg);
+	SWC_BOOL ExtractExportFileInfo    (OUT WCString& sFileKey, 
+									   OUT WCString& sFileHash, 
+									   OUT WCString& sFileName, 
+									   OUT UINT64& lFileSize,
+									   OUT WCArray<WCString>& arrFilesInsQueuries);
+	WCString MakeInsertExDecryptReplyXml(IN SWC_BOOL bSuccess, IN const WCString sFailCode, IN const WCString sFailMsg);
+
+	CPmxXmlIO(IN WCString sXml);
+	~CPmxXmlIO() {};
+
+private:
+	SWC_BOOL ExtractCommandInfo            ();
+	SWC_BOOL FindAndIntoElem               (IN const CHAR* sElem, IN SWC_BOOL bIgnoreError = FALSE);
+	SWC_BOOL FindElem                      (IN const CHAR* sElem, IN SWC_BOOL bIgnoreError = FALSE);
+	WCString GetElemData                   ();
+	WCString GetAttrData                   (IN const CHAR* sAttr);
+	WCString GetStrFromXml                 (IN CMarkup& xml);
+	WCString GetCurrentGlobalTime          ();
+	VOID     MakeRpoductInstallInfoMngQuery(IN const CHAR* sProductElemName, OUT WCArray<WCString>& arrQueries);
+	WCString HandleEscapeChar              (IN WCString sSrc);
+
+private:
+	WCString m_sCode;
+	WCString m_sSubCode;
+	WCString m_sCompanyID;
+	WCString m_sAgentID;
+	WCString m_sAgentVersion;
+	WCString m_sUserID;
+	WCString m_sDateTime;
+	WCString m_sSharePC;
+	WCString m_sAgentPolicyStamp;
+	time_t   m_tAgentPolicyStamp;
+};
+
+//-----------------------------------------------------------------------------
+#if defined(_WIN32) || defined(_WIN64)
+	#pragma pack()
+#endif
+
+#endif // __PMX_IO_H__

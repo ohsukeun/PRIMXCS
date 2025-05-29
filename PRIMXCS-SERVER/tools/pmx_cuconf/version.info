@@ -1,0 +1,16 @@
+#
+# version infomation
+#
+MAJOR_VER=1
+MINOR1_VER=0
+MINOR2_VER=0
+BUILD_NO=10
+ADD_TAG=""
+
+PROJECT_NAME=pmx_cuconf
+
+# RELEASE / DEBUG
+COMPILE_MODE=DEBUG
+
+# history
+# [2023-06-08] v1.0.0.1 : created 
